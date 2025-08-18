@@ -174,8 +174,6 @@ class World {
             );
             usedPosition.push(coinPosition);
             coin.x = coinPosition;
-            console.log(coin.x);
-            
         });
     }
 }

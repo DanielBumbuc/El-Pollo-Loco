@@ -46,6 +46,7 @@ class MoveableObject extends DrawableObject {
     }
 
     isColliding(mo) {
+        //check collision with offset parameter
         return this.x + this.width > mo.x &&
             this.y + this.height > mo.y &&
             this.x < mo.x &&
