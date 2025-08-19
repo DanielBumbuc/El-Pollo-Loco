@@ -6,6 +6,12 @@ class MoveableObject extends DrawableObject {
     lastHit = 0;
     speedY = 0;
     acceleration = 3;
+    offset = {
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0
+    }
 
     isAboveGround() {
         if (this instanceof ThrowableObject) {
@@ -47,11 +53,15 @@ class MoveableObject extends DrawableObject {
 
     isColliding(mo) {
         //check collision with offset parameter
-        return this.x + this.width > mo.x &&
-            this.y + this.height > mo.y &&
-            this.x < mo.x &&
-            this.y < mo.y + mo.height;
+        // console.log(this.x + this.width - this.offset.right);
+        console.log('left:', this.x + this.offset.left + ' right:' , this.x + this.width - this.offset.right);
+        
+        return this.x + this.width - this.offset.right > mo.x && //right line from character > left line mo
+            this.y +  + this.height > mo.y && //bottom line from character > top line mo
+            this.x + this.offset.left < mo.x + mo.width && //left line from character < right line mo
+            this.y < mo.y + mo.height; //top line from character < bottom line mo
     }
+
 
     hit() {
         this.lifepoints -= 5;

@@ -5,8 +5,8 @@ class Character extends MoveableObject {
     offset = {
         top: 70,
         bottom: 80,
-        left: 20,
-        right: 40
+        left: 40,
+        right: 20
     }
     
     IMAGES_WALKING = [
@@ -52,6 +52,7 @@ class Character extends MoveableObject {
         this.applayGravity();
         this.speed = 4;
         this.animate();
+        console.log('currentleft:', this.x + ' currentright:' , this.x + this.width);
     }
 
     animate() {
