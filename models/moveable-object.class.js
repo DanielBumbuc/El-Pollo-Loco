@@ -54,12 +54,12 @@ class MoveableObject extends DrawableObject {
     isColliding(mo) {
         //check collision with offset parameter
         // console.log(this.x + this.width - this.offset.right);
-        console.log('left:', this.x + this.offset.left + ' right:' , this.x + this.width - this.offset.right);
+        // console.log('left:', this.x + this.offset.left + ' right:' , this.x + this.width - this.offset.right);
         
-        return this.x + this.width - this.offset.right > mo.x && //right line from character > left line mo
-            this.y +  + this.height > mo.y && //bottom line from character > top line mo
-            this.x + this.offset.left < mo.x + mo.width && //left line from character < right line mo
-            this.y < mo.y + mo.height; //top line from character < bottom line mo
+        return this.x + this.width - this.offset.right > mo.x + mo.offset.left && //right line from character > left line mo
+            this.y + this.height > mo.y + mo.offset.top && //bottom line from character > top line mo
+            this.x + this.offset.left < mo.x + mo.width - mo.offset.right && //left line from character < right line mo
+            this.y < mo.y + mo.height - mo.offset.bottom; //top line from character < bottom line mo
     }
 
 

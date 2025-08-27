@@ -3,6 +3,12 @@ class Coin extends MoveableObject {
     width = 50;
     height = 50;
     minDistance = 350;
+    offset = {
+        top: 20,
+        bottom: 20,
+        left: 20,
+        right: 20
+    }
 
     constructor() {
         super();

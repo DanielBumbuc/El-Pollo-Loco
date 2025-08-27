@@ -3,9 +3,9 @@ class Character extends MoveableObject {
     y = 150;
     otherDirection = false;
     offset = {
-        top: 70,
-        bottom: 80,
-        left: 40,
+        top: 50,
+        bottom: 50,
+        left: 20,
         right: 20
     }
     
@@ -51,8 +51,8 @@ class Character extends MoveableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.applayGravity();
         this.speed = 4;
-        this.animate();
-        console.log('currentleft:', this.x + ' currentright:' , this.x + this.width);
+        this.animate();     
+           
     }
 
     animate() {
