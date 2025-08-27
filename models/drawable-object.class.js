@@ -12,7 +12,7 @@ class DrawableObject {
     }
 
     drawFrame(ctx) {
-        // if (this instanceof Endboss) {
+        // if (this instanceof Endboss) {d
         //     ctx.beginPath();
         //     ctx.lineWidth = '3';
         //     ctx.strokeStyle = 'blue';
