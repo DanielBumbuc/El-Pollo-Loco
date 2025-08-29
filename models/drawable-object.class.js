@@ -20,18 +20,18 @@ class DrawableObject {
         //     ctx.stroke();
         // }
 
-        if (this instanceof Bottle) {
-            ctx.beginPath();
-            ctx.lineWidth = '2';
-            ctx.strokeStyle = 'red';
-            ctx.rect(
-                this.x + 20, 
-                this.y + 80, 
-                this.width - 40, 
-                this.height - 90
-            );
-            ctx.stroke();
-        }
+        // if (this instanceof Bottle) {
+        //     ctx.beginPath();
+        //     ctx.lineWidth = '2';
+        //     ctx.strokeStyle = 'red';
+        //     ctx.rect(
+        //         this.x + 20, 
+        //         this.y + 80, 
+        //         this.width - 40, 
+        //         this.height - 90
+        //     );
+        //     ctx.stroke();
+        // }
     }
 
     loadImg(path) {

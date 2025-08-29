@@ -1,6 +1,7 @@
 class World {
     canvas;
     ctx;
+    gameState = 'start';
     keyboard;
     camera_x = 0;
     character = new Character();
@@ -9,6 +10,7 @@ class World {
     statusbarBottles = new Statusbar('bottles', 20, 100, 0);
     throwableObject = [];
     level = level1;
+    startScreen = new StartGame();
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
@@ -23,20 +25,25 @@ class World {
     draw() {
         let self = this;
         this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-        this.ctx.translate(this.camera_x, 0);
-        this.addObjectsToMap(this.level.backgrounds);
-        this.addObjectsToMap(this.level.clouds);
-        this.addToMap(this.character);
-        this.ctx.translate(-this.camera_x, 0);
-        this.addToMap(this.statusbarLifepoints);
-        this.addToMap(this.statusbarCoins);
-        this.addToMap(this.statusbarBottles);
-        this.ctx.translate(this.camera_x, 0);
-        this.addObjectsToMap(this.level.enemies);
-        this.addObjectsToMap(this.level.bottles);
-        this.addObjectsToMap(this.level.coins);
-        this.addObjectsToMap(this.throwableObject);
-        this.ctx.translate(-this.camera_x, 0);
+        if (this.gameState === 'start') {
+            this.startGame();
+        } else {
+
+            this.ctx.translate(this.camera_x, 0);
+            this.addObjectsToMap(this.level.backgrounds);
+            this.addObjectsToMap(this.level.clouds);
+            this.addToMap(this.character);
+            this.ctx.translate(-this.camera_x, 0);
+            this.addToMap(this.statusbarLifepoints);
+            this.addToMap(this.statusbarCoins);
+            this.addToMap(this.statusbarBottles);
+            this.ctx.translate(this.camera_x, 0);
+            this.addObjectsToMap(this.level.enemies);
+            this.addObjectsToMap(this.level.bottles);
+            this.addObjectsToMap(this.level.coins);
+            this.addObjectsToMap(this.throwableObject);
+            this.ctx.translate(-this.camera_x, 0);
+        }
 
         requestAnimationFrame(function () {
             self.draw();
@@ -45,6 +52,10 @@ class World {
 
     setWorld() {
         this.character.world = this;
+    }
+
+    startGame() {
+        this.startScreen.draw(this.ctx);
     }
 
     addObjectsToMap(objects) {
@@ -110,7 +121,7 @@ class World {
             if (this.character.bottleAmount < 10) {
                 return;
             } else if (this.character.bottleAmount >= 10) {
-                this.throwableObject.push(bottle);    
+                this.throwableObject.push(bottle);
                 this.character.bottleAmount -= 10;
                 this.statusbarBottles.setPercentage(this.character.bottleAmount);
             }
