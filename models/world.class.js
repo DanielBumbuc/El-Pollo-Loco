@@ -1,7 +1,7 @@
 class World {
     canvas;
     ctx;
-    gameState = 'start';
+    gameState = false;
     keyboard;
     camera_x = 0;
     character = new Character();
@@ -16,19 +16,19 @@ class World {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
         this.keyboard = keyboard;
-        this.draw();
+
         this.setWorld();
         this.setCollectables();
-        this.run();
+        this.initStartScreen();
+        this.draw();
     }
 
     draw() {
         let self = this;
         this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-        if (this.gameState === 'start') {
-            this.startGame();
+        if (!this.gameState) {
+            this.startScreen.draw(this.ctx);
         } else {
-
             this.ctx.translate(this.camera_x, 0);
             this.addObjectsToMap(this.level.backgrounds);
             this.addObjectsToMap(this.level.clouds);
@@ -54,8 +54,17 @@ class World {
         this.character.world = this;
     }
 
-    startGame() {
-        this.startScreen.draw(this.ctx);
+    initStartScreen() {
+        this.canvas.addEventListener("click", (e) => {
+            const rect = this.canvas.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+            let clicked = this.startScreen.checkClick(clickX, clickY);
+            if (clicked === this.startScreen.playButton) {
+                this.gameState = true;
+                this.run();
+            }
+        });
     }
 
     addObjectsToMap(objects) {
