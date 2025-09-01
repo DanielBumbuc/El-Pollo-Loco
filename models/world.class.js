@@ -62,11 +62,15 @@ class World {
 
             if (clicked === this.startScreen.playButton) {
                 this.gameState = true;
+                this.startGame();
                 this.run();
             }
         });
     }
 
+    startGame() {
+        this.level.enemies.forEach(chicken => chicken.animateWalking());
+    }
 
     addObjectsToMap(objects) {
         objects.forEach(o => {
