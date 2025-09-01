@@ -37,8 +37,8 @@ class StartGame extends DrawableObject {
 
     loadPlayButton() {
         this.playButton.loadImg('img/icons8-spielen-64.png');
-        this.playButton.x = 300;
-        this.playButton.y = 350;
+        this.playButton.x = 360;
+        this.playButton.y = 240;
         this.playButton.width = 64;
         this.playButton.height = 64;
     }

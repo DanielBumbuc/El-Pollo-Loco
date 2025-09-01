@@ -4,10 +4,13 @@ class Keyboard {
     UP = false;
     DOWN = false;
     SPACE = false;
+    ENTER = false;
     D = false;
 
     constructor() {
-        console.log(this.D);
+        
+
+
     }
 
     handleKeydown(pressedKey) {
@@ -16,6 +19,7 @@ class Keyboard {
         if (pressedKey == 'ArrowUp') this.UP = true;
         if (pressedKey == 'ArrowDown') this.DOWN = true;
         if (pressedKey == 'Space') this.SPACE = true;
+        if (pressedKey == 'Enter') this.ENTER = true;
         if (pressedKey == 'KeyD') this.D = true;
         
     }
@@ -26,6 +30,7 @@ class Keyboard {
         if (pressedKey == 'ArrowUp') this.UP = false;
         if (pressedKey == 'ArrowDown') this.DOWN = false;
         if (pressedKey == 'Space') this.SPACE = false; 
+        if (pressedKey == 'Enter') this.ENTER = true;
         if (pressedKey == 'KeyD') this.D = false; 
     }
     

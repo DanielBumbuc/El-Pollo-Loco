@@ -9,6 +9,7 @@ function init() {
 
 document.addEventListener('keydown', (e) => {
     keyboard.handleKeydown(e.code);
+    
 })
 
 document.addEventListener('keyup', (e) => {

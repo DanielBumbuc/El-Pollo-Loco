@@ -20,6 +20,7 @@ class World {
         this.initStartScreen();
         this.setCollectables();
         this.draw();
+        this.run();
     }
 
     draw() {
@@ -53,17 +54,36 @@ class World {
     }
 
     initStartScreen() {
-        
-        this.canvas.addEventListener("click", (e) => {
+        this.checkMousePosition();
+        this.canvas.addEventListener('click', (e) => {
             const rect = this.canvas.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
             const clickY = e.clientY - rect.top;
             let clicked = this.startScreen.checkClick(clickX, clickY);
-
             if (clicked === this.startScreen.playButton) {
                 this.gameState = true;
                 this.startGame();
-                this.run();
+            }
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Enter' && !this.gameState) {
+                this.gameState = true;
+                this.startGame();
+            }
+        });
+    }
+
+    checkMousePosition() {
+        this.canvas.addEventListener('mousemove', (e) => {
+            const rect = this.canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            let hovered = this.startScreen.checkClick(mouseX, mouseY);
+            if (hovered === this.startScreen.playButton) {
+                this.canvas.style.cursor = 'pointer';
+            } else {
+                this.canvas.style.cursor = 'default';
             }
         });
     }
