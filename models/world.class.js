@@ -8,6 +8,8 @@ class World {
     statusbarLifepoints = new Statusbar('lifepoints', 20, 20, 100);
     statusbarCoins = new Statusbar('coins', 20, 60, 0);
     statusbarBottles = new Statusbar('bottles', 20, 100, 0);
+    statusbarEndboss = new Statusbar('endboss', 740, 20, 100);
+    showEndbossStatusbar = false;
     throwableObject = [];
     level = level1;
     startScreen = new StartGame();
@@ -21,6 +23,7 @@ class World {
         this.setCollectables();
         this.draw();
         this.run();
+        this.spawnEndboss();
     }
 
     draw() {
@@ -37,12 +40,17 @@ class World {
             this.addToMap(this.statusbarLifepoints);
             this.addToMap(this.statusbarCoins);
             this.addToMap(this.statusbarBottles);
+            if (this.showEndbossStatusbar) {
+                this.addToMap(this.statusbarEndboss);
+            }
             this.ctx.translate(this.camera_x, 0);
             this.addObjectsToMap(this.level.enemies);
+            this.addObjectsToMap(this.level.endboss);
             this.addObjectsToMap(this.level.bottles);
             this.addObjectsToMap(this.level.coins);
             this.addObjectsToMap(this.throwableObject);
             this.ctx.translate(-this.camera_x, 0);
+
         }
         requestAnimationFrame(function () {
             self.draw();
@@ -120,12 +128,33 @@ class World {
         setInterval(() => {
             this.checkCollisions();
             this.chekcThrowObjects();
+
+        }, 200);
+    }
+
+    spawnEndboss() {
+        
+        let spawnInterval = setInterval(() => {
+            if (this.character.x >= 1800) {
+                this.level.endboss.forEach(endboss => endboss.animateWalking());
+                this.showEndbossStatusbar = true;
+                this.statusbarEndboss.animateStatusbar();
+                
+                clearInterval(spawnInterval);
+            }
         }, 200);
     }
 
     checkCollisions() {
         this.level.enemies.forEach(enemy => {
             if (this.character.isColliding(enemy)) {
+                this.character.hit();
+                this.statusbarLifepoints.setPercentage(this.character.lifepoints);
+            }
+        });
+
+        this.level.endboss.forEach(endboss => {
+            if (this.character.isColliding(endboss)) {
                 this.character.hit();
                 this.statusbarLifepoints.setPercentage(this.character.lifepoints);
             }

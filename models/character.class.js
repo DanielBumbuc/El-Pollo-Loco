@@ -51,8 +51,7 @@ class Character extends MoveableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.applayGravity();
         this.speed = 4;
-        this.animate();     
-           
+        this.animate();
     }
 
     animate() {
@@ -87,4 +86,6 @@ class Character extends MoveableObject {
             }
         }, 50);
     }
+
+    
 }

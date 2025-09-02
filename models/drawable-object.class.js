@@ -1,6 +1,7 @@
 class DrawableObject {
     x = 100;
     y = 250;
+    speed = 4;
     height = 170;
     width = 80;
     img;
@@ -45,5 +46,9 @@ class DrawableObject {
             img.src = path;
             this.imageCache[path] = img;
         });
+    }
+
+    moveStatusbar() {
+        this.x -= this.speed;
     }
 }

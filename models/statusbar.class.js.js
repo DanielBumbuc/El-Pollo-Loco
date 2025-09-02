@@ -38,7 +38,8 @@ class Statusbar extends DrawableObject {
         this.types = {
             lifepoints: this.IMAGES_LIFEPOINTS,
             coins: this.IMAGES_COINS,
-            bottles: this.IMAGES_BOTTLES
+            bottles: this.IMAGES_BOTTLES,
+            endboss: this.IMAGES_LIFEPOINTS
         };
         this.type = type;
         this.images = this.types[type];
@@ -68,5 +69,15 @@ class Statusbar extends DrawableObject {
         } else {
             return 0;
         }
+    }
+
+    animateStatusbar() {
+        let statusbarInterval = setInterval(() => {
+            this.moveStatusbar();
+            if (this.x <= 540) {
+                clearInterval(statusbarInterval);
+            }
+        }, 1000 / 60);
+        
     }
 }
