@@ -1,6 +1,6 @@
 class ThrowableObject extends MoveableObject {
-    world;
-    isOnGround = false;
+world;
+isOnGround = false;
 
     IMAGES_BOTTLE_ROTATE = [
         '../img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png',
@@ -31,20 +31,18 @@ class ThrowableObject extends MoveableObject {
         this.throw();
     }
 
-    throw() {        
+    throw() {
         this.speedY = 30;
         this.applayGravity();
         if (this.bottleAmount <= 0) {
-            console.log(true);
-            
+            // console.log(true);
+
         }
         setInterval(() => {
             this.x += this.speedX;
-            this.playAnimation(this.IMAGES_BOTTLE_ROTATE);  
-            this.checkIsOnGround(); 
-            // if (this.isOnGround == true) {
-                
-            // }    
+            this.playAnimation(this.IMAGES_BOTTLE_ROTATE);
+            this.checkIsOnGround();
+            this.checkBottleCollision();  
         }, 40);
     }
 
@@ -55,11 +53,20 @@ class ThrowableObject extends MoveableObject {
         }
     }
 
-    collecBottles() {
-
+    checkBottleCollision() {
+        this.world.level.endboss.forEach((endboss) => {
+            if (this.isColliding(endboss)) {
+                console.log(this.world.statusbarEndboss);
+                this.world.statusbarEndboss.setPercentage(endboss.lifepoints);
+                endboss.hit();
+                this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
+                this.speedY = 0;
+                this.speedX = 0;
+                setTimeout(() => {
+                    this.y = 500;
+                }, 10);
+            }
+        });
     }
-
-    //collect bottles function
-// sound bottles function
 }
 

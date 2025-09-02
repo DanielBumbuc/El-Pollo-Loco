@@ -59,6 +59,7 @@ class World {
 
     setWorld() {
         this.character.world = this;
+        this.throwableObject.world = this;
     }
 
     initStartScreen() {
@@ -127,8 +128,7 @@ class World {
     run() {
         setInterval(() => {
             this.checkCollisions();
-            this.chekcThrowObjects();
-
+            this.checkThrowObjects();
         }, 200);
     }
 
@@ -175,12 +175,21 @@ class World {
                 this.removeCollectedObject(coin);
             }
         });
+
+        // this.level.endboss.forEach(endboss => {
+        //     if (this.throwableObject.isColliding(endboss)) {
+        //         // this.bottle.isColliding(endboss)
+        //         // this.character.hit();
+        //         this.statusbarEndboss.setPercentage(this.endboss.lifepoints);
+        //     }
+        // });
     }
 
-    chekcThrowObjects() {
+    checkThrowObjects() {
         this.speedX = this.character.otherDirection ? -10 : 10;
         if (this.keyboard.D) {
             let bottle = new ThrowableObject(this.character.x, this.character.y, this.speedX);
+            bottle.world = this; // Hier die Referenz setzen!
             if (this.character.bottleAmount < 10) {
                 return;
             } else if (this.character.bottleAmount >= 10) {
