@@ -4,6 +4,8 @@ class Endboss extends MoveableObject {
     height = 200;
     lifepoints = 100;
     alert = false;
+    hasAttacked = false; // Neu: Flag für einmaligen Angriff
+    lastAttackTime = 0; // Neu: Zeitstempel des letzten Angriffs
     offset = {
         top: 50,
         bottom: 50,
@@ -69,18 +71,28 @@ class Endboss extends MoveableObject {
         }, 100);
 
         setInterval(() => {
+            const now = Date.now();
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
-            } else if (this.alert) {
+            } else if (this.alert && !this.hasAttacked && now - this.lastAttackTime > 5000) {
                 this.playAnimation(this.IMAGES_ALERT);
-                let attackInterval = setInterval(() => {
-                    this.playAnimation(this.IMAGES_ATTACK);
-                }, 2000);
-                clearInterval(attackInterval);
-            }
+                this.hasAttacked = true; // Angriff nur einmal zulassen
+                this.lastAttackTime = now;
+                // Attack-Animation einmalig abspielen  
+                let attackIndex = 0;
+                let attackAnim = setInterval(() => {
+                    if (attackIndex < this.IMAGES_ATTACK.length) {
+                        this.img = this.imageCache[this.IMAGES_ATTACK[attackIndex]];
+                        attackIndex++;
+                    } else {
+                        clearInterval(attackAnim); // Animation stoppen
+                        this.hasAttacked = false; // Angriff zurücksetzen
+                    }
 
+                }, 100); // Geschwindigkeit der Attack-Animation
+            }
         }, 50);
     }
 }
