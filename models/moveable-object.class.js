@@ -1,5 +1,6 @@
 class MoveableObject extends DrawableObject {
     speed = 0.15;
+    canMoveLeft = true;
     lifepoints = 100;
     bottleAmount = 0;
     coinAmount = 0;
@@ -44,7 +45,9 @@ class MoveableObject extends DrawableObject {
     }
 
     moveLeft() {
-        this.x -= this.speed;
+        if (this.canMoveLeft) {
+            this.x -= this.speed;
+        }
     }
 
     jump() {
@@ -62,9 +65,8 @@ class MoveableObject extends DrawableObject {
             this.y < mo.y + mo.height - mo.offset.bottom; //top line from character < bottom line mo
     }
 
-
-    hit() {
-        this.lifepoints -= 5;
+    hit(damage) {
+        this.lifepoints -= damage;
         if (this.lifepoints < 0) {
             this.lifepoints = 0;
         } else {
@@ -76,7 +78,6 @@ class MoveableObject extends DrawableObject {
         let passedTime = new Date().getTime() - this.lastHit;
         passedTime = passedTime / 1000;
         return passedTime < 0.5;
-
     }
 
     isDead() {
@@ -87,8 +88,6 @@ class MoveableObject extends DrawableObject {
         this.bottleAmount += 10;
         if (this.bottleAmount > 100) {
             this.bottleAmount = 100;
-        } else {
-            this.lastHit = new Date().getTime();
         }
     }
 
@@ -96,8 +95,6 @@ class MoveableObject extends DrawableObject {
         this.coinAmount += 10;
         if (this.coinAmount > 100) {
             this.coinAmount = 100;
-        } else {
-            this.lastHit = new Date().getTime();
         }
     }
 }

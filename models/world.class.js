@@ -129,6 +129,7 @@ class World {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
+            this.checkCharacterPosition();
         }, 200);
     }
 
@@ -136,7 +137,7 @@ class World {
         
         let spawnInterval = setInterval(() => {
             if (this.character.x >= 1800) {
-                this.level.endboss.forEach(endboss => endboss.animateWalking());
+                this.level.endboss.forEach(endboss => endboss.animate());
                 this.showEndbossStatusbar = true;
                 this.statusbarEndboss.animateStatusbar();
                 
@@ -148,14 +149,14 @@ class World {
     checkCollisions() {
         this.level.enemies.forEach(enemy => {
             if (this.character.isColliding(enemy)) {
-                this.character.hit();
+                this.character.hit(5);
                 this.statusbarLifepoints.setPercentage(this.character.lifepoints);
             }
         });
 
         this.level.endboss.forEach(endboss => {
             if (this.character.isColliding(endboss)) {
-                this.character.hit();
+                this.character.hit(10);
                 this.statusbarLifepoints.setPercentage(this.character.lifepoints);
             }
         });
@@ -189,7 +190,7 @@ class World {
         this.speedX = this.character.otherDirection ? -10 : 10;
         if (this.keyboard.D) {
             let bottle = new ThrowableObject(this.character.x, this.character.y, this.speedX);
-            bottle.world = this; // Hier die Referenz setzen!
+            bottle.world = this;
             if (this.character.bottleAmount < 10) {
                 return;
             } else if (this.character.bottleAmount >= 10) {
@@ -203,6 +204,20 @@ class World {
                 }
             }, 40);
         }
+    }
+
+    checkCharacterPosition() {
+        let alertDistance = 300;
+        this.level.endboss.forEach(endboss => {
+            if (this.character.x + alertDistance > endboss.x && this.character.x < endboss.x + endboss.width) {
+                console.log(this.character.x, 'und', endboss.x);
+                endboss.canMoveLeft = false;
+                endboss.alert = true;
+            } else {
+                endboss.canMoveLeft = true;
+                endboss.alert = false;
+            }
+        });
     }
 
     setCollectables() {

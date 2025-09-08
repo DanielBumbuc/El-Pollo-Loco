@@ -56,9 +56,22 @@ isOnGround = false;
     checkBottleCollision() {
         this.world.level.endboss.forEach((endboss) => {
             if (this.isColliding(endboss)) {
-                console.log(this.world.statusbarEndboss);
                 this.world.statusbarEndboss.setPercentage(endboss.lifepoints);
-                endboss.hit();
+                endboss.hit(15);
+                this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
+                this.speedY = 0;
+                this.speedX = 0;
+                setTimeout(() => {
+                    this.y = 500;
+                }, 10);
+            }
+        });
+
+        this.world.level.enemies.forEach((enemies) => {
+            if (this.isColliding(enemies)) {
+                enemies.hit(50);
+                console.log(enemies.lifepoints);
+                
                 this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
                 this.speedY = 0;
                 this.speedX = 0;
