@@ -7,7 +7,7 @@ class World {
     character = new Character();
     statusbarLifepoints = new Statusbar('lifepoints', 20, 20, 100);
     statusbarCoins = new Statusbar('coins', 20, 60, 0);
-    statusbarBottles = new Statusbar('bottles', 20, 100, 0);
+    statusbarBottles = new Statusbar('bottles', 20, 100, 50);
     statusbarEndboss = new Statusbar('endboss', 740, 20, 100);
     showEndbossStatusbar = false;
     throwableObject = [];
@@ -128,19 +128,20 @@ class World {
     run() {
         setInterval(() => {
             this.checkCollisions();
-            this.checkThrowObjects();
+            // this.checkThrowObjects();
             this.checkCharacterPosition();
+            this.removeDeadEnemies();
         }, 200);
     }
 
     spawnEndboss() {
-        
+
         let spawnInterval = setInterval(() => {
             if (this.character.x >= 1800) {
                 this.level.endboss.forEach(endboss => endboss.animate());
                 this.showEndbossStatusbar = true;
                 this.statusbarEndboss.animateStatusbar();
-                
+
                 clearInterval(spawnInterval);
             }
         }, 200);
@@ -188,22 +189,22 @@ class World {
 
     checkThrowObjects() {
         this.speedX = this.character.otherDirection ? -10 : 10;
-        if (this.keyboard.D) {
-            let bottle = new ThrowableObject(this.character.x, this.character.y, this.speedX);
-            bottle.world = this;
+        // if (this.keyboard.D) {
             if (this.character.bottleAmount < 10) {
                 return;
-            } else if (this.character.bottleAmount >= 10) {
-                this.throwableObject.push(bottle);
-                this.character.bottleAmount -= 10;
-                this.statusbarBottles.setPercentage(this.character.bottleAmount);
             }
+            let bottle = new ThrowableObject(this.character.x, this.character.y, this.speedX);
+            bottle.world = this;
+            this.throwableObject.push(bottle);
+            this.character.bottleAmount -= 10;
+            this.statusbarBottles.setPercentage(this.character.bottleAmount);
+
             setInterval(() => {
                 if (bottle.isOnGround == true) {
                     this.throwableObject = this.throwableObject.filter(bottle => bottle.y < 420);
                 }
             }, 40);
-        }
+        // }
     }
 
     checkCharacterPosition() {
@@ -273,5 +274,9 @@ class World {
             usedPosition.push(coinPosition);
             coin.x = coinPosition;
         });
+    }
+
+    removeDeadEnemies() {
+        this.level.enemies = this.level.enemies.filter(enemy => !enemy.isDead());
     }
 }

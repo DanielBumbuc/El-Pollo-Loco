@@ -2,7 +2,7 @@ class MoveableObject extends DrawableObject {
     speed = 0.15;
     canMoveLeft = true;
     lifepoints = 100;
-    bottleAmount = 0;
+    bottleAmount = 50;
     coinAmount = 0;
     lastHit = 0;
     speedY = 0;

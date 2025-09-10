@@ -20,7 +20,13 @@ class Keyboard {
         if (pressedKey == 'ArrowDown') this.DOWN = true;
         if (pressedKey == 'Space') this.SPACE = true;
         if (pressedKey == 'Enter') this.ENTER = true;
-        if (pressedKey == 'KeyD') this.D = true;
+        // if (pressedKey == 'KeyD') this.D = true;
+        if (pressedKey == 'KeyD') {
+        this.D = false;
+        if (typeof this.onBottleThrow === 'function') {
+            this.onBottleThrow();
+        }
+    }
         
     }
 
@@ -30,8 +36,8 @@ class Keyboard {
         if (pressedKey == 'ArrowUp') this.UP = false;
         if (pressedKey == 'ArrowDown') this.DOWN = false;
         if (pressedKey == 'Space') this.SPACE = false; 
-        if (pressedKey == 'Enter') this.ENTER = true;
-        if (pressedKey == 'KeyD') this.D = false; 
+        if (pressedKey == 'Enter') this.ENTER = false;
+        if (pressedKey == 'KeyD')  this.D = false;
     }
     
 }
