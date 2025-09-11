@@ -6,7 +6,8 @@ class MoveableObject extends DrawableObject {
     coinAmount = 0;
     lastHit = 0;
     speedY = 0;
-    acceleration = 3;
+    acceleration = 2.5;
+    isJumping = false;
     offset = {
         top: 0,
         bottom: 0,
@@ -18,7 +19,7 @@ class MoveableObject extends DrawableObject {
         if (this instanceof ThrowableObject) {
             return true;
         } else {
-            return this.y < 250;
+            return this.y < 130;
         }  
     }
 
@@ -27,6 +28,10 @@ class MoveableObject extends DrawableObject {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
+                if (this.y > 130) {
+                    this.y = 130;
+                    this.speedY = 0;
+                }
             }
         }, 1000 / 25);
 
@@ -51,7 +56,8 @@ class MoveableObject extends DrawableObject {
     }
 
     jump() {
-        this.speedY = 20;
+        this.isJumping = true;
+        this.speedY = 28;
     }
 
     isColliding(mo) {

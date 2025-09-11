@@ -1,9 +1,9 @@
 class DrawableObject {
     x = 100;
-    y = 250;
+    y = 150;
     speed = 4;
-    height = 170;
-    width = 80;
+    height = 300;
+    width = 140;
     img;
     imageCache = {};
     currentImage = 0;
@@ -13,13 +13,13 @@ class DrawableObject {
     }
 
     drawFrame(ctx) {
-        // if (this instanceof Endboss) {d
-        //     ctx.beginPath();
-        //     ctx.lineWidth = '3';
-        //     ctx.strokeStyle = 'blue';
-        //     ctx.rect(this.x, this.y, this.width, this.height);
-        //     ctx.stroke();
-        // }
+        if (this instanceof Character) {
+            ctx.beginPath();
+            ctx.lineWidth = '3';
+            ctx.strokeStyle = 'blue';
+            ctx.rect(this.x, this.y, this.width, this.height);
+            ctx.stroke();
+        }
 
         // if (this instanceof Bottle) {
         //     ctx.beginPath();

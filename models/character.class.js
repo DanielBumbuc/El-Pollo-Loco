@@ -1,14 +1,16 @@
 class Character extends MoveableObject {
     world;
-    y = 150;
+    y = 60;
     otherDirection = false;
+    jumpFrame = 0;
+    
     offset = {
         top: 50,
         bottom: 50,
         left: 20,
         right: 20
     }
-    
+
     IMAGES_WALKING = [
         '../img/2_character_pepe/2_walk/W-21.png',
         '../img/2_character_pepe/2_walk/W-22.png',
@@ -44,7 +46,7 @@ class Character extends MoveableObject {
     ];
 
     constructor() {
-        super().loadImg('../img/2_character_pepe/2_walk/W-21.png');
+        super().loadImg('../img/2_character_pepe/3_jump/J-31.png');
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_JUMPING);
         this.loadImages(this.IMAGES_HURT);
@@ -52,6 +54,8 @@ class Character extends MoveableObject {
         this.applayGravity();
         this.speed = 4;
         this.animate();
+        console.log(this.y);
+
     }
 
     animate() {
@@ -78,14 +82,49 @@ class Character extends MoveableObject {
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isAboveGround()) {
-                this.playAnimation(this.IMAGES_JUMPING);
+                if (this.isAboveGround()) {
+                    if (this.isJumping) {
+                        console.log('test');                      
+                        this.isJumping = true;
+                        this.jumpFrame = 0;
+                        this.jumpStartY = this.y;
+                        this.jumpStartTime = Date.now();
+                    }
+                    // Sprungdauer schätzen (z.B. bis y wieder auf Bodenhöhe ist)
+                    let jumpDuration = 600; // z.B. 600ms, kann dynamisch berechnet werden
+                    let elapsed = Date.now() - this.jumpStartTime;
+                    let frameIndex = Math.floor((elapsed / jumpDuration) * this.IMAGES_JUMPING.length);
+                    frameIndex = Math.min(frameIndex, this.IMAGES_JUMPING.length - 1);
+                    this.img = this.imageCache[this.IMAGES_JUMPING[frameIndex]];
+                }
             } else {
+
                 if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                     this.playAnimation(this.IMAGES_WALKING);
                 }
             }
-        }, 60);
+        }, 50);
     }
 
-    
+
+    // Sprung beginnt
+    // if (!this.isJumping) {
+    //     this.isJumping = true;
+    //     this.jumpFrame = 0;
+    // }
+    // // Animation abspielen
+    // if (this.jumpFrame < this.IMAGES_JUMPING.length) {
+    //     this.img = this.imageCache[this.IMAGES_JUMPING[this.jumpFrame]];
+    //     this.jumpFrame++;
+    // } else {
+    //     // Letztes Bild halten
+    //     this.img = this.imageCache[this.IMAGES_JUMPING[this.IMAGES_JUMPING.length - 1]];
+    // }
+
+    // // Sprung beendet
+    //             if (this.isJumping) {
+    //                 this.isJumping = false;
+    //                 this.jumpFrame = 0;
+    //             }
+
 }
