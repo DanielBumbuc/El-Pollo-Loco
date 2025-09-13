@@ -82,21 +82,13 @@ class Character extends MoveableObject {
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isAboveGround()) {
-                let elapsed = Date.now() - this.jumpStartTime;
-                let jumpProgress = elapsed / this.calcJumpDuration();
-                let frameIndex;
-                jumpProgress = Math.max(0, Math.min(jumpProgress, 1));
-                frameIndex = Math.floor(jumpProgress * this.IMAGES_JUMPING.length);
-                frameIndex = Math.max(0, Math.min(frameIndex, this.IMAGES_JUMPING.length - 1));
-                this.img = this.imageCache[this.IMAGES_JUMPING[frameIndex]];
-                console.log(jumpProgress);
+                return;
             } else {
-
                 if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                     this.playAnimation(this.IMAGES_WALKING);
                 }
             }
-        }, 10);
+        }, 50);
     }
 
 

@@ -8,9 +8,10 @@ class MoveableObject extends DrawableObject {
     speedY = 0;
     acceleration = 2.5;
     onGroundY = 130;
+    jumpAnimationInterval = null;
     jumpStartTime = null;
     jumpEndTime = null;
-    jumpDuration = 1000; // z.B. 600ms für einen Sprung, passe nach Bedarf an
+    jumpDuration = 1000;
     offset = {
         top: 0,
         bottom: 0,
@@ -62,6 +63,7 @@ class MoveableObject extends DrawableObject {
         this.jumpStartTime = Date.now();
         this.jumpEndTime;
         this.speedY = 28;
+        this.startJumpAnimation();
     }
 
     calcJumpDuration() {
@@ -71,6 +73,25 @@ class MoveableObject extends DrawableObject {
             this.jumpStartTime = null; // Optional: zurücksetzen, wenn Sprung vorbei
         }
         return this.jumpDuration;
+    }
+
+    startJumpAnimation() {
+        if (this.jumpAnimationInterval) {
+            clearInterval(this.jumpAnimationInterval);
+        }
+        this.jumpAnimationInterval = setInterval(() => {
+            if (!this.isAboveGround()) {
+                clearInterval(this.jumpAnimationInterval);
+                this.jumpAnimationInterval = null;
+                return;
+            }
+            let elapsed = Date.now() - this.jumpStartTime;
+            let jumpProgress = elapsed / this.calcJumpDuration();
+            jumpProgress = Math.max(0, Math.min(jumpProgress, 1));
+            let frameIndex = Math.floor(jumpProgress * this.IMAGES_JUMPING.length);
+            frameIndex = Math.max(0, Math.min(frameIndex, this.IMAGES_JUMPING.length - 1));
+            this.img = this.imageCache[this.IMAGES_JUMPING[frameIndex]];
+        }, 30); 
     }
 
     isColliding(mo) {
