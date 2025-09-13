@@ -13,13 +13,13 @@ class DrawableObject {
     }
 
     drawFrame(ctx) {
-        if (this instanceof Character) {
-            ctx.beginPath();
-            ctx.lineWidth = '3';
-            ctx.strokeStyle = 'blue';
-            ctx.rect(this.x, this.y, this.width, this.height);
-            ctx.stroke();
-        }
+        // if (this instanceof Character) {
+        //     ctx.beginPath();
+        //     ctx.lineWidth = '3';
+        //     ctx.strokeStyle = 'blue';
+        //     ctx.rect(this.x, this.y, this.width, this.height);
+        //     ctx.stroke();
+        // }
 
         // if (this instanceof Bottle) {
         //     ctx.beginPath();

@@ -7,7 +7,10 @@ class MoveableObject extends DrawableObject {
     lastHit = 0;
     speedY = 0;
     acceleration = 2.5;
-    isJumping = false;
+    onGroundY = 130;
+    jumpStartTime = null;
+    jumpEndTime = null;
+    jumpDuration = 1000; // z.B. 600ms für einen Sprung, passe nach Bedarf an
     offset = {
         top: 0,
         bottom: 0,
@@ -20,7 +23,7 @@ class MoveableObject extends DrawableObject {
             return true;
         } else {
             return this.y < 130;
-        }  
+        }
     }
 
     applayGravity() {
@@ -28,8 +31,8 @@ class MoveableObject extends DrawableObject {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
-                if (this.y > 130) {
-                    this.y = 130;
+                if (this.y > this.onGroundY) {
+                    this.y = this.onGroundY;
                     this.speedY = 0;
                 }
             }
@@ -56,15 +59,25 @@ class MoveableObject extends DrawableObject {
     }
 
     jump() {
-        this.isJumping = true;
+        this.jumpStartTime = Date.now();
+        this.jumpEndTime;
         this.speedY = 28;
+    }
+
+    calcJumpDuration() {
+        if (!this.isAboveGround() && this.jumpStartTime && !this.jumpEndTime) {
+            this.jumpEndTime = Date.now();
+            this.jumpDuration = this.jumpEndTime - this.jumpStartTime;
+            this.jumpStartTime = null; // Optional: zurücksetzen, wenn Sprung vorbei
+        }
+        return this.jumpDuration;
     }
 
     isColliding(mo) {
         //check collision with offset parameter
         // console.log(this.x + this.width - this.offset.right);
         // console.log('left:', this.x + this.offset.left + ' right:' , this.x + this.width - this.offset.right);
-        
+
         return this.x + this.width - this.offset.right > mo.x + mo.offset.left && //right line from character > left line mo
             this.y + this.height > mo.y + mo.offset.top && //bottom line from character > top line mo
             this.x + this.offset.left < mo.x + mo.width - mo.offset.right && //left line from character < right line mo
