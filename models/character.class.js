@@ -78,7 +78,8 @@ class Character extends MoveableObject {
 
         setInterval(() => {
             if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD);
+                return;
+                // this.playAnimation(this.IMAGES_DEAD);
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isAboveGround()) {
@@ -90,26 +91,4 @@ class Character extends MoveableObject {
             }
         }, 50);
     }
-
-
-    // Sprung beginnt
-    // if (!this.isJumping) {
-    //     this.isJumping = true;
-    //     this.jumpFrame = 0;
-    // }
-    // // Animation abspielen
-    // if (this.jumpFrame < this.IMAGES_JUMPING.length) {
-    //     this.img = this.imageCache[this.IMAGES_JUMPING[this.jumpFrame]];
-    //     this.jumpFrame++;
-    // } else {
-    //     // Letztes Bild halten
-    //     this.img = this.imageCache[this.IMAGES_JUMPING[this.IMAGES_JUMPING.length - 1]];
-    // }
-
-    // // Sprung beendet
-    //             if (this.isJumping) {
-    //                 this.isJumping = false;
-    //                 this.jumpFrame = 0;
-    //             }
-
 }

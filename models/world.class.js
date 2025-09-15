@@ -13,6 +13,8 @@ class World {
     throwableObject = [];
     level = level1;
     startScreen = new StartGame();
+    gameOverScreen = new GameOver();
+    isGameOver = false;
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
@@ -27,6 +29,14 @@ class World {
     }
 
     draw() {
+        if (this.isGameOver) {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.addObjectsToMap(this.level.backgrounds);
+            this.addObjectsToMap(this.level.clouds);
+            this.gameOverScreen.draw(this.ctx);
+        } if (!this.character) {
+            return;
+        }
         let self = this;
         if (!this.gameState) {
             this.startScreen.draw(this.ctx);
@@ -126,22 +136,28 @@ class World {
     }
 
     run() {
-        setInterval(() => {
+        let runInterval = setInterval(() => {
             this.checkCollisions();
             // this.checkThrowObjects();
             this.checkCharacterPosition();
             this.removeDeadEnemies();
+            if (this.character.deadAnimationDone) {
+                this.removeDeadCharacter();
+                clearInterval(runInterval);
+            }
         }, 200);
     }
 
     spawnEndboss() {
 
         let spawnInterval = setInterval(() => {
-            if (this.character.x >= 1800) {
+            if (!this.character) {
+                clearInterval(spawnInterval);
+                return;
+            } else if (this.character.x >= 1800) {
                 this.level.endboss.forEach(endboss => endboss.animate());
                 this.showEndbossStatusbar = true;
                 this.statusbarEndboss.animateStatusbar();
-
                 clearInterval(spawnInterval);
             }
         }, 200);
@@ -190,20 +206,20 @@ class World {
     checkThrowObjects() {
         this.speedX = this.character.otherDirection ? -10 : 10;
         // if (this.keyboard.D) {
-            if (this.character.bottleAmount < 10) {
-                return;
-            }
-            let bottle = new ThrowableObject(this.character.x, this.character.y, this.speedX);
-            bottle.world = this;
-            this.throwableObject.push(bottle);
-            this.character.bottleAmount -= 10;
-            this.statusbarBottles.setPercentage(this.character.bottleAmount);
+        if (this.character.bottleAmount < 10) {
+            return;
+        }
+        let bottle = new ThrowableObject(this.character.x, this.character.y, this.speedX);
+        bottle.world = this;
+        this.throwableObject.push(bottle);
+        this.character.bottleAmount -= 10;
+        this.statusbarBottles.setPercentage(this.character.bottleAmount);
 
-            setInterval(() => {
-                if (bottle.isOnGround == true) {
-                    this.throwableObject = this.throwableObject.filter(bottle => bottle.y < 420);
-                }
-            }, 40);
+        setInterval(() => {
+            if (bottle.isOnGround == true) {
+                this.throwableObject = this.throwableObject.filter(bottle => bottle.y < 420);
+            }
+        }, 40);
         // }
     }
 
@@ -278,5 +294,12 @@ class World {
 
     removeDeadEnemies() {
         this.level.enemies = this.level.enemies.filter(enemy => !enemy.isDead());
+    }
+
+    removeDeadCharacter() {
+        if (this.character && this.character.isDead()) {
+            this.character = null;
+            this.isGameOver = true;
+        }
     }
 }

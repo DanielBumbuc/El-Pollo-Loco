@@ -12,6 +12,8 @@ class MoveableObject extends DrawableObject {
     jumpStartTime = null;
     jumpEndTime = null;
     jumpDuration = 1000;
+    dead = false;
+    deadAnimationDone = false;
     offset = {
         top: 0,
         bottom: 0,
@@ -94,6 +96,23 @@ class MoveableObject extends DrawableObject {
         }, 30); 
     }
 
+    startDeadAnimation() {
+        let frame = 0;
+        console.log(this.dead);
+        this.deadAnimationInterval = setInterval(() => {
+        if (frame < this.IMAGES_DEAD.length && this.dead === true) {
+            this.img = this.imageCache[this.IMAGES_DEAD[frame]];
+            frame++;
+            console.log(frame);
+            
+        } 
+        else {
+            clearInterval(this.deadAnimationInterval);
+            this.deadAnimationDone = true;
+        }
+    }, 120); // Geschwindigkeit anpassen
+    }
+
     isColliding(mo) {
         //check collision with offset parameter
         // console.log(this.x + this.width - this.offset.right);
@@ -121,6 +140,10 @@ class MoveableObject extends DrawableObject {
     }
 
     isDead() {
+        if (this instanceof Character && this.lifepoints == 0 && !this.dead) {
+            this.dead = true; // Animation wurde gestartet
+            this.startDeadAnimation();
+        }
         return this.lifepoints == 0;
     }
 
