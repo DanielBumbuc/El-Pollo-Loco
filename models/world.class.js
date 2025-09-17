@@ -218,6 +218,8 @@ class World {
         setInterval(() => {
             if (bottle.isOnGround == true) {
                 this.throwableObject = this.throwableObject.filter(bottle => bottle.y < 420);
+                
+                
             }
         }, 40);
         // }

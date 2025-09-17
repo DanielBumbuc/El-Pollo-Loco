@@ -35,7 +35,7 @@ isOnGround = false;
         this.speedY = 30;
         this.applayGravity();
         if (this.bottleAmount <= 0) {
-            // console.log(true);
+            
 
         }
         setInterval(() => {
