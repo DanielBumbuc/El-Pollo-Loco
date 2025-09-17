@@ -98,19 +98,19 @@ class MoveableObject extends DrawableObject {
 
     startDeadAnimation() {
         let frame = 0;
-        console.log(this.dead);
+        
         this.deadAnimationInterval = setInterval(() => {
         if (frame < this.IMAGES_DEAD.length && this.dead === true) {
             this.img = this.imageCache[this.IMAGES_DEAD[frame]];
             frame++;
             console.log(frame);
-            
         } 
         else {
             clearInterval(this.deadAnimationInterval);
             this.deadAnimationDone = true;
+            this.img = this.imageCache[this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]];
         }
-    }, 120); // Geschwindigkeit anpassen
+    }, 120);
     }
 
     isColliding(mo) {
@@ -140,7 +140,7 @@ class MoveableObject extends DrawableObject {
     }
 
     isDead() {
-        if (this instanceof Character && this.lifepoints == 0 && !this.dead) {
+        if ((this instanceof Character || this instanceof Endboss) && this.lifepoints == 0 && !this.dead) {
             this.dead = true; // Animation wurde gestartet
             this.startDeadAnimation();
         }

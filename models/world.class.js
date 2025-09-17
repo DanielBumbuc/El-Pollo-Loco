@@ -144,6 +144,9 @@ class World {
             if (this.character.deadAnimationDone) {
                 this.removeDeadCharacter();
                 clearInterval(runInterval);
+            } else if (this.level.endboss[0].deadAnimationDone) {
+                this.removeDeadEndboss();
+                clearInterval(runInterval);
             }
         }, 200);
     }
@@ -218,8 +221,8 @@ class World {
         setInterval(() => {
             if (bottle.isOnGround == true) {
                 this.throwableObject = this.throwableObject.filter(bottle => bottle.y < 420);
-                
-                
+
+
             }
         }, 40);
         // }
@@ -229,7 +232,7 @@ class World {
         let alertDistance = 300;
         this.level.endboss.forEach(endboss => {
             if (this.character.x + alertDistance > endboss.x && this.character.x < endboss.x + endboss.width) {
-                console.log(this.character.x, 'und', endboss.x);
+                // console.log(this.character.x, 'und', endboss.x);
                 endboss.canMoveLeft = false;
                 endboss.alert = true;
             } else {
@@ -296,6 +299,10 @@ class World {
 
     removeDeadEnemies() {
         this.level.enemies = this.level.enemies.filter(enemy => !enemy.isDead());
+    }
+
+    removeDeadEndboss() {
+        this.level.endboss = this.level.endboss.filter(endboss => !endboss.isDead());
     }
 
     removeDeadCharacter() {

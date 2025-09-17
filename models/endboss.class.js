@@ -6,6 +6,7 @@ class Endboss extends MoveableObject {
     alert = false;
     hasAttacked = false; // Neu: Flag für einmaligen Angriff
     lastAttackTime = 0; // Neu: Zeitstempel des letzten Angriffs
+    attackSpeed = 230;
     offset = {
         top: 50,
         bottom: 50,
@@ -73,7 +74,7 @@ class Endboss extends MoveableObject {
         setInterval(() => {
             const now = Date.now();
             if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD);
+                return
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.alert && !this.hasAttacked && now - this.lastAttackTime > 5000) {
@@ -82,17 +83,32 @@ class Endboss extends MoveableObject {
                 this.lastAttackTime = now;
                 // Attack-Animation einmalig abspielen  
                 let attackIndex = 0;
+                let lastPosX = this.x; // Position vor dem Angriff speichern
                 let attackAnim = setInterval(() => {
                     if (attackIndex < this.IMAGES_ATTACK.length) {
                         this.img = this.imageCache[this.IMAGES_ATTACK[attackIndex]];
                         attackIndex++;
+                        
                     } else {
                         clearInterval(attackAnim); // Animation stoppen
+                        this.attackPosition();
+                        // this.x -= this.attackSpeed; // Endboss bewegt sich während des Angriffs nach links
                         this.hasAttacked = false; // Angriff zurücksetzen
+                        
                     }
 
-                }, 100); // Geschwindigkeit der Attack-Animation
+                }, 200); // Geschwindigkeit der Attack-Animation
             }
         }, 50);
+    }
+
+    attackPosition() {
+        let lastPosX = this.x; // Position vor dem Angriff speichern
+        this.x -= this.attackSpeed; // Endboss bewegt sich während des Angriffs nach links
+        setInterval(() => {
+            if (this.x < lastPosX) {
+                this.x += this.attackSpeed; // Endboss bewegt sich nach dem Angriff langsam zurück
+            }
+        }, 200);
     }
 }
