@@ -14,6 +14,7 @@ class MoveableObject extends DrawableObject {
     jumpDuration = 1000;
     dead = false;
     deadAnimationDone = false;
+    alertAnimationActive = false;
     offset = {
         top: 0,
         bottom: 0,
@@ -35,8 +36,8 @@ class MoveableObject extends DrawableObject {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
                 // if (this.y > this.onGroundY) {
-                    // this.y = this.onGroundY;
-                    // this.speedY = 0;
+                // this.y = this.onGroundY;
+                // this.speedY = 0;
                 // }
             }
         }, 1000 / 25);
@@ -48,7 +49,23 @@ class MoveableObject extends DrawableObject {
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImage++;
+
     }
+
+startAlertAnimation() {
+    
+    this.alertAnimationActive = true;
+    let i = 0;
+    let interval = setInterval(() => {
+        this.img = this.imageCache[this.IMAGES_ALERT[i]];
+        i++;
+        console.log('Alert Frame:', i);
+        if (i >= this.IMAGES_ALERT.length) {
+            clearInterval(interval);
+            this.alertAnimationActive = false; // Animation ist fertig
+        }
+    }, 300); // Geschwindigkeit der Alert-Animation
+}
 
     moveRight() {
         this.x += this.speed;
@@ -93,24 +110,24 @@ class MoveableObject extends DrawableObject {
             let frameIndex = Math.floor(jumpProgress * this.IMAGES_JUMPING.length);
             frameIndex = Math.max(0, Math.min(frameIndex, this.IMAGES_JUMPING.length - 1));
             this.img = this.imageCache[this.IMAGES_JUMPING[frameIndex]];
-        }, 30); 
+        }, 30);
     }
 
     startDeadAnimation() {
         let frame = 0;
-        
+
         this.deadAnimationInterval = setInterval(() => {
-        if (frame < this.IMAGES_DEAD.length && this.dead === true) {
-            this.img = this.imageCache[this.IMAGES_DEAD[frame]];
-            frame++;
-            console.log(frame);
-        } 
-        else {
-            clearInterval(this.deadAnimationInterval);
-            this.deadAnimationDone = true;
-            this.img = this.imageCache[this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]];
-        }
-    }, 120);
+            if (frame < this.IMAGES_DEAD.length && this.dead === true) {
+                this.img = this.imageCache[this.IMAGES_DEAD[frame]];
+                frame++;
+                console.log(frame);
+            }
+            else {
+                clearInterval(this.deadAnimationInterval);
+                this.deadAnimationDone = true;
+                this.img = this.imageCache[this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]];
+            }
+        }, 120);
     }
 
     isColliding(mo) {

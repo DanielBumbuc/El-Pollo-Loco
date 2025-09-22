@@ -68,46 +68,59 @@ class Endboss extends MoveableObject {
         }, 1000 / 60);
 
         setInterval(() => {
+            if (this.alertAnimationActive) return;
             this.playAnimation(this.IMAGES_WALKING);
-        }, 100);
+        }, 200);
 
         setInterval(() => {
+            if (this.alertAnimationActive) return; // Animation läuft bereits!
             const now = Date.now();
             if (this.isDead()) {
                 return
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
-            } else if (this.alert && !this.hasAttacked && now - this.lastAttackTime > 5000) {
-                this.playAnimation(this.IMAGES_ALERT);
-                this.hasAttacked = true; // Angriff nur einmal zulassen
-                this.lastAttackTime = now;
-                // Attack-Animation einmalig abspielen  
-                let attackIndex = 0;
-                let lastPosX = this.x; // Position vor dem Angriff speichern
-                let attackAnim = setInterval(() => {
-                    if (attackIndex < this.IMAGES_ATTACK.length) {
-                        this.img = this.imageCache[this.IMAGES_ATTACK[attackIndex]];
-                        attackIndex++;
-                        
-                    } else {
-                        clearInterval(attackAnim); // Animation stoppen
-                        this.attackPosition();
-                        // this.x -= this.attackSpeed; // Endboss bewegt sich während des Angriffs nach links
-                        this.hasAttacked = false; // Angriff zurücksetzen
-                        
-                    }
+            } else if (this.alert) {
+                    this.startAlertAnimation();
+                // this.hasAttacked = true;
+                // this.lastAttackTime = now;
+                // let attackIndex = 0;
+                // let attackAnim = setInterval(() => {
+                //     if (attackIndex < this.IMAGES_ATTACK.length) {
+                //         this.img = this.imageCache[this.IMAGES_ATTACK[attackIndex]];
+                //         attackIndex++;
+                //         this.attackPosition();
+                //     } else {
+                //         clearInterval(attackAnim); // Animation stoppen
+                //         this.hasAttacked = false; // Angriff zurücksetzen
 
-                }, 200); // Geschwindigkeit der Attack-Animation
+                //     }
+
+                // }, 2000); // Geschwindigkeit der Attack-Animation
             }
-        }, 50);
+        }, 2000);
+    }
+
+    attackAnimation() {
+        let attackIndex = 0;
+        let attackAnim = setInterval(() => {
+            if (attackIndex < this.IMAGES_ATTACK.length) {
+                this.img = this.imageCache[this.IMAGES_ATTACK[attackIndex]];
+                attackIndex++;
+                this.attackPosition();
+            } else {
+                clearInterval(attackAnim);
+                this.hasAttacked = false;
+            }
+
+        }, 200);
     }
 
     attackPosition() {
-        let lastPosX = this.x; // Position vor dem Angriff speichern
-        this.x -= this.attackSpeed; // Endboss bewegt sich während des Angriffs nach links
+        let lastPosX = this.x;
+        this.x -= this.attackSpeed;
         setInterval(() => {
             if (this.x < lastPosX) {
-                this.x += this.attackSpeed; // Endboss bewegt sich nach dem Angriff langsam zurück
+                this.x += this.attackSpeed;
             }
         }, 200);
     }
