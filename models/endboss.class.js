@@ -86,7 +86,6 @@ class Endboss extends MoveableObject {
                     this.startAttackAnimation();
                 }
                 this.lastAttackTime = now;
-                let attackIndex = 0;
             }
         }, 2000);
     }

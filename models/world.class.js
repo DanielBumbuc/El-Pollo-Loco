@@ -14,7 +14,9 @@ class World {
     level = level1;
     startScreen = new StartGame();
     gameOverScreen = new GameOver();
+    youWonScreen = new YouWon();
     isGameOver = false;
+    isYouWon = false;
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
@@ -34,6 +36,11 @@ class World {
             this.addObjectsToMap(this.level.backgrounds);
             this.addObjectsToMap(this.level.clouds);
             this.gameOverScreen.draw(this.ctx);
+        } else if(this.youWon) {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.addObjectsToMap(this.level.backgrounds);
+            this.addObjectsToMap(this.level.clouds);
+            this.youWonScreen.draw(this.ctx);
         } if (!this.character) {
             return;
         }
@@ -138,7 +145,6 @@ class World {
     run() {
         let runInterval = setInterval(() => {
             this.checkCollisions();
-            // this.checkThrowObjects();
             this.checkCharacterPosition();
             this.removeDeadEnemies();
             if (this.character.deadAnimationDone) {
@@ -147,6 +153,7 @@ class World {
             } else if (this.level.endboss[0].deadAnimationDone) {
                 this.removeDeadEndboss();
                 clearInterval(runInterval);
+                this.isYouWon = true;
             }
         }, 200);
     }
@@ -196,14 +203,6 @@ class World {
                 this.removeCollectedObject(coin);
             }
         });
-
-        // this.level.endboss.forEach(endboss => {
-        //     if (this.throwableObject.isColliding(endboss)) {
-        //         // this.bottle.isColliding(endboss)
-        //         // this.character.hit();
-        //         this.statusbarEndboss.setPercentage(this.endboss.lifepoints);
-        //     }
-        // });
     }
 
     checkThrowObjects() {
