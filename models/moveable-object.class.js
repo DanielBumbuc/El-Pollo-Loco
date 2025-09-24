@@ -15,6 +15,7 @@ class MoveableObject extends DrawableObject {
     dead = false;
     deadAnimationDone = false;
     alertAnimationActive = false;
+    attackAnimationActive = false;
     offset = {
         top: 0,
         bottom: 0,
@@ -52,20 +53,36 @@ class MoveableObject extends DrawableObject {
 
     }
 
-startAlertAnimation() {
-    
-    this.alertAnimationActive = true;
-    let i = 0;
-    let interval = setInterval(() => {
-        this.img = this.imageCache[this.IMAGES_ALERT[i]];
-        i++;
-        console.log('Alert Frame:', i);
-        if (i >= this.IMAGES_ALERT.length) {
-            clearInterval(interval);
-            this.alertAnimationActive = false; // Animation ist fertig
-        }
-    }, 300); // Geschwindigkeit der Alert-Animation
-}
+    startAlertAnimation() {
+        this.alertAnimationActive = true;
+        let i = 0;
+        let interval = setInterval(() => {
+            this.img = this.imageCache[this.IMAGES_ALERT[i]];
+            i++;
+            if (i >= this.IMAGES_ALERT.length) {
+                clearInterval(interval);
+                this.alertAnimationActive = false; // Animation ist fertig
+                this.hasAlerted = true;
+            }
+        }, 300); // Geschwindigkeit der Alert-Animation
+    }
+
+    startAttackAnimation() {
+        this.attackAnimationActive = true;
+        let i = 0;
+        let interval = setInterval(() => {
+            this.img = this.imageCache[this.IMAGES_ATTACK[i]];
+            i++;
+            if (i >= this.IMAGES_ATTACK.length / 2 && !this.hasAttacked) {
+                this.hasAttacked = true;
+                this.attackPosition();
+            } else if (i >= this.IMAGES_ATTACK.length) {
+                clearInterval(interval);
+                this.attackAnimationActive = false; // Animation ist fertig
+                this.hasAttacked = false; // Reset für nächsten Angriff
+            }
+        }, 100); // Geschwindigkeit der Attack-Animation
+    }
 
     moveRight() {
         this.x += this.speed;
