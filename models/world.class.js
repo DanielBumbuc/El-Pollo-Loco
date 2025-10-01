@@ -36,11 +36,14 @@ class World {
             this.addObjectsToMap(this.level.backgrounds);
             this.addObjectsToMap(this.level.clouds);
             this.gameOverScreen.draw(this.ctx);
-        } else if(this.youWon) {
+        } else if(this.isYouWon) {
+            console.log('You won');
+            
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.addObjectsToMap(this.level.backgrounds);
             this.addObjectsToMap(this.level.clouds);
             this.youWonScreen.draw(this.ctx);
+            this.character = null;
         } if (!this.character) {
             return;
         }

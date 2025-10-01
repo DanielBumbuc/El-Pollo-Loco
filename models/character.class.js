@@ -63,6 +63,7 @@ class Character extends MoveableObject {
 
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.moveRight();
+                this.playSound('walking');
             }
 
             if (this.world.keyboard.LEFT && this.x > 0) {

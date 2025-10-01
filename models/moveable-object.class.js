@@ -23,6 +23,20 @@ class MoveableObject extends DrawableObject {
         right: 0
     }
 
+    sounds = {
+        jump: new Audio('../audio/swing-whoosh-110410.mp3'),
+        walking: new Audio('../audio/running-in-grass-6237.mp3'),
+        // coin: new Audio('../audio/coin.mp3'),
+        // bottle: new Audio('../audio/bottle.mp3'),
+        // hit: new Audio('../audio/hit.mp3'),
+        // dead: new Audio('../audio/character_dead.mp3')
+    }
+
+    playSound(sound) {
+        this.sounds[sound].currentTime = 0;
+        this.sounds[sound].play();
+    }
+
     isAboveGround() {
         if (this instanceof ThrowableObject) {
             return true;
@@ -87,11 +101,13 @@ class MoveableObject extends DrawableObject {
     moveRight() {
         this.x += this.speed;
         this.otherDirection = false;
+        
     }
 
     moveLeft() {
         if (this.canMoveLeft) {
             this.x -= this.speed;
+            this.playSound('walking');
         }
     }
 
@@ -100,6 +116,8 @@ class MoveableObject extends DrawableObject {
         this.jumpEndTime;
         this.speedY = 28;
         this.startJumpAnimation();
+        this.playSound('jump');
+        
     }
 
     calcJumpDuration() {
