@@ -51,8 +51,8 @@ class MoveableObject extends DrawableObject {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
                 if (this instanceof Character && this.y > this.onGroundY) {
-                this.y = this.onGroundY;
-                this.speedY = 0;
+                    this.y = this.onGroundY;
+                    this.speedY = 0;
                 }
             }
         }, 1000 / 25);
@@ -101,13 +101,12 @@ class MoveableObject extends DrawableObject {
     moveRight() {
         this.x += this.speed;
         this.otherDirection = false;
-        
+
     }
 
     moveLeft() {
         if (this.canMoveLeft) {
             this.x -= this.speed;
-            this.playSound('walking');
         }
     }
 
@@ -117,7 +116,7 @@ class MoveableObject extends DrawableObject {
         this.speedY = 28;
         this.startJumpAnimation();
         this.playSound('jump');
-        
+
     }
 
     calcJumpDuration() {
@@ -212,4 +211,7 @@ class MoveableObject extends DrawableObject {
             this.coinAmount = 100;
         }
     }
+
+
+
 }

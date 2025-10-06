@@ -54,6 +54,7 @@ class Character extends MoveableObject {
         this.applayGravity();
         this.speed = 4;
         this.animate();
+        this.sounds.walking.loop = true; // Sound soll durchlaufen
         console.log(this.y);
 
     }
