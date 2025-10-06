@@ -123,7 +123,7 @@ class MoveableObject extends DrawableObject {
         if (!this.isAboveGround() && this.jumpStartTime && !this.jumpEndTime) {
             this.jumpEndTime = Date.now();
             this.jumpDuration = this.jumpEndTime - this.jumpStartTime;
-            this.jumpStartTime = null; // Optional: zurücksetzen, wenn Sprung vorbei
+            this.jumpStartTime = null;
         }
         return this.jumpDuration;
     }

@@ -54,7 +54,6 @@ class Character extends MoveableObject {
         this.applayGravity();
         this.speed = 4;
         this.animate();
-        this.sounds.walking.loop = true; // Sound soll durchlaufen
         console.log(this.y);
 
     }
@@ -64,7 +63,6 @@ class Character extends MoveableObject {
 
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.moveRight();
-                this.playSound('walking');
             }
 
             if (this.world.keyboard.LEFT && this.x > 0) {
@@ -89,6 +87,7 @@ class Character extends MoveableObject {
             } else {
                 if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                     this.playAnimation(this.IMAGES_WALKING);
+                    this.sounds.walking.play();
                 }
             }
         }, 50);
