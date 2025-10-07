@@ -25,7 +25,7 @@ class MoveableObject extends DrawableObject {
 
     sounds = {
         jump: new Audio('../audio/swing-whoosh-110410.mp3'),
-        walking: new Audio('../audio/running-in-grass-6237.mp3'),
+        walking: new Audio('../audio/click.wav'),
         // coin: new Audio('../audio/coin.mp3'),
         // bottle: new Audio('../audio/bottle.mp3'),
         // hit: new Audio('../audio/hit.mp3'),
