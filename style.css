@@ -2,6 +2,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100vh;
     background-image: url('./img/cactus-9696097_1920.png');
     background-size: cover;
     background-position: center;
@@ -24,4 +25,32 @@ h1 {
     font-family: 'rustler';
     src:
         url('./fonts/rustler.ttf') format('truetype');
+}
+
+.navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.setting-img {
+    width: 50px;
+    cursor: pointer;
+}
+
+.setting-img:hover {
+    transform: rotate(45deg);
+    transition: transform 0.3s;
+}
+
+.volume-img {
+    width: 50px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.volume-off-img {
+    width: 50px;
+    margin-left: 20px;
+    cursor: pointer;
 }
