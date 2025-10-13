@@ -36,9 +36,9 @@ class World {
             this.addObjectsToMap(this.level.backgrounds);
             this.addObjectsToMap(this.level.clouds);
             this.gameOverScreen.draw(this.ctx);
-        } else if(this.isYouWon) {
+        } else if (this.isYouWon) {
             console.log('You won');
-            
+
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.addObjectsToMap(this.level.backgrounds);
             this.addObjectsToMap(this.level.clouds);
@@ -119,6 +119,10 @@ class World {
 
     startGame() {
         this.level.enemies.forEach(chicken => chicken.animateWalking());
+        let backgroundMusic = new Audio('../audio/funk-lead-loop-71557.mp3');
+        backgroundMusic.loop = true;
+        backgroundMusic.volume = 0.3;
+        backgroundMusic.play();
     }
 
     addObjectsToMap(objects) {

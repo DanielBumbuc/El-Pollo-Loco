@@ -25,16 +25,23 @@ class MoveableObject extends DrawableObject {
 
     sounds = {
         jump: new Audio('../audio/swing-whoosh-110410.mp3'),
-        walking: new Audio('../audio/click.wav'),
-        // coin: new Audio('../audio/coin.mp3'),
-        // bottle: new Audio('../audio/bottle.mp3'),
-        // hit: new Audio('../audio/hit.mp3'),
-        // dead: new Audio('../audio/character_dead.mp3')
+        // walking: new Audio('../audio/click.wav'),
+        coin: new Audio('../audio/money-pickup-2-89563.mp3'),
+        bottle: new Audio('../audio/health-pickup-6860.mp3'),
+        throw: new Audio('../audio/air-whoosh-380651.mp3'),
+        hit: new Audio('../audio/hitHurt.wav'),
+        dead: new Audio('../audio/ouchmp3-14591.mp3')
     }
 
     playSound(sound) {
         this.sounds[sound].currentTime = 0;
         this.sounds[sound].play();
+    }
+
+    setSoundVolume(sound, volume) {
+        if (this.sounds[sound]) {
+            this.sounds[sound].volume = volume;
+        }
     }
 
     isAboveGround() {
@@ -177,6 +184,7 @@ class MoveableObject extends DrawableObject {
 
     hit(damage) {
         this.lifepoints -= damage;
+        this.playSound('hit');
         if (this.lifepoints < 0) {
             this.lifepoints = 0;
         } else {
@@ -194,12 +202,15 @@ class MoveableObject extends DrawableObject {
         if ((this instanceof Character || this instanceof Endboss) && this.lifepoints == 0 && !this.dead) {
             this.dead = true; // Animation wurde gestartet
             this.startDeadAnimation();
+            this.playSound('dead');
         }
         return this.lifepoints == 0;
     }
 
     collectBottle() {
         this.bottleAmount += 10;
+        this.setSoundVolume('bottle', 0.3);
+        this.playSound('bottle');
         if (this.bottleAmount > 100) {
             this.bottleAmount = 100;
         }
@@ -207,11 +218,10 @@ class MoveableObject extends DrawableObject {
 
     collectCoin() {
         this.coinAmount += 10;
+        this.setSoundVolume('coin', 0.3);
+        this.playSound('coin');
         if (this.coinAmount > 100) {
             this.coinAmount = 100;
         }
     }
-
-
-
 }

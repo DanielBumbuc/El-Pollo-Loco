@@ -87,7 +87,7 @@ class Character extends MoveableObject {
             } else {
                 if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                     this.playAnimation(this.IMAGES_WALKING);
-                    this.sounds.walking.play();
+                    // this.sounds.walking.play();
                 }
             }
         }, 50);
