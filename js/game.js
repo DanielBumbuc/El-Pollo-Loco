@@ -10,6 +10,12 @@ function init() {
     };
 }
 
+function toggleVolumeImg() {
+    if (world) {
+        world.toggleVolumeImg();
+    }
+}
+
 document.addEventListener('keydown', (e) => {
     keyboard.handleKeydown(e.code);
 })

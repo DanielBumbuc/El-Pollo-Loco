@@ -1,3 +1,9 @@
+@font-face {
+    font-family: 'rustler';
+    src:
+        url('./fonts/rustler.ttf') format('truetype');
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -11,6 +17,10 @@ body {
     text-shadow: 4px 4px 3px rgba(0,0,0,0.6);
 }
 
+.d-none {
+    display: none;
+}
+
 canvas {
     background-color: black;
 }
@@ -21,16 +31,13 @@ h1 {
     margin-bottom: 60px;
 }
 
-@font-face {
-    font-family: 'rustler';
-    src:
-        url('./fonts/rustler.ttf') format('truetype');
-}
-
 .navbar {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
+    width: 720px;
+    margin: 60px 0 -60px 0;
+    z-index: 2;
 }
 
 .setting-img {
@@ -53,4 +60,15 @@ h1 {
     width: 50px;
     margin-left: 20px;
     cursor: pointer;
+}
+
+.volume-img:hover, 
+.volume-off-img:hover {
+    animation: pulse 0.6s;
+}
+
+@keyframes pulse {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
 }

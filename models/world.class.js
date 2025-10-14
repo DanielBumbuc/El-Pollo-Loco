@@ -3,6 +3,7 @@ class World {
     ctx;
     gameState = false;
     keyboard;
+    volume = true;
     camera_x = 0;
     character = new Character();
     statusbarLifepoints = new Statusbar('lifepoints', 20, 20, 100);
@@ -17,8 +18,9 @@ class World {
     youWonScreen = new YouWon();
     isGameOver = false;
     isYouWon = false;
+    backgroundMusic = new Audio('../audio/funk-lead-loop-71557.mp3');
 
-    constructor(canvas, keyboard) {
+    constructor(canvas, keyboard, volume) {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
         this.keyboard = keyboard;
@@ -28,6 +30,7 @@ class World {
         this.draw();
         this.run();
         this.spawnEndboss();
+
     }
 
     draw() {
@@ -103,6 +106,57 @@ class World {
         });
     }
 
+    toggleVolumeImg() {
+        let volumeOnImg = document.getElementById('volumeOn');
+        let volumeOffImg = document.getElementById('volumeOff');
+        if (this.volume) {
+            volumeOnImg.classList.add('d-none');
+            volumeOffImg.classList.remove('d-none');
+            this.volume = false;
+            this.toggleVolume();
+        } else {
+            volumeOnImg.classList.remove('d-none');
+            volumeOffImg.classList.add('d-none');
+            this.volume = true;
+            this.toggleVolume();
+        }
+    }
+
+    toggleVolume() {
+
+        if (this.volume) {
+            this.backgroundMusic.volume = 0.3;
+            this.character.sounds.jump.volume = 0.3;
+            this.character.sounds.coin.volume = 0.3;
+            this.character.sounds.bottle.volume = 0.3;
+            this.character.sounds.throw.volume = 0.3;
+            this.character.sounds.hit.volume = 0.3;
+            this.character.sounds.dead.volume = 0.3;
+        } else {
+            this.backgroundMusic.volume = 0;
+            this.character.sounds.jump.volume = 0;
+            this.character.sounds.coin.volume = 0;
+            this.character.sounds.bottle.volume = 0;
+            this.character.sounds.throw.volume = 0;
+            this.character.sounds.hit.volume = 0;
+            this.character.sounds.dead.volume = 0;
+        }
+
+        console.log(this.backgroundMusic.volume = 0,
+            this.character.sounds.jump.volume = 0,
+            this.character.sounds.coin.volume = 0,
+            this.character.sounds.bottle.volume = 0,
+            this.character.sounds.throw.volume = 0,
+            this.character.sounds.hit.volume = 0,
+            this.character.sounds.dead.volume = 0);
+        
+        // if (this.volume) {
+        //     this.backgroundMusic.volume = 0;
+        // } else {
+        //     this.backgroundMusic.volume = 0.3;
+        // }
+    }
+
     checkMousePosition() {
         this.canvas.addEventListener('mousemove', (e) => {
             const rect = this.canvas.getBoundingClientRect();
@@ -119,10 +173,9 @@ class World {
 
     startGame() {
         this.level.enemies.forEach(chicken => chicken.animateWalking());
-        let backgroundMusic = new Audio('../audio/funk-lead-loop-71557.mp3');
-        backgroundMusic.loop = true;
-        backgroundMusic.volume = 0.3;
-        backgroundMusic.play();
+        this.backgroundMusic.loop = true;
+        this.backgroundMusic.volume = 0.3;
+        this.backgroundMusic.play();
     }
 
     addObjectsToMap(objects) {
