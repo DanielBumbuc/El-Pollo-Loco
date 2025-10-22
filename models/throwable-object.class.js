@@ -1,6 +1,6 @@
 class ThrowableObject extends MoveableObject {
-world;
-isOnGround = false;
+    world;
+    isOnGround = false;
 
     IMAGES_BOTTLE_ROTATE = [
         '../img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png',
@@ -28,22 +28,23 @@ isOnGround = false;
         this.speedX = speedX;
         this.height = 40;
         this.width = 40;
+        this.world = world; // ← Sicherstellen, dass this.world definiert ist
         this.throw();
     }
 
     throw() {
         this.speedY = 30;
         this.applayGravity();
-        this.playSound('throw');
+        // this.playSound('throw');
         if (this.bottleAmount <= 0) {
-            
+
 
         }
         setInterval(() => {
             this.x += this.speedX;
             this.playAnimation(this.IMAGES_BOTTLE_ROTATE);
             this.checkIsOnGround();
-            this.checkBottleCollision();  
+            this.checkBottleCollision();
         }, 40);
     }
 
@@ -72,7 +73,7 @@ isOnGround = false;
             if (this.isColliding(enemies)) {
                 enemies.hit(50);
                 console.log(enemies.lifepoints);
-                
+
                 this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
                 this.speedY = 0;
                 this.speedX = 0;

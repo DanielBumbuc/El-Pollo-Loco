@@ -3,7 +3,7 @@ class World {
     ctx;
     gameState = false;
     keyboard;
-    volume = true;
+    muted = false;
     camera_x = 0;
     character = new Character();
     statusbarLifepoints = new Statusbar('lifepoints', 20, 20, 100);
@@ -19,6 +19,7 @@ class World {
     isGameOver = false;
     isYouWon = false;
     backgroundMusic = new Audio('../audio/funk-lead-loop-71557.mp3');
+    
 
     constructor(canvas, keyboard, volume) {
         this.canvas = canvas;
@@ -109,52 +110,36 @@ class World {
     toggleVolumeImg() {
         let volumeOnImg = document.getElementById('volumeOn');
         let volumeOffImg = document.getElementById('volumeOff');
-        if (this.volume) {
+        if (!this.muted) {
             volumeOnImg.classList.add('d-none');
             volumeOffImg.classList.remove('d-none');
-            this.volume = false;
+            this.muted = true;
             this.toggleVolume();
         } else {
             volumeOnImg.classList.remove('d-none');
             volumeOffImg.classList.add('d-none');
-            this.volume = true;
+            this.muted = false;
             this.toggleVolume();
         }
     }
 
     toggleVolume() {
-
-        if (this.volume) {
+        if (!this.muted) {
             this.backgroundMusic.volume = 0.3;
-            this.character.sounds.jump.volume = 0.3;
-            this.character.sounds.coin.volume = 0.3;
-            this.character.sounds.bottle.volume = 0.3;
-            this.character.sounds.throw.volume = 0.3;
-            this.character.sounds.hit.volume = 0.3;
-            this.character.sounds.dead.volume = 0.3;
+            // Alle Character-Sounds auf 0.3 setzen
+            for (let soundKey in this.character.sounds) {
+                this.character.sounds[soundKey].volume = 0.3;
+            }
         } else {
             this.backgroundMusic.volume = 0;
-            this.character.sounds.jump.volume = 0;
-            this.character.sounds.coin.volume = 0;
-            this.character.sounds.bottle.volume = 0;
-            this.character.sounds.throw.volume = 0;
-            this.character.sounds.hit.volume = 0;
-            this.character.sounds.dead.volume = 0;
+            // Alle Character-Sounds auf 0 setzen (muten)
+            for (let soundKey in this.character.sounds) {
+                this.character.sounds[soundKey].volume = 0;
+            }
         }
 
-        console.log(this.backgroundMusic.volume = 0,
-            this.character.sounds.jump.volume = 0,
-            this.character.sounds.coin.volume = 0,
-            this.character.sounds.bottle.volume = 0,
-            this.character.sounds.throw.volume = 0,
-            this.character.sounds.hit.volume = 0,
-            this.character.sounds.dead.volume = 0);
+        console.log(this.character.sounds.throw.volume); // Zum Testen
         
-        // if (this.volume) {
-        //     this.backgroundMusic.volume = 0;
-        // } else {
-        //     this.backgroundMusic.volume = 0.3;
-        // }
     }
 
     checkMousePosition() {
@@ -271,8 +256,8 @@ class World {
         if (this.character.bottleAmount < 10) {
             return;
         }
-        let bottle = new ThrowableObject(this.character.x, this.character.y, this.speedX);
-        bottle.world = this;
+        let bottle = new ThrowableObject(this.character.x, this.character.y, this.speedX, this);
+        // bottle.world = this;
         this.throwableObject.push(bottle);
         this.character.bottleAmount -= 10;
         this.statusbarBottles.setPercentage(this.character.bottleAmount);
