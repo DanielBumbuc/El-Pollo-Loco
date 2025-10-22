@@ -23,24 +23,17 @@ class MoveableObject extends DrawableObject {
         right: 0
     }
 
-    sounds = {
-        jump: new Audio('../audio/swing-whoosh-110410.mp3'),
-        // walking: new Audio('../audio/click.wav'),
-        coin: new Audio('../audio/money-pickup-2-89563.mp3'),
-        bottle: new Audio('../audio/health-pickup-6860.mp3'),
-        throw: new Audio('../audio/air-whoosh-380651.mp3'),
-        hit: new Audio('../audio/hitHurt.wav'),
-        dead: new Audio('../audio/ouchmp3-14591.mp3')
-    }
+    // Sounds werden jetzt zentral über den SoundManager verwaltet
 
     playSound(sound) {
-        this.sounds[sound].currentTime = 0;
-        this.sounds[sound].play();
+        if (window.soundManager) {
+            window.soundManager.playSound(sound);
+        }
     }
 
     setSoundVolume(sound, volume) {
-        if (this.sounds[sound]) {
-            this.sounds[sound].volume = volume;
+        if (window.soundManager) {
+            window.soundManager.setSoundVolume(sound, volume);
         }
     }
 

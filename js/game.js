@@ -4,6 +4,12 @@ let keyboard = new Keyboard();
 
 function init() {
     canvas = document.getElementById('canvas');
+    
+    // SoundManager initialisieren
+    if (window.soundManager) {
+        window.soundManager.initializeGameSounds();
+    }
+    
     world = new World(canvas, keyboard);
     keyboard.onBottleThrow = () => {
         world.checkThrowObjects();

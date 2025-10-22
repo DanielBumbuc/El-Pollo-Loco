@@ -126,20 +126,17 @@ class World {
     toggleVolume() {
         if (!this.muted) {
             this.backgroundMusic.volume = 0.3;
-            // Alle Character-Sounds auf 0.3 setzen
-            for (let soundKey in this.character.sounds) {
-                this.character.sounds[soundKey].volume = 0.3;
+            // Alle Sounds über SoundManager entmuten
+            if (window.soundManager) {
+                window.soundManager.setMuted(false);
             }
         } else {
             this.backgroundMusic.volume = 0;
-            // Alle Character-Sounds auf 0 setzen (muten)
-            for (let soundKey in this.character.sounds) {
-                this.character.sounds[soundKey].volume = 0;
+            // Alle Sounds über SoundManager muten
+            if (window.soundManager) {
+                window.soundManager.setMuted(true);
             }
         }
-
-        console.log(this.character.sounds.throw.volume); // Zum Testen
-        
     }
 
     checkMousePosition() {

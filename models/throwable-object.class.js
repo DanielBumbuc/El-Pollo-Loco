@@ -35,9 +35,7 @@ class ThrowableObject extends MoveableObject {
     throw() {
         this.speedY = 30;
         this.applayGravity();
-        // this.playSound('throw');
         if (this.bottleAmount <= 0) {
-
 
         }
         setInterval(() => {
