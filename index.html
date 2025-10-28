@@ -7,7 +7,6 @@
     <title>El Pollo Loco</title>
     <link rel="stylesheet" href="./style.css">
     <script src="./models/world.class.js"></script>
-
     <script src="./models/drawable-object.class.js"></script>
     <script src="./models/sound-manager.class.js"></script>
     <script src="./models/start-game.class.js"></script>
@@ -32,14 +31,53 @@
 
 <body onload="init()">
 
-    <h1>El Pollo Loco</h1>
-    <nav class="navbar">
-        <img class="setting-img" src="./img/Design ohne Titel.svg" alt="">
-        <div class="volume-container">
-            <img id="volumeOn" class="volume-img" onclick="toggleVolumeImg()" src="./img/volume.svg" alt="">
-            <img id="volumeOff" class="volume-off-img d-none" onclick="toggleVolumeImg()" src="./img/volumeOff.svg" alt="">
+    <h1 class="game-title">El Pollo Loco</h1>
+    
+    <nav class="western-navbar">
+        <!-- Links: Steuerungslegende -->
+        <div class="controls-legend">
+            <h3 class="legend-title">Controls</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <span class="key-icon">←→</span>
+                    <span class="action">Move</span>
+                </div>
+                <div class="legend-item">
+                    <span class="key-icon">↑</span>
+                    <span class="action">Jump</span>
+                </div>
+                <div class="legend-item">
+                    <span class="key-icon">D</span>
+                    <span class="action">Throw</span>
+                </div>
+                <div class="legend-item">
+                    <span class="key-icon">Enter</span>
+                    <span class="action">Start</span>
+                </div>
+            </div>
         </div>
-
+        <div class="western-controls">
+            <div class="western-button settings-btn" title="Settings">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 15.5A3.5 3.5 0 0 1 8.5 12A3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5a3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97c0-.33-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1c0 .33.03.65.07.97L2.46 14.6c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.31.61.22l2.49-1c.52.39 1.06.73 1.69.98l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.25 1.17-.59 1.69-.98l2.49 1c.22.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64L19.43 13z"/>
+                </svg>
+                <span class="western-star">✦</span>
+            </div>
+            
+            <div class="western-button volume-btn" id="volumeOn" onclick="toggleVolumeImg()" title="Volume On">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/>
+                </svg>
+                <span class="western-star">✦</span>
+            </div>
+            
+            <div class="western-button volume-btn d-none" id="volumeOff" onclick="toggleVolumeImg()" title="Volume Off">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12,4L9.91,6.09L12,8.18M4.27,3L3,4.27L7.73,9H3V15H7L12,20V13.27L16.25,17.53C15.58,18.04 14.83,18.46 14,18.7V20.77C15.38,20.45 16.63,19.82 17.68,18.96L19.73,21L21,19.73L12,10.73M19,12C19,12.94 18.8,13.82 18.46,14.64L19.97,16.15C20.62,14.91 21,13.5 21,12C21,7.72 18,4.14 14,3.23V5.29C16.89,6.15 19,8.83 19,12M16.5,12C16.5,10.23 15.5,8.71 14,7.97V10.18L16.45,12.63C16.5,12.43 16.5,12.21 16.5,12Z"/>
+                </svg>
+                <span class="western-star">✦</span>
+            </div>
+        </div>
     </nav>
     <canvas id="canvas" width="720" height="480"></canvas>
 

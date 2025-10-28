@@ -126,13 +126,11 @@ class World {
     toggleVolume() {
         if (!this.muted) {
             this.backgroundMusic.volume = 0.3;
-            // Alle Sounds über SoundManager entmuten
             if (window.soundManager) {
                 window.soundManager.setMuted(false);
             }
         } else {
             this.backgroundMusic.volume = 0;
-            // Alle Sounds über SoundManager muten
             if (window.soundManager) {
                 window.soundManager.setMuted(true);
             }

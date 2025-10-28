@@ -9,10 +9,22 @@ class Bottle extends MoveableObject {
         left: 20,
         right: 15
     }
+    IMAGES_BOTTLE = [
+        'img/6_salsa_bottle/1_salsa_bottle_on_ground.png',
+        'img/6_salsa_bottle/2_salsa_bottle_on_ground.png'
+    ];
     
     constructor() {
         super();
         this.loadImg('../img/6_salsa_bottle/1_salsa_bottle_on_ground.png');
-    
+        this.loadImages(this.IMAGES_BOTTLE);    
+        this.animateBottles();
     }
+
+    animateBottles() {
+        setInterval(() => {
+            this.playAnimation(this.IMAGES_BOTTLE);
+        }, 1000);  
+    }
+
 }
