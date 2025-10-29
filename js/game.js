@@ -1,6 +1,7 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let activeButton = false;
 
 function init() {
     canvas = document.getElementById('canvas');
@@ -19,6 +20,23 @@ function init() {
 function toggleVolumeImg() {
     if (world) {
         world.toggleVolumeImg();
+    }
+}
+
+function activeControlButton(element) {
+    // Alle Buttons zurücksetzen
+    document.querySelectorAll('.western-button').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    // Aktuellen Button aktivieren
+    element.classList.add('active');
+    
+    // Spezifische Aktionen
+    if (element.classList.contains('settings-btn')) {
+        // Settings-Panel öffnen/schließen
+        
+    } else if (element.classList.contains('volume-btn')) {
+        toggleVolumeImg();
     }
 }
 
