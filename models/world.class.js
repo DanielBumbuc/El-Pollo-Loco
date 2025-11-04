@@ -3,7 +3,7 @@ class World {
     ctx;
     gameState = false;
     keyboard;
-    muted = false;
+    savedMuted;
     camera_x = 0;
     character = new Character();
     statusbarLifepoints = new Statusbar('lifepoints', 20, 20, 100);
@@ -19,7 +19,7 @@ class World {
     isGameOver = false;
     isYouWon = false;
     backgroundMusic = new Audio('../audio/funk-lead-loop-71557.mp3');
-    
+
 
     constructor(canvas, keyboard, volume) {
         this.canvas = canvas;
@@ -31,7 +31,6 @@ class World {
         this.draw();
         this.run();
         this.spawnEndboss();
-
     }
 
     draw() {
@@ -86,6 +85,28 @@ class World {
         this.throwableObject.world = this;
     }
 
+    startGame() {
+        this.level.enemies.forEach(chicken => chicken.animateWalking());
+        this.backgroundMusic.loop = true;
+        this.loadSavedSettings();
+        if (this.savedMuted === 'false') {
+            this.backgroundMusic.volume = 0.3;
+        } else if (this.savedMuted === 'true') {
+            this.backgroundMusic.volume = 0;
+        }
+        this.backgroundMusic.play();
+    }
+
+    loadSavedSettings() {
+        this.savedMuted = localStorage.getItem('gameMuted');
+        if (this.savedMuted === 'true') {
+            window.soundManager.setMuted(true);
+        } else {
+            window.soundManager.setMuted(false);
+        }
+
+    }
+
     initStartScreen() {
         this.checkMousePosition();
         this.canvas.addEventListener('click', (e) => {
@@ -110,29 +131,37 @@ class World {
     toggleVolumeImg() {
         let volumeOnImg = document.getElementById('volumeOn');
         let volumeOffImg = document.getElementById('volumeOff');
-        if (!this.muted) {
+        if (!window.soundManager.isMuted) {
             volumeOnImg.classList.add('d-none');
             volumeOffImg.classList.remove('d-none');
-            this.muted = true;
+            window.soundManager.isMuted = true;
             this.toggleVolume();
         } else {
             volumeOnImg.classList.remove('d-none');
             volumeOffImg.classList.add('d-none');
-            this.muted = false;
+            window.soundManager.isMuted = false;
             this.toggleVolume();
         }
     }
 
     toggleVolume() {
-        if (!this.muted) {
+
+        if (!window.soundManager.isMuted) {
+            console.log('Sound is unmuted');
+
             this.backgroundMusic.volume = 0.3;
             if (window.soundManager) {
                 window.soundManager.setMuted(false);
+                console.log(window.soundManager.isMuted);
+                localStorage.setItem('gameMuted', 'false');
             }
         } else {
+            console.log('Sound is muted');
             this.backgroundMusic.volume = 0;
             if (window.soundManager) {
                 window.soundManager.setMuted(true);
+                console.log(window.soundManager.isMuted);
+                localStorage.setItem('gameMuted', 'true');
             }
         }
     }
@@ -149,13 +178,6 @@ class World {
                 this.canvas.style.cursor = 'default';
             }
         });
-    }
-
-    startGame() {
-        this.level.enemies.forEach(chicken => chicken.animateWalking());
-        this.backgroundMusic.loop = true;
-        this.backgroundMusic.volume = 0.3;
-        this.backgroundMusic.play();
     }
 
     addObjectsToMap(objects) {
