@@ -129,16 +129,19 @@ class World {
     }
 
     toggleVolumeImg() {
-        let volumeOnImg = document.getElementById('volumeOn');
-        let volumeOffImg = document.getElementById('volumeOff');
+        let volumeOnIcon = document.getElementById('volumeOnIcon');
+        let volumeOffIcon = document.getElementById('volumeOffIcon');
+        
         if (!window.soundManager.isMuted) {
-            volumeOnImg.classList.add('d-none');
-            volumeOffImg.classList.remove('d-none');
+            // Sound stumm schalten
+            volumeOnIcon.classList.add('d-none');
+            volumeOffIcon.classList.remove('d-none');
             window.soundManager.isMuted = true;
             this.toggleVolume();
         } else {
-            volumeOnImg.classList.remove('d-none');
-            volumeOffImg.classList.add('d-none');
+            // Sound wieder anschalten
+            volumeOnIcon.classList.remove('d-none');
+            volumeOffIcon.classList.add('d-none');
             window.soundManager.isMuted = false;
             this.toggleVolume();
         }

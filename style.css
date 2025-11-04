@@ -161,6 +161,16 @@ canvas {
     color: #654321;
     z-index: 2;
     transition: all 0.3s ease;
+    position: absolute;
+}
+
+/* Sicherstellen, dass beide SVGs übereinander liegen */
+.western-button #volumeOnIcon,
+.western-button #volumeOffIcon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .western-star {
