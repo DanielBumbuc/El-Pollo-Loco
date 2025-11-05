@@ -12,7 +12,7 @@ class World {
     statusbarEndboss = new Statusbar('endboss', 740, 20, 100);
     showEndbossStatusbar = false;
     throwableObject = [];
-    level = level1;
+    level = null;
     startScreen = new StartGame();
     gameOverScreen = new GameOver();
     youWonScreen = new YouWon();
@@ -25,15 +25,14 @@ class World {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
         this.keyboard = keyboard;
+        
         this.setWorld();
-        this.initStartScreen();
-        this.setCollectables();
         this.draw();
-        this.run();
-        this.spawnEndboss();
+        // setCollectables(), run() und spawnEndboss() werden erst bei startGame() aufgerufen
     }
 
     draw() {
+        let self = this;
         if (this.isGameOver) {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.addObjectsToMap(this.level.backgrounds);
@@ -47,12 +46,12 @@ class World {
             this.addObjectsToMap(this.level.clouds);
             this.youWonScreen.draw(this.ctx);
             this.character = null;
-        } if (!this.character) {
-            return;
-        }
-        let self = this;
-        if (!this.gameState) {
+        } else if (!this.gameState) {
+            // Startscreen anzeigen wenn Spiel nicht gestartet
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.startScreen.draw(this.ctx);
+        } else if (!this.character || !this.level) {
+            return;
         } else {
             this.ctx.clearRect(0, 0, canvas.width, canvas.height);
             this.ctx.translate(this.camera_x, 0);
@@ -86,7 +85,15 @@ class World {
     }
 
     startGame() {
+        // Jetzt wo das Level geladen ist, können wir diese Methoden sicher aufrufen
+        this.setCollectables();
+        this.run();
+        this.spawnEndboss();
+        
+        // Enemies animieren
         this.level.enemies.forEach(chicken => chicken.animateWalking());
+        
+        // Hintergrundmusik starten
         this.backgroundMusic.loop = true;
         this.loadSavedSettings();
         if (this.savedMuted === 'false') {
@@ -110,26 +117,7 @@ class World {
 
     }
 
-    initStartScreen() {
-        this.checkMousePosition();
-        this.canvas.addEventListener('click', (e) => {
-            const rect = this.canvas.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            const clickY = e.clientY - rect.top;
-            let clicked = this.startScreen.checkClick(clickX, clickY);
-            if (clicked === this.startScreen.playButton) {
-                this.gameState = true;
-                this.startGame();
-            }
-        });
 
-        window.addEventListener('keydown', (e) => {
-            if (e.code === 'Enter' && !this.gameState) {
-                this.gameState = true;
-                this.startGame();
-            }
-        });
-    }
 
     toggleVolumeImg() {
         let volumeOnIcon = document.getElementById('volumeOnIcon');
@@ -172,19 +160,19 @@ class World {
         }
     }
 
-    checkMousePosition() {
-        this.canvas.addEventListener('mousemove', (e) => {
-            const rect = this.canvas.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
-            const mouseY = e.clientY - rect.top;
-            let hovered = this.startScreen.checkClick(mouseX, mouseY);
-            if (hovered === this.startScreen.playButton) {
-                this.canvas.style.cursor = 'pointer';
-            } else {
-                this.canvas.style.cursor = 'default';
-            }
-        });
-    }
+    // checkMousePosition() {
+    //     this.canvas.addEventListener('mousemove', (e) => {
+    //         const rect = this.canvas.getBoundingClientRect();
+    //         const mouseX = e.clientX - rect.left;
+    //         const mouseY = e.clientY - rect.top;
+    //         let hovered = this.startScreen.checkClick(mouseX, mouseY);
+    //         if (hovered === this.startScreen.playButton) {
+    //             this.canvas.style.cursor = 'pointer';
+    //         } else {
+    //             this.canvas.style.cursor = 'default';
+    //         }
+    //     });
+    // }
 
     addObjectsToMap(objects) {
         objects.forEach(o => {
@@ -212,13 +200,19 @@ class World {
 
     run() {
         let runInterval = setInterval(() => {
+            // Nur ausführen wenn Level und Character existieren
+            if (!this.level || !this.character) {
+                return;
+            }
+            
             this.checkCollisions();
             this.checkCharacterPosition();
             this.removeDeadEnemies();
+            
             if (this.character.deadAnimationDone) {
                 this.removeDeadCharacter();
                 clearInterval(runInterval);
-            } else if (this.level.endboss[0].deadAnimationDone) {
+            } else if (this.level.endboss && this.level.endboss[0] && this.level.endboss[0].deadAnimationDone) {
                 this.removeDeadEndboss();
                 clearInterval(runInterval);
                 this.isYouWon = true;
@@ -227,50 +221,65 @@ class World {
     }
 
     spawnEndboss() {
-
         let spawnInterval = setInterval(() => {
-            if (!this.character) {
+            // Nur ausführen wenn Level und Character existieren
+            if (!this.level || !this.character) {
                 clearInterval(spawnInterval);
                 return;
             } else if (this.character.x >= 1800) {
-                this.level.endboss.forEach(endboss => endboss.animate());
-                this.showEndbossStatusbar = true;
-                this.statusbarEndboss.animateStatusbar();
+                if (this.level.endboss && this.level.endboss.length > 0) {
+                    this.level.endboss.forEach(endboss => endboss.animate());
+                    this.showEndbossStatusbar = true;
+                    this.statusbarEndboss.animateStatusbar();
+                }
                 clearInterval(spawnInterval);
             }
         }, 200);
     }
 
     checkCollisions() {
-        this.level.enemies.forEach(enemy => {
-            if (this.character.isColliding(enemy)) {
-                this.character.hit(5);
-                this.statusbarLifepoints.setPercentage(this.character.lifepoints);
-            }
-        });
+        // Nur ausführen wenn Level und Character existieren
+        if (!this.level || !this.character) {
+            return;
+        }
 
-        this.level.endboss.forEach(endboss => {
-            if (this.character.isColliding(endboss)) {
-                this.character.hit(10);
-                this.statusbarLifepoints.setPercentage(this.character.lifepoints);
-            }
-        });
+        if (this.level.enemies) {
+            this.level.enemies.forEach(enemy => {
+                if (this.character.isColliding(enemy)) {
+                    this.character.hit(5);
+                    this.statusbarLifepoints.setPercentage(this.character.lifepoints);
+                }
+            });
+        }
 
-        this.level.bottles.forEach(bottle => {
-            if (this.character.isColliding(bottle)) {
-                this.character.collectBottle();
-                this.statusbarBottles.setPercentage(this.character.bottleAmount);
-                this.removeCollectedObject(bottle);
-            }
-        });
+        if (this.level.endboss) {
+            this.level.endboss.forEach(endboss => {
+                if (this.character.isColliding(endboss)) {
+                    this.character.hit(10);
+                    this.statusbarLifepoints.setPercentage(this.character.lifepoints);
+                }
+            });
+        }
 
-        this.level.coins.forEach(coin => {
-            if (this.character.isColliding(coin)) {
-                this.character.collectCoin();
-                this.statusbarCoins.setPercentage(this.character.coinAmount);
-                this.removeCollectedObject(coin);
-            }
-        });
+        if (this.level.bottles) {
+            this.level.bottles.forEach(bottle => {
+                if (this.character.isColliding(bottle)) {
+                    this.character.collectBottle();
+                    this.statusbarBottles.setPercentage(this.character.bottleAmount);
+                    this.removeCollectedObject(bottle);
+                }
+            });
+        }
+
+        if (this.level.coins) {
+            this.level.coins.forEach(coin => {
+                if (this.character.isColliding(coin)) {
+                    this.character.collectCoin();
+                    this.statusbarCoins.setPercentage(this.character.coinAmount);
+                    this.removeCollectedObject(coin);
+                }
+            });
+        }
     }
 
     checkThrowObjects() {
@@ -296,6 +305,11 @@ class World {
     }
 
     checkCharacterPosition() {
+        // Nur ausführen wenn Level, Character und Endboss existieren
+        if (!this.level || !this.character || !this.level.endboss) {
+            return;
+        }
+
         let alertDistance = 300;
         this.level.endboss.forEach(endboss => {
             if (this.character.x + alertDistance > endboss.x && this.character.x < endboss.x + endboss.width) {
@@ -365,11 +379,15 @@ class World {
     }
 
     removeDeadEnemies() {
-        this.level.enemies = this.level.enemies.filter(enemy => !enemy.isDead());
+        if (this.level && this.level.enemies) {
+            this.level.enemies = this.level.enemies.filter(enemy => !enemy.isDead());
+        }
     }
 
     removeDeadEndboss() {
-        this.level.endboss = this.level.endboss.filter(endboss => !endboss.isDead());
+        if (this.level && this.level.endboss) {
+            this.level.endboss = this.level.endboss.filter(endboss => !endboss.isDead());
+        }
     }
 
     removeDeadCharacter() {

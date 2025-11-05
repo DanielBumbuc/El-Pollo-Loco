@@ -3,6 +3,21 @@ let world;
 let keyboard = new Keyboard();
 let activeButton = false;
 
+function startGame() {
+    if (world) {
+        // Play-Button ausblenden
+        document.getElementById('playButton').classList.add('d-none');
+
+        // Level laden
+        loadLevel1();
+        world.level = level1;
+
+        // Spiel starten
+        world.gameState = true;
+        world.startGame();
+    }
+}
+
 function init() {
     canvas = document.getElementById('canvas');
 
@@ -15,6 +30,18 @@ function init() {
     keyboard.onBottleThrow = () => {
         world.checkThrowObjects();
     };
+    
+    // StartScreen initialisieren
+    initStartScreen();
+}
+
+function initStartScreen() {
+    // Enter-Taste zum Starten des Spiels
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Enter' && !world.gameState) {
+            startGame();
+        }
+    });
 }
 
 function toggleVolumeImg() {
@@ -23,16 +50,7 @@ function toggleVolumeImg() {
     }
 }
 
-function startGame() {
-    if (world) {
-        // Play-Button ausblenden
-        document.getElementById('playButton').classList.add('d-none');
-        
-        // Spiel starten
-        world.gameState = true;
-        world.startGame();
-    }
-}
+
 
 function activeControlButton(element) {
     let savedMuted = localStorage.getItem('gameMuted');
@@ -44,7 +62,7 @@ function activeControlButton(element) {
 
     if (savedMuted === 'true') {
         console.log(savedMuted);
-        
+
     }
     // Aktuellen Button aktivieren
     element.classList.add('active');
