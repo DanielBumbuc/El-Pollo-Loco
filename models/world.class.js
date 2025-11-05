@@ -99,10 +99,13 @@ class World {
 
     loadSavedSettings() {
         this.savedMuted = localStorage.getItem('gameMuted');
+        
         if (this.savedMuted === 'true') {
             window.soundManager.setMuted(true);
+            document.querySelector('.volume-btn').classList.remove('active');
         } else {
             window.soundManager.setMuted(false);
+            document.querySelector('.volume-btn').classList.add('active');
         }
 
     }
@@ -131,7 +134,7 @@ class World {
     toggleVolumeImg() {
         let volumeOnIcon = document.getElementById('volumeOnIcon');
         let volumeOffIcon = document.getElementById('volumeOffIcon');
-        
+
         if (!window.soundManager.isMuted) {
             // Sound stumm schalten
             volumeOnIcon.classList.add('d-none');

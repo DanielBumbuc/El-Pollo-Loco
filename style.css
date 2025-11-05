@@ -223,3 +223,35 @@ canvas {
     opacity: 1;
     transform: scale(1.2);
 }
+
+/* ===== SIMPLE PLAY BUTTON ===== */
+.game-container {
+    position: relative;
+    display: inline-block;
+}
+
+.simple-play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+    z-index: 5;
+}
+
+.simple-play-button:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.simple-play-button:active {
+    transform: translate(-50%, -50%) scale(0.95);
+}
+
+.simple-play-button.d-none {
+    display: none;
+}

@@ -122,7 +122,7 @@ class SoundManager {
         this.registerSound('bottle', '../audio/health-pickup-6860.mp3', 0.3);
         this.registerSound('hit', '../audio/hitHurt.wav', 0.3);
         this.registerSound('throw', '../audio/air-whoosh-380651.mp3', 0.3);
-        this.registerSound('walking', '../audio/running-in-grass-6237.mp3', 0.3);
+        // this.registerSound('walking', '../audio/running-in-grass-6237.mp3', 0.3);
         this.registerSound('dead', '../audio/ouchmp3-14591.mp3', 0.3);
     }
 }

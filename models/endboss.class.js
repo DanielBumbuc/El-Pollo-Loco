@@ -14,6 +14,7 @@ class Endboss extends MoveableObject {
         left: 50,
         right: 50
     }
+    
     IMAGES_WALKING = [
         '../img/4_enemie_boss_chicken/1_walk/G1.png',
         '../img/4_enemie_boss_chicken/1_walk/G2.png',

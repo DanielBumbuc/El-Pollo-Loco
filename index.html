@@ -79,7 +79,22 @@
             </div>
         </div>
     </nav>
-    <canvas id="canvas" width="720" height="480"></canvas>
+    
+    <!-- Game Canvas Container -->
+    <div class="game-container">
+        <canvas id="canvas" width="720" height="480"></canvas>
+        
+        <!-- Simple Play Button -->
+        <button class="simple-play-button" id="playButton" onclick="startGame()">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                <!-- Simple Circle Background -->
+                <circle cx="30" cy="30" r="28" fill="#8B4513" stroke="#654321" stroke-width="4"/>
+                
+                <!-- Play Triangle -->
+                <path d="M23 18L23 42L43 30Z" fill="#FFDC00"/>
+            </svg>
+        </button>
+    </div>
 
 </body>
 
