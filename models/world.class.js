@@ -25,10 +25,9 @@ class World {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
         this.keyboard = keyboard;
-        
+    
         this.setWorld();
         this.draw();
-        // setCollectables(), run() und spawnEndboss() werden erst bei startGame() aufgerufen
     }
 
     draw() {
@@ -109,9 +108,12 @@ class World {
         
         if (this.savedMuted === 'true') {
             window.soundManager.setMuted(true);
+            console.log('sound muted');
+            
             document.querySelector('.volume-btn').classList.remove('active');
         } else {
             window.soundManager.setMuted(false);
+            console.log('sound unmuted');
             document.querySelector('.volume-btn').classList.add('active');
         }
 
@@ -120,17 +122,19 @@ class World {
 
 
     toggleVolumeImg() {
+        let volumeBtn = document.getElementById('volumeButton');
         let volumeOnIcon = document.getElementById('volumeOnIcon');
         let volumeOffIcon = document.getElementById('volumeOffIcon');
-
         if (!window.soundManager.isMuted) {
             // Sound stumm schalten
+            volumeBtn.classList.remove('active');
             volumeOnIcon.classList.add('d-none');
             volumeOffIcon.classList.remove('d-none');
             window.soundManager.isMuted = true;
             this.toggleVolume();
         } else {
             // Sound wieder anschalten
+            volumeBtn.classList.add('active');
             volumeOnIcon.classList.remove('d-none');
             volumeOffIcon.classList.add('d-none');
             window.soundManager.isMuted = false;

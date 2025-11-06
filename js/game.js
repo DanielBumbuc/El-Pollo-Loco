@@ -30,9 +30,12 @@ function init() {
     keyboard.onBottleThrow = () => {
         world.checkThrowObjects();
     };
-    
+
     // StartScreen initialisieren
     initStartScreen();
+    console.log(window.soundManager.isMuted);
+    setSavedVolumeIcon();
+
 }
 
 function initStartScreen() {
@@ -49,8 +52,6 @@ function toggleVolumeImg() {
         world.toggleVolumeImg();
     }
 }
-
-
 
 function activeControlButton(element) {
     let savedMuted = localStorage.getItem('gameMuted');
@@ -73,6 +74,26 @@ function activeControlButton(element) {
 
     } else if (element.classList.contains('volume-btn')) {
         toggleVolumeImg();
+    }
+}
+
+function setSavedVolumeIcon() {
+    let volumeBtn = document.getElementById('volumeButton');
+    let volumeOnIcon = document.getElementById('volumeOnIcon');
+    let volumeOffIcon = document.getElementById('volumeOffIcon');
+    let savedMuted = localStorage.getItem('gameMuted');
+    if (savedMuted === 'true') {
+        // Sound icon stumm schalten
+        volumeBtn.classList.remove('active');
+        volumeOnIcon.classList.add('d-none');
+        volumeOffIcon.classList.remove('d-none');
+        window.soundManager.isMuted = true;
+    } else if (savedMuted === 'false') {
+        // Sound iocn wieder anschalten
+        volumeBtn.classList.add('active');
+        volumeOnIcon.classList.remove('d-none');
+        volumeOffIcon.classList.add('d-none');
+        window.soundManager.isMuted = false;
     }
 }
 
