@@ -47,6 +47,36 @@ function initStartScreen() {
     });
 }
 
+function resetGame() {
+    // Alle Intervalle stoppen
+    clearAllIntervals();
+    
+    // World zurücksetzen
+    world = null;
+    
+    // Neue World erstellen
+    world = new World(canvas, keyboard);
+    
+    // Zurück zum Startscreen
+    world.gameState = false;
+    document.getElementById('playButton').classList.remove('d-none');
+    
+    // Sound stoppen
+    if (world.backgroundMusic) {
+        world.backgroundMusic.pause();
+        world.backgroundMusic.currentTime = 0;
+    }
+    
+    console.log('Game reset complete');
+}
+
+function clearAllIntervals() {
+    // Alle aktiven Intervalle stoppen
+    for (let i = 1; i < 99999; i++) {
+        window.clearInterval(i);
+    }
+}
+
 function toggleVolumeImg() {
     if (world) {
         world.toggleVolumeImg();
