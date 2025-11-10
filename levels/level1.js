@@ -33,12 +33,12 @@ function loadLevel1() {
             new Cloud()
         ],
         [
-            new ChickenSmall(),
-            new ChickenSmall(),
-            new ChickenSmall(),
-            new Chicken(),
-            new Chicken(),
-            new Chicken(),
+            // new ChickenSmall(),
+            // new ChickenSmall(),
+            // new ChickenSmall(),
+            // new Chicken(),
+            // new Chicken(),
+            // new Chicken(),
         ],
         [
             new Endboss()
