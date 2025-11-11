@@ -175,6 +175,20 @@ class MoveableObject extends DrawableObject {
             this.y < mo.y + mo.height - mo.offset.bottom; //top line from character < bottom line mo
     }
 
+    isLandingOnTop(enemy) {
+        // Prüfe ob Character von oben kommt (fallend)
+        let isFalling = this.speedY < 0;
+
+        // Prüfe ob Character über dem Gegner ist
+        let isAboveEnemy = this.y + this.height - this.offset.bottom < enemy.y + enemy.offset.top + 20;
+
+        // Prüfe horizontale Überlappung
+        let hasHorizontalOverlap = this.x + this.width - this.offset.right > enemy.x + enemy.offset.left &&
+            this.x + this.offset.left < enemy.x + enemy.width - enemy.offset.right;
+
+        return isFalling && isAboveEnemy && hasHorizontalOverlap;
+    }
+
     hit(damage) {
         this.lifepoints -= damage;
         this.playSound('hit');

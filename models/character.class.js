@@ -4,12 +4,41 @@ class Character extends MoveableObject {
     otherDirection = false;
     jumpFrame = 0;
     isJumping = false;
+    idleCounter = 0;
+    isIdleAnimating = false;
+    idleThreshold = 100; // 300 frames = 5000ms
     offset = {
         top: 50,
         bottom: 50,
         left: 20,
         right: 20
     }
+
+    IMAGES_IDLE = [
+        '../img/2_character_pepe/1_idle/idle/I-1.png',
+        '../img/2_character_pepe/1_idle/idle/I-2.png',
+        '../img/2_character_pepe/1_idle/idle/I-3.png',
+        '../img/2_character_pepe/1_idle/idle/I-4.png',
+        '../img/2_character_pepe/1_idle/idle/I-5.png',
+        '../img/2_character_pepe/1_idle/idle/I-6.png',
+        '../img/2_character_pepe/1_idle/idle/I-7.png',
+        '../img/2_character_pepe/1_idle/idle/I-8.png',
+        '../img/2_character_pepe/1_idle/idle/I-9.png',
+        '../img/2_character_pepe/1_idle/idle/I-10.png'
+    ];
+
+    IMAGES_LONG_IDLE = [
+        '../img/2_character_pepe/1_idle/long_idle/I-11.png',
+        '../img/2_character_pepe/1_idle/long_idle/I-12.png',
+        '../img/2_character_pepe/1_idle/long_idle/I-13.png',
+        '../img/2_character_pepe/1_idle/long_idle/I-14.png',
+        '../img/2_character_pepe/1_idle/long_idle/I-15.png',
+        '../img/2_character_pepe/1_idle/long_idle/I-16.png',
+        '../img/2_character_pepe/1_idle/long_idle/I-17.png',
+        '../img/2_character_pepe/1_idle/long_idle/I-18.png',
+        '../img/2_character_pepe/1_idle/long_idle/I-19.png',
+        '../img/2_character_pepe/1_idle/long_idle/I-20.png'
+    ];
 
     IMAGES_WALKING = [
         '../img/2_character_pepe/2_walk/W-21.png',
@@ -51,10 +80,12 @@ class Character extends MoveableObject {
         this.loadImages(this.IMAGES_JUMPING);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
+        this.loadImages(this.IMAGES_IDLE);
+        this.loadImages(this.IMAGES_LONG_IDLE);
         this.applayGravity();
         this.speed = 4;
         this.animate();
-        console.log(this.y);
+
 
     }
 
@@ -83,13 +114,55 @@ class Character extends MoveableObject {
             } else if (this.isHurt() && !this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isAboveGround()) {
-                return;                
+                return;
             } else {
                 if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                     this.playAnimation(this.IMAGES_WALKING);
-                    // this.sounds.walking.play();
+
+                } else {
+                    this.checkIdleAnimation();    
                 }
             }
-        }, 50);
+        }, 150);
     }
+
+    checkIdleAnimation() {
+    this.idleCounter++;
+    if (this.idleCounter >= 0) {
+        this.playAnimation(this.IMAGES_IDLE);
+        if (this.idleCounter >= this.idleThreshold) {
+            this.playAnimation(this.IMAGES_LONG_IDLE);
+        }
+    } else {
+        // Normale Idle-Pose (nur wenn nicht animiert)
+        this.loadImg('../img/2_character_pepe/3_jump/J-31.png');
+    }
+}
+
+    startIdleAnimation() {
+        this.isIdleAnimating = true;
+        // Hier deine Idle-Animation starten
+        console.log('Character is idle for 15+ seconds - starting idle animation');
+
+        // this.playAnimation(this.IMAGES_IDLE);
+
+    }
+
+    resetIdleCounter() {
+        this.idleCounter = 0;
+        this.isIdleAnimating = false;
+    }
+
+    jumpOnEnemy() {
+        // Character springt hoch nach dem Besiegen eines Gegners
+        this.speedY = 15; // Kleiner Sprung nach oben
+        this.world.level.enemies.forEach((enemies) => {
+            if (this.isColliding(enemies)) {
+                enemies.hit(100);
+                console.log(enemies.lifepoints);
+            }
+        });
+    }
+
+    
 }

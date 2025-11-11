@@ -25,7 +25,7 @@ class World {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
         this.keyboard = keyboard;
-    
+
         this.setWorld();
         this.draw();
     }
@@ -88,10 +88,10 @@ class World {
         this.setCollectables();
         this.run();
         this.spawnEndboss();
-        
+
         // Enemies animieren
         this.level.enemies.forEach(chicken => chicken.animateWalking());
-        
+
         // Hintergrundmusik starten
         this.backgroundMusic.loop = true;
         this.loadSavedSettings();
@@ -105,11 +105,11 @@ class World {
 
     loadSavedSettings() {
         this.savedMuted = localStorage.getItem('gameMuted');
-        
+
         if (this.savedMuted === 'true') {
             window.soundManager.setMuted(true);
             console.log('sound muted');
-            
+
             document.querySelector('.volume-btn').classList.remove('active');
         } else {
             window.soundManager.setMuted(false);
@@ -208,11 +208,11 @@ class World {
             if (!this.level || !this.character) {
                 return;
             }
-            
+
             this.checkCollisions();
             this.checkCharacterPosition();
             this.removeDeadEnemies();
-            
+
             if (this.character.deadAnimationDone) {
                 this.removeDeadCharacter();
                 clearInterval(runInterval);
@@ -247,14 +247,22 @@ class World {
             return;
         }
 
-        if (this.level.enemies) {
-            this.level.enemies.forEach(enemy => {
-                if (this.character.isColliding(enemy)) {
-                    this.character.hit(5);
+        this.level.enemies.forEach((enemy, index) => {
+            if (this.character.isColliding(enemy) && !enemy.isDead()) {
+
+                // Prüfe ob Character auf Gegner springt
+                if (this.character.isLandingOnTop(enemy)) {
+                    console.log('landing');
+                    this.character.jumpOnEnemy();
+                    
+                    // this.defeatEnemyByJumping(enemy, index);
+                } else {
+                    // Normale Kollision - Character nimmt Schaden
+                    this.character.hit(10);
                     this.statusbarLifepoints.setPercentage(this.character.lifepoints);
                 }
-            });
-        }
+            }
+        });
 
         if (this.level.endboss) {
             this.level.endboss.forEach(endboss => {
