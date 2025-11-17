@@ -30,16 +30,31 @@ class ChickenSmall extends MoveableObject {
         setInterval(() => {
             this.moveLeft();
         }, 1000 / 60);
-        
+
         setInterval(() => {
             this.playAnimation(this.IMAGES_WALKING);
         }, 100);
 
         setInterval(() => {
-            if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD);
+    try {
+        if (this.isDead()) {
+            // Nur beim ersten Tod loggen
+            if (!this.hasLoggedDeath) {
+                console.log('ChickenSmall DIED:', {
+                    lifepoints: this.lifepoints,
+                    isDead: this.isDead(),
+                    deadProperty: this.dead,
+                    timestamp: new Date().toLocaleTimeString()
+                });
+                this.hasLoggedDeath = true;
             }
-        }, 50);
+            
+            this.playAnimation(this.IMAGES_DEAD);
+        }
+    } catch (error) {
+        console.error('Error in ChickenSmall animation:', error);
+    }
+}, 50);
 
     }
 

@@ -120,24 +120,24 @@ class Character extends MoveableObject {
                     this.playAnimation(this.IMAGES_WALKING);
 
                 } else {
-                    this.checkIdleAnimation();    
+                    // this.checkIdleAnimation();
                 }
             }
         }, 150);
     }
 
     checkIdleAnimation() {
-    this.idleCounter++;
-    if (this.idleCounter >= 0) {
-        this.playAnimation(this.IMAGES_IDLE);
-        if (this.idleCounter >= this.idleThreshold) {
-            this.playAnimation(this.IMAGES_LONG_IDLE);
+        this.idleCounter++;
+        if (this.idleCounter >= 0) {
+            this.playAnimation(this.IMAGES_IDLE);
+            if (this.idleCounter >= this.idleThreshold) {
+                this.playAnimation(this.IMAGES_LONG_IDLE);
+            }
+        } else {
+            // Normale Idle-Pose (nur wenn nicht animiert)
+            this.loadImg('../img/2_character_pepe/3_jump/J-31.png');
         }
-    } else {
-        // Normale Idle-Pose (nur wenn nicht animiert)
-        this.loadImg('../img/2_character_pepe/3_jump/J-31.png');
     }
-}
 
     startIdleAnimation() {
         this.isIdleAnimating = true;
@@ -155,14 +155,18 @@ class Character extends MoveableObject {
 
     jumpOnEnemy() {
         // Character springt hoch nach dem Besiegen eines Gegners
-        this.speedY = 15; // Kleiner Sprung nach oben
+
         this.world.level.enemies.forEach((enemies) => {
             if (this.isColliding(enemies)) {
                 enemies.hit(100);
                 console.log(enemies.lifepoints);
             }
         });
+
+        // this.resetIdleCounter();
+        this.speedY = 15; // Kleiner Sprung nach oben
     }
 
-    
+
+
 }

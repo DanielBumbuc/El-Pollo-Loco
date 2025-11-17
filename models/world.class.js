@@ -208,11 +208,8 @@ class World {
             if (!this.level || !this.character) {
                 return;
             }
-
             this.checkCollisions();
             this.checkCharacterPosition();
-            this.removeDeadEnemies();
-
             if (this.character.deadAnimationDone) {
                 this.removeDeadCharacter();
                 clearInterval(runInterval);
@@ -252,8 +249,15 @@ class World {
 
                 // Prüfe ob Character auf Gegner springt
                 if (this.character.isLandingOnTop(enemy)) {
-                    console.log('landing');
                     this.character.jumpOnEnemy();
+
+                    // Enemy erst nach Death-Animation entfernen
+                setTimeout(() => {
+                    // if (this.level.enemies[index] && this.level.enemies[index].isDead()) {
+                    //     this.level.enemies.splice(index, 1);
+                    // }
+                    this.removeDeadEnemies();
+                }, 200);
                     
                     // this.defeatEnemyByJumping(enemy, index);
                 } else {
@@ -391,7 +395,7 @@ class World {
     }
 
     removeDeadEnemies() {
-        if (this.level && this.level.enemies) {
+        if (this.level && this.level.enemies) {            
             this.level.enemies = this.level.enemies.filter(enemy => !enemy.isDead());
         }
     }

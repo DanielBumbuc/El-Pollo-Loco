@@ -69,7 +69,7 @@ class ThrowableObject extends MoveableObject {
 
         this.world.level.enemies.forEach((enemies) => {
             if (this.isColliding(enemies)) {
-                enemies.hit(50);
+                enemies.hit(100);
                 console.log(enemies.lifepoints);
 
                 this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
