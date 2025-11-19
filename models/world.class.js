@@ -223,6 +223,11 @@ class World {
                     this.level.endboss.forEach(endboss => endboss.animate());
                     this.showEndbossStatusbar = true;
                     this.statusbarEndboss.animateStatusbar();
+                    if (window.soundManager) {
+                    window.soundManager.stopBackgroundMusic(); // Background Music stoppen
+                    window.soundManager.playSound('bossFightMusic'); // Endboss Music starten
+                    console.log('Endboss fight music started!');
+                }
                 }
                 clearInterval(spawnInterval);
             }

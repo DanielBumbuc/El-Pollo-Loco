@@ -209,7 +209,25 @@ class MoveableObject extends DrawableObject {
         if ((this instanceof Character || this instanceof Endboss) && this.lifepoints == 0 && !this.dead) {
             this.dead = true; // Animation wurde gestartet
             this.startDeadAnimation();
-            this.playSound('dead');
+            if (this instanceof Endboss) {
+            console.log('🔥 ENDBOSS DEFEATED! 🔥');
+            
+            // Boss Fight Music stoppen und Victory Music starten
+            if (window.soundManager) {
+                window.soundManager.stopBackgroundMusic();
+                window.soundManager.playSound('endbossDead'); // Neuer Victory Sound
+            }
+            
+        } else if (this instanceof Character) {
+            console.log('💀 Character died - Game Over');
+            
+            // Background Music stoppen bei Character-Tod
+            if (window.soundManager) {
+                window.soundManager.stopBackgroundMusic();
+                window.soundManager.playSound('dead'); // Game Over Sound
+            }
+        }
+            // this.playSound('dead');
         }
         return this.lifepoints == 0;
     }

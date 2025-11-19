@@ -125,9 +125,10 @@ class SoundManager {
         // this.registerSound('walking', '../audio/running-in-grass-6237.mp3', 0.3);
         this.registerSound('dead', '../audio/ouchmp3-14591.mp3', 0.3);
         this.registerSound('chicken', '../audio/chicken_sound.wav', 0.3);
-        
+        this.registerSound('endbossDead', '../audio/female-character-death-vocal-9-408428.mp3', 0.6);
+        this.registerSound('bossFightMusic', '../audio/cowboy-western-background-247644.mp3', 0.3);
         // Background Music hinzufügen
-        this.registerSound('backgroundMusic', '../audio/funk-lead-loop-71557.mp3', 0.3);
+        this.registerSound('backgroundMusic', '../audio/the-russian-gunfighter-western-movie-instrumental-286601.mp3', 0.3);
         if (this.sounds['backgroundMusic']) {
             this.sounds['backgroundMusic'].loop = true;
         }
@@ -147,6 +148,7 @@ class SoundManager {
      */
     stopBackgroundMusic() {
         this.stopSound('backgroundMusic');
+        this.stopSound('bossFightMusic');
         console.log('Background music stopped via SoundManager');
     }
 
