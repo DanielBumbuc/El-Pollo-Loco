@@ -48,6 +48,12 @@ function initStartScreen() {
 }
 
 function resetGame() {
+    // Background Music über SoundManager stoppen
+    if (window.soundManager) {
+        window.soundManager.stopBackgroundMusic();
+        console.log('Background music stopped via SoundManager');
+    }
+    
     // Alle Intervalle stoppen
     clearAllIntervals();
     
@@ -60,12 +66,7 @@ function resetGame() {
     // Zurück zum Startscreen
     world.gameState = false;
     document.getElementById('playButton').classList.remove('d-none');
-    
-    // Sound stoppen
-    if (world.backgroundMusic) {
-        world.backgroundMusic.pause();
-        world.backgroundMusic.currentTime = 0;
-    }
+    document.getElementById('restartButton').classList.add('d-none');
     
     console.log('Game reset complete');
 }
@@ -126,6 +127,8 @@ function setSavedVolumeIcon() {
         window.soundManager.isMuted = false;
     }
 }
+
+
 
 document.addEventListener('keydown', (e) => {
     keyboard.handleKeydown(e.code);

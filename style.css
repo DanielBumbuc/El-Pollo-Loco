@@ -255,3 +255,52 @@ canvas {
 .simple-play-button.d-none {
     display: none;
 }
+
+/* ===== SIMPLE RESTART BUTTON ===== */
+.simple-restart-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 50%;
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 2);
+    z-index: 5;
+    opacity: 0;
+}
+
+.simple-restart-button:not(.d-none) {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    animation: restartButtonAppear 0.6s cubic-bezier(0.68, -0.55, 0.265, 1) forwards;
+}
+
+.simple-restart-button:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.simple-restart-button:active {
+    transform: translate(-50%, -50%) scale(0.95);
+}
+
+.simple-restart-button.d-none {
+    display: none;
+}
+
+@keyframes restartButtonAppear {
+    0% {
+        transform: translate(-50%, -50%) scale(0) rotate(-180deg);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2) rotate(-90deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}

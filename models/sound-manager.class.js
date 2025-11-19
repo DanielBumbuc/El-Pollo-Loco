@@ -124,6 +124,39 @@ class SoundManager {
         this.registerSound('throw', '../audio/air-whoosh-380651.mp3', 0.3);
         // this.registerSound('walking', '../audio/running-in-grass-6237.mp3', 0.3);
         this.registerSound('dead', '../audio/ouchmp3-14591.mp3', 0.3);
+        this.registerSound('chicken', '../audio/chicken_sound.wav', 0.3);
+        
+        // Background Music hinzufügen
+        this.registerSound('backgroundMusic', '../audio/funk-lead-loop-71557.mp3', 0.3);
+        if (this.sounds['backgroundMusic']) {
+            this.sounds['backgroundMusic'].loop = true;
+        }
+    }
+
+    /**
+     * Spielt die Background Music ab
+     */
+    playBackgroundMusic() {
+        this.stopBackgroundMusic(); // Erst stoppen falls bereits läuft
+        this.playSound('backgroundMusic');
+        console.log('Background music started via SoundManager');
+    }
+
+    /**
+     * Stoppt die Background Music
+     */
+    stopBackgroundMusic() {
+        this.stopSound('backgroundMusic');
+        console.log('Background music stopped via SoundManager');
+    }
+
+    /**
+     * Prüft ob Background Music läuft
+     * @returns {boolean}
+     */
+    isBackgroundMusicPlaying() {
+        const bgMusic = this.sounds['backgroundMusic'];
+        return bgMusic && !bgMusic.paused && bgMusic.currentTime > 0;
     }
 }
 

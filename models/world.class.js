@@ -18,7 +18,6 @@ class World {
     youWonScreen = new YouWon();
     isGameOver = false;
     isYouWon = false;
-    backgroundMusic = new Audio('../audio/funk-lead-loop-71557.mp3');
 
 
     constructor(canvas, keyboard, volume) {
@@ -38,8 +37,6 @@ class World {
             this.addObjectsToMap(this.level.clouds);
             this.gameOverScreen.draw(this.ctx);
         } else if (this.isYouWon) {
-            console.log('You won');
-
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.addObjectsToMap(this.level.backgrounds);
             this.addObjectsToMap(this.level.clouds);
@@ -92,15 +89,11 @@ class World {
         // Enemies animieren
         this.level.enemies.forEach(chicken => chicken.animateWalking());
 
-        // Hintergrundmusik starten
-        this.backgroundMusic.loop = true;
+        // Hintergrundmusik über SoundManager starten
         this.loadSavedSettings();
-        if (this.savedMuted === 'false') {
-            this.backgroundMusic.volume = 0.3;
-        } else if (this.savedMuted === 'true') {
-            this.backgroundMusic.volume = 0;
+        if (window.soundManager) {
+            window.soundManager.playBackgroundMusic();
         }
-        this.backgroundMusic.play();
     }
 
     loadSavedSettings() {
@@ -118,8 +111,6 @@ class World {
         }
 
     }
-
-
 
     toggleVolumeImg() {
         let volumeBtn = document.getElementById('volumeButton');
@@ -147,7 +138,6 @@ class World {
         if (!window.soundManager.isMuted) {
             console.log('Sound is unmuted');
 
-            this.backgroundMusic.volume = 0.3;
             if (window.soundManager) {
                 window.soundManager.setMuted(false);
                 console.log(window.soundManager.isMuted);
@@ -155,7 +145,7 @@ class World {
             }
         } else {
             console.log('Sound is muted');
-            this.backgroundMusic.volume = 0;
+
             if (window.soundManager) {
                 window.soundManager.setMuted(true);
                 console.log(window.soundManager.isMuted);
@@ -217,8 +207,9 @@ class World {
                 this.removeDeadEndboss();
                 clearInterval(runInterval);
                 this.isYouWon = true;
+                this.initRestartButton();
             }
-        }, 200);
+        }, 100); //change from 200ms to 100ms for checking isLandingOnTop
     }
 
     spawnEndboss() {
@@ -252,13 +243,10 @@ class World {
                     this.character.jumpOnEnemy();
 
                     // Enemy erst nach Death-Animation entfernen
-                setTimeout(() => {
-                    // if (this.level.enemies[index] && this.level.enemies[index].isDead()) {
-                    //     this.level.enemies.splice(index, 1);
-                    // }
-                    this.removeDeadEnemies();
-                }, 200);
-                    
+                    setTimeout(() => {
+                        this.removeDeadEnemies();
+                    }, 200);
+
                     // this.defeatEnemyByJumping(enemy, index);
                 } else {
                     // Normale Kollision - Character nimmt Schaden
@@ -395,7 +383,7 @@ class World {
     }
 
     removeDeadEnemies() {
-        if (this.level && this.level.enemies) {            
+        if (this.level && this.level.enemies) {
             this.level.enemies = this.level.enemies.filter(enemy => !enemy.isDead());
         }
     }
@@ -410,6 +398,19 @@ class World {
         if (this.character && this.character.isDead()) {
             this.character = null;
             this.isGameOver = true;
+            this.initRestartButton();
         }
+    }
+
+    initRestartButton() {
+        let restartBtn = document.getElementById('restartButton');
+        setInterval(() => {
+            if (this.isGameOver || this.isYouWon) {
+                console.log('you won', this.isYouWon , 'you lose',  this.isGameOver);
+                
+                restartBtn.classList.remove('d-none');
+            }
+        }, 2000);
+
     }
 }

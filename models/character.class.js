@@ -159,6 +159,7 @@ class Character extends MoveableObject {
         this.world.level.enemies.forEach((enemies) => {
             if (this.isColliding(enemies)) {
                 enemies.hit(100);
+                this.playSound('chicken');
                 console.log(enemies.lifepoints);
             }
         });

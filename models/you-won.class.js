@@ -11,6 +11,7 @@ class YouWon extends DrawableObject {
     }
 
     loadYouWonScreen() {
+        let restartBtn = document.getElementById('restartButton');
         this.loadImg('../img/You won, you lost/You won A.png');
     }
 }
