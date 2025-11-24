@@ -125,6 +125,7 @@ class SoundManager {
         // this.registerSound('walking', '../audio/running-in-grass-6237.mp3', 0.3);
         this.registerSound('dead', '../audio/ouchmp3-14591.mp3', 0.3);
         this.registerSound('chicken', '../audio/chicken_sound.wav', 0.3);
+        this.registerSound('endboss', '../audio/chiken-sound-370337.mp3', 0.3);
         this.registerSound('endbossDead', '../audio/female-character-death-vocal-9-408428.mp3', 0.6);
         this.registerSound('bossFightMusic', '../audio/cowboy-western-background-247644.mp3', 0.3);
         // Background Music hinzufügen

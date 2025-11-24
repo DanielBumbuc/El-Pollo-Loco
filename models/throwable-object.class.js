@@ -58,6 +58,7 @@ class ThrowableObject extends MoveableObject {
             if (this.isColliding(endboss)) {
                 this.world.statusbarEndboss.setPercentage(endboss.lifepoints);
                 endboss.hit(15);
+                this.playSound('endboss');
                 this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
                 this.speedY = 0;
                 this.speedX = 0;
@@ -70,8 +71,8 @@ class ThrowableObject extends MoveableObject {
         this.world.level.enemies.forEach((enemies) => {
             if (this.isColliding(enemies)) {
                 enemies.hit(100);
+                this.playSound('chicken');
                 console.log(enemies.lifepoints);
-
                 this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
                 this.speedY = 0;
                 this.speedX = 0;

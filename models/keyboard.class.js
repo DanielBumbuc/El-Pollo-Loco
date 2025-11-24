@@ -20,9 +20,8 @@ class Keyboard {
         if (pressedKey == 'ArrowDown') this.DOWN = true;
         if (pressedKey == 'Space') this.SPACE = true;
         if (pressedKey == 'Enter') this.ENTER = true;
-        // if (pressedKey == 'KeyD') this.D = true;
-        if (pressedKey == 'KeyD') {
-        this.D = false;
+        if (pressedKey == 'KeyD' && !this.D) {
+        this.D = true;
         if (typeof this.onBottleThrow === 'function') {
             this.onBottleThrow();
         }
