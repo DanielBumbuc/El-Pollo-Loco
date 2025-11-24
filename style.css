@@ -8,13 +8,18 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
     background-image: url('./img/cactus-9696097_1920.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     font-family: 'rustler', Arial, Helvetica, sans-serif;
     text-shadow: 4px 4px 3px rgba(0, 0, 0, 0.6);
+    box-sizing: border-box;
 }
 
 .d-none {
@@ -33,6 +38,12 @@ canvas {
     background-color: black;
     border: 4px solid #654321;
     border-radius: 8px;
+    display: block;
+    max-width: 100vw;
+    max-height: 100vh;
+    width: 720px;
+    height: 480px;
+    object-fit: contain;
 }
 
 /* ===== WESTERN GAME TITLE ===== */
@@ -213,7 +224,7 @@ canvas {
 
 .western-button.active {
     background: linear-gradient(145deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
-    box-shadow: 
+    box-shadow:
         inset 0 2px 4px rgba(255, 255, 255, 0.3),
         0 4px 8px rgba(0, 0, 0, 0.4);
     transform: translateY(-2px);
@@ -290,15 +301,88 @@ canvas {
     display: none;
 }
 
+/* ===== RESPONSIVE FULLSCREEN GAMING ===== */
+@media only screen and (max-width: 935px), only screen and (max-height: 480px) {
+    body {
+        justify-content: center;
+        align-items: center;
+    }
+    
+    canvas {
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        border: none !important;
+        border-radius: 0 !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1;
+    }
+    
+    .game-container {
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+/* ===== TABLET/DESKTOP RESPONSIVE ===== */
+@media only screen and (min-width: 936px) and (min-height: 481px) {
+    canvas {
+        /* Skaliert das Canvas proportional zur verfügbaren Bildschirmgröße */
+        width: min(90vw, 720px);
+        height: min(90vh, 480px);
+        
+        /* Behält das 720:480 Verhältnis bei */
+        aspect-ratio: 720/480;
+        
+        /* Falls das Canvas zu groß wird, skaliere es runter */
+        max-width: 90vw;
+        max-height: 90vh;
+    }
+}
+
+@media (max-width: 935px) {
+    h1 {
+        display: none;
+    }
+
+    .western-navbar {
+        display: none;
+    }
+    
+    /* Buttons für Touch-Geräte optimieren */
+    .simple-play-button,
+    .simple-restart-button {
+        z-index: 10;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+    
+    .simple-play-button svg,
+    .simple-restart-button svg {
+        width: 70px;
+        height: 70px;
+    }
+}
+
 @keyframes restartButtonAppear {
     0% {
         transform: translate(-50%, -50%) scale(0) rotate(-180deg);
         opacity: 0;
     }
+
     50% {
         transform: translate(-50%, -50%) scale(1.2) rotate(-90deg);
         opacity: 0.8;
     }
+
     100% {
         transform: translate(-50%, -50%) scale(1) rotate(0deg);
         opacity: 1;

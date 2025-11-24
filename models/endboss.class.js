@@ -14,7 +14,7 @@ class Endboss extends MoveableObject {
         left: 50,
         right: 50
     }
-    
+
     IMAGES_WALKING = [
         '../img/4_enemie_boss_chicken/1_walk/G1.png',
         '../img/4_enemie_boss_chicken/1_walk/G2.png',
@@ -61,6 +61,7 @@ class Endboss extends MoveableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.x = 2500;
         this.speed = 1;
+        
 
     }
 
@@ -75,20 +76,21 @@ class Endboss extends MoveableObject {
         }, 200);
 
         setInterval(() => {
-            if (this.alertAnimationActive) return; // Animation läuft bereits!
+            console.log(this.lifepoints);
+            if (this.alertAnimationActive) return;
             const now = Date.now();
             if (this.isDead()) {
                 return
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.alert) {
-                    this.startAlertAnimation();
-                if (this.hasAlerted && now - this.lastAttackTime > 3000) { // Mindestens 3 Sekunden seit letztem Angriff
+                this.startAlertAnimation();
+                if (this.hasAlerted && now - this.lastAttackTime > 200) {
                     this.startAttackAnimation();
                 }
                 this.lastAttackTime = now;
             }
-        }, 2000);
+        }, 200);
     }
 
     attackPosition() {
@@ -96,7 +98,7 @@ class Endboss extends MoveableObject {
         let lastPosX = this.x;
         this.x -= this.attackSpeed;
         if (attackInterval) { // Verhindert mehrere Intervalle
-        clearInterval(attackInterval);
+            clearInterval(attackInterval);
         }
         attackInterval = setInterval(() => {
             if (this.x < lastPosX) {

@@ -395,6 +395,8 @@ class World {
 
     removeDeadEndboss() {
         if (this.level && this.level.endboss) {
+            console.log('endboss is dead');
+            
             this.level.endboss = this.level.endboss.filter(endboss => !endboss.isDead());
         }
     }
