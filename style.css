@@ -4,6 +4,12 @@
         url('./fonts/rustler.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: 'ranchers';
+    src:
+        url('./fonts/ranchers.ttf') format('truetype');
+}
+
 body {
     display: flex;
     flex-direction: column;

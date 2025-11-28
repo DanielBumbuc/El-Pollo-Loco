@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>El Pollo Loco</title>
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./impressum.css">
     <script src="./models/world.class.js"></script>
     <script src="./models/drawable-object.class.js"></script>
     <script src="./models/sound-manager.class.js"></script>
@@ -27,6 +28,7 @@
     <script src="./models/game-over.class.js"></script>
     <script src="./models/you-won.class.js"></script>
     <script src="./js/game.js"></script>
+    <script src="./js/impressum.js"></script>
 </head>
 
 <body onload="init()">
@@ -81,12 +83,58 @@
 
                 <span class="western-star">✦</span>
             </div>
+
+            <div class="western-button impressum-btn" onclick="openImpressum()" title="Impressum">
+                <!-- Info Symbol (i) als SVG -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <!-- i-Punkt -->
+                    <circle cx="11.5" cy="5" r="1.5" fill="#654321"/>
+                    <!-- i-Strich -->
+                    <rect x="10.5" y="10" width="2.5" height="12" rx="1.5" fill="#654321"/>
+                </svg>
+                <span class="western-star">✦</span>
+            </div>
+
         </div>
     </nav>
 
     <!-- Game Canvas Container -->
     <div class="game-container">
         <canvas id="canvas" width="720" height="480"></canvas>
+
+        <!-- Impressum Overlay -->
+        <div id="impressumOverlay" class="impressum-overlay d-none" onclick="closeImpressum()">
+            <div class="impressum-container" onclick="event.stopPropagation()">
+                <!-- Close Button -->
+                <button class="impressum-close-btn" onclick="closeImpressum()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M18 6L6 18M6 6L18 18" stroke="#F4A460" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                
+                <h2>Impressum</h2>
+                
+                <h3>Angaben gemäß § 5 TMG:</h3>
+                <p>
+                    Daniel Bumbuc<br>
+                    Dachsklingeweg 7<br>
+                    71067 Sindelfingen
+                </p>
+                
+                <h3>Kontakt:</h3>
+                <p>
+                    Telefon: 0176/23979755<br>
+                    E-Mail: bumbucd@icloud.com
+                </p>
+                
+                <h3>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:</h3>
+                <p>
+                    Daniel Bumbuc<br>
+                    Dachsklingeweg 7<br>
+                    71067 Sindelfingen
+                </p>
+            </div>
+        </div>
 
         <div class="btns">
             <div class="play-btn">
