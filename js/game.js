@@ -8,6 +8,16 @@ function startGame() {
         // Play-Button ausblenden
         document.getElementById('playButton').classList.add('d-none');
 
+        if (window.innerWidth <= 935) {
+            document.getElementById('upperBtnContainer').classList.remove('d-none');
+            document.getElementById('playBtnContainer').classList.remove('d-none');
+        } else {
+            document.getElementById('upperBtnContainer').classList.add('d-none');
+            document.getElementById('playBtnContainer').classList.add('d-none');
+        }
+
+
+
         // Level laden
         loadLevel1();
         world.level = level1;
@@ -53,21 +63,21 @@ function resetGame() {
         window.soundManager.stopBackgroundMusic();
         console.log('Background music stopped via SoundManager');
     }
-    
+
     // Alle Intervalle stoppen
     clearAllIntervals();
-    
+
     // World zurücksetzen
     world = null;
-    
+
     // Neue World erstellen
     world = new World(canvas, keyboard);
-    
+
     // Zurück zum Startscreen
     world.gameState = false;
     document.getElementById('playButton').classList.remove('d-none');
     document.getElementById('restartButton').classList.add('d-none');
-    
+
     console.log('Game reset complete');
 }
 

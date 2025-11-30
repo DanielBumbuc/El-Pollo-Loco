@@ -29,7 +29,7 @@ body {
 }
 
 .d-none {
-    display: none;
+    display: none !important;
 }
 
 .d-flex {
@@ -247,14 +247,16 @@ canvas {
     height: 480px;
     width: 720px;
     height: 480px;
-    position: relative; /* ← Das fehlt! */
+    position: relative;
+    /* ← Das fehlt! */
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .btns {
-    position: absolute; /* ← Absolute Positionierung */
+    position: absolute;
+    /* ← Absolute Positionierung */
     top: 0;
     left: 0;
     width: 100%;
@@ -262,7 +264,8 @@ canvas {
     display: flex;
     justify-content: center;
     align-items: center;
-    pointer-events: none; /* ← Klicks durchlassen */
+    pointer-events: none;
+    /* ← Klicks durchlassen */
     z-index: 10;
 }
 
@@ -271,12 +274,24 @@ canvas {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    pointer-events: auto; /* ← Buttons bleiben klickbar */
+    pointer-events: auto;
+    /* ← Buttons bleiben klickbar */
+}
+
+.upper-btn {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 20px;
+    pointer-events: auto;
+    width: auto;
+    height: 100%;
 }
 
 .play-btn {
-        /* position: absolute; */
-    bottom: 20px;
+    /* position: absolute; */
+    /* bottom: 20px; */
     /* left: 20px; */
     pointer-events: auto;
     width: 100%;
@@ -284,6 +299,21 @@ canvas {
     display: flex;
     align-items: end;
     justify-content: center;
+    gap: 300px;
+}
+
+.leftSide {
+    display: flex;
+    flex-direction: row;
+    margin: 12px 0;
+    gap: 8px;
+}
+
+.rightSide {
+    display: flex;
+    flex-direction: column;
+    margin: 12px 0;
+    gap: 8px;
 }
 
 .simple-play-button {
@@ -347,10 +377,12 @@ canvas {
 }
 
 /* ===== MOBILE ARROW BUTTON ===== */
-.mobile-arrow-btn {
-    display: none; /* ← Standardmäßig versteckt */
-    width: 70px;
-    height: 70px;
+.mobile-setting-btn {
+    /* display: none; */
+    /* ← Standardmäßig versteckt */
+    display: flex;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     border: 3px solid #654321;
     background: rgba(139, 69, 19, 0.85);
@@ -363,7 +395,34 @@ canvas {
     touch-action: manipulation;
     transition: all 0.15s ease;
     backdrop-filter: blur(8px);
-    box-shadow: 
+    opacity: 0.8;
+    /* Semi-transparent für bessere Spielsicht */
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.4),
+        inset 0 2px 0 rgba(255, 220, 0, 0.2);
+    z-index: 15;
+}
+
+.mobile-arrow-btn {
+    /* display: none; */
+    /* ← Standardmäßig versteckt */
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 3px solid #654321;
+    background: rgba(139, 69, 19, 0.85);
+    color: #FFDC00;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    transition: all 0.15s ease;
+    backdrop-filter: blur(8px);
+    opacity: 0.8;
+    /* Semi-transparent für bessere Spielsicht */
+    box-shadow:
         0 4px 20px rgba(0, 0, 0, 0.4),
         inset 0 2px 0 rgba(255, 220, 0, 0.2);
     z-index: 15;
@@ -372,13 +431,15 @@ canvas {
 .mobile-arrow-btn:active {
     background: rgba(255, 220, 0, 0.4);
     transform: scale(0.9);
-    box-shadow: 
+    box-shadow:
         0 2px 10px rgba(0, 0, 0, 0.6),
         inset 0 1px 0 rgba(255, 220, 0, 0.3);
 }
 
 .mobile-arrow-btn:hover {
     background: rgba(139, 69, 19, 0.95);
+    opacity: 1;
+    /* Vollständig sichtbar beim Hover */
     transform: scale(1.05);
 }
 
@@ -387,12 +448,13 @@ canvas {
 }
 
 /* ===== RESPONSIVE FULLSCREEN GAMING ===== */
-@media only screen and (max-width: 935px), only screen and (max-height: 480px) {
+@media only screen and (max-width: 935px),
+only screen and (max-height: 480px) {
     body {
         justify-content: center;
         align-items: center;
     }
-    
+
     canvas {
         width: 100vw !important;
         height: 100vh !important;
@@ -405,7 +467,7 @@ canvas {
         left: 0;
         z-index: 1;
     }
-    
+
     .game-container {
         width: 100vw;
         height: 100vh;
@@ -416,13 +478,13 @@ canvas {
         justify-content: center;
         align-items: center;
     }
-    
+
     .btns {
         width: 100vw;
         height: 100vh;
         z-index: 10;
     }
-    
+
     /* Mobile Arrow Button nur in responsive Ansicht anzeigen */
     .mobile-arrow-btn {
         display: flex !important;
@@ -435,10 +497,10 @@ canvas {
         /* Skaliert das Canvas proportional zur verfügbaren Bildschirmgröße */
         width: min(90vw, 720px);
         height: min(90vh, 480px);
-        
+
         /* Behält das 720:480 Verhältnis bei */
         aspect-ratio: 720/480;
-        
+
         /* Falls das Canvas zu groß wird, skaliere es runter */
         max-width: 90vw;
         max-height: 90vh;
@@ -453,14 +515,14 @@ canvas {
     .western-navbar {
         display: none;
     }
-    
+
     /* Buttons für Touch-Geräte optimieren */
     .simple-play-button,
     .simple-restart-button {
         z-index: 10;
         transform: translate(-50%, -50%) scale(1.2);
     }
-    
+
     .simple-play-button svg,
     .simple-restart-button svg {
         width: 70px;
