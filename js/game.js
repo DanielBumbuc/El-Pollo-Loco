@@ -16,8 +16,6 @@ function startGame() {
             document.getElementById('playBtnContainer').classList.add('d-none');
         }
 
-
-
         // Level laden
         loadLevel1();
         world.level = level1;
@@ -147,3 +145,26 @@ document.addEventListener('keydown', (e) => {
 document.addEventListener('keyup', (e) => {
     keyboard.handleKeyup(e.code);
 })
+
+// Touch-Events für Mobile Play Buttons - Kompakte Version
+document.addEventListener('touchstart', (e) => {
+    keyboard.handleTouchStart(e);
+});
+
+document.addEventListener('touchend', (e) => {
+    keyboard.handleTouchEnd(e);
+});
+
+// Mobile Volume Icon Update
+function updateMobileVolumeIcon() {
+    const mobileVolumeOnIcon = document.getElementById('mobileVolumeOnIcon');
+    const mobileVolumeOffIcon = document.getElementById('mobileVolumeOffIcon');
+    
+    if (window.soundManager && window.soundManager.isMuted) {
+        mobileVolumeOnIcon.classList.add('d-none');
+        mobileVolumeOffIcon.classList.remove('d-none');
+    } else {
+        mobileVolumeOnIcon.classList.remove('d-none');
+        mobileVolumeOffIcon.classList.add('d-none');
+    }
+}
