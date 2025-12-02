@@ -28,12 +28,9 @@ function startGame() {
 
 function init() {
     canvas = document.getElementById('canvas');
-
-    // SoundManager initialisieren
     if (window.soundManager) {
         window.soundManager.initializeGameSounds();
     }
-
     world = new World(canvas, keyboard);
     keyboard.onBottleThrow = () => {
         world.checkThrowObjects();
@@ -75,7 +72,8 @@ function resetGame() {
     world.gameState = false;
     document.getElementById('playButton').classList.remove('d-none');
     document.getElementById('restartButton').classList.add('d-none');
-
+    document.getElementById('upperBtnContainer').classList.add('d-none');
+    document.getElementById('playBtnContainer').classList.add('d-none');
     console.log('Game reset complete');
 }
 
@@ -159,7 +157,7 @@ document.addEventListener('touchend', (e) => {
 function updateMobileVolumeIcon() {
     const mobileVolumeOnIcon = document.getElementById('mobileVolumeOnIcon');
     const mobileVolumeOffIcon = document.getElementById('mobileVolumeOffIcon');
-    
+
     if (window.soundManager && window.soundManager.isMuted) {
         mobileVolumeOnIcon.classList.add('d-none');
         mobileVolumeOffIcon.classList.remove('d-none');

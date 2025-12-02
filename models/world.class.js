@@ -12,6 +12,7 @@ class World {
     statusbarEndboss = new Statusbar('endboss', 740, 20, 100);
     showEndbossStatusbar = false;
     throwableObject = [];
+    bottleCooldownAktive = false;
     level = null;
     startScreen = new StartGame();
     gameOverScreen = new GameOver();
@@ -82,6 +83,7 @@ class World {
 
     startGame() {
         // Jetzt wo das Level geladen ist, können wir diese Methoden sicher aufrufen
+        this.character.resetIdleCounter();
         this.setCollectables();
         this.run();
         this.spawnEndboss();
@@ -224,10 +226,10 @@ class World {
                     this.showEndbossStatusbar = true;
                     this.statusbarEndboss.animateStatusbar();
                     if (window.soundManager) {
-                    window.soundManager.stopBackgroundMusic(); // Background Music stoppen
-                    window.soundManager.playSound('bossFightMusic'); // Endboss Music starten
-                    console.log('Endboss fight music started!');
-                }
+                        window.soundManager.stopBackgroundMusic(); // Background Music stoppen
+                        window.soundManager.playSound('bossFightMusic'); // Endboss Music starten
+                        console.log('Endboss fight music started!');
+                    }
                 }
                 clearInterval(spawnInterval);
             }
@@ -293,12 +295,14 @@ class World {
 
     checkThrowObjects() {
         this.speedX = this.character.otherDirection ? -10 : 10;
-        // if (this.keyboard.D) {
+        if (this.bottleCooldownAktive) {
+            console.log('Cooldown aktiv!');
+            return;
+        }
         if (this.character.bottleAmount < 10) {
             return;
         }
         let bottle = new ThrowableObject(this.character.x, this.character.y, this.speedX, this);
-        // bottle.world = this;
         this.throwableObject.push(bottle);
         this.character.bottleAmount -= 10;
         this.statusbarBottles.setPercentage(this.character.bottleAmount);
@@ -306,11 +310,20 @@ class World {
         setInterval(() => {
             if (bottle.isOnGround == true) {
                 this.throwableObject = this.throwableObject.filter(bottle => bottle.y < 420);
-
-
             }
         }, 40);
-        // }
+
+        this.bottleCooldown();
+
+    }
+
+    bottleCooldown() {
+        // Cooldown aktivieren
+        this.bottleCooldownAktive = true;
+        setTimeout(() => {
+            this.bottleCooldownAktive = false;
+        }, 1000); // 1 Sekunde Cooldown
+
     }
 
     checkCharacterPosition() {
@@ -396,7 +409,7 @@ class World {
     removeDeadEndboss() {
         if (this.level && this.level.endboss) {
             console.log('endboss is dead');
-            
+
             this.level.endboss = this.level.endboss.filter(endboss => !endboss.isDead());
         }
     }
@@ -413,8 +426,8 @@ class World {
         let restartBtn = document.getElementById('restartButton');
         setInterval(() => {
             if (this.isGameOver || this.isYouWon) {
-                console.log('you won', this.isYouWon , 'you lose',  this.isGameOver);
-                
+                console.log('you won', this.isYouWon, 'you lose', this.isGameOver);
+
                 restartBtn.classList.remove('d-none');
             }
         }, 2000);

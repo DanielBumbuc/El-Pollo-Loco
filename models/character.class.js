@@ -6,7 +6,7 @@ class Character extends MoveableObject {
     isJumping = false;
     idleCounter = 0;
     isIdleAnimating = false;
-    idleThreshold = 100; // 300 frames = 5000ms
+    idleThreshold = 50; // 300 frames = 5000ms
     offset = {
         top: 50,
         bottom: 50,
@@ -118,9 +118,9 @@ class Character extends MoveableObject {
             } else {
                 if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                     this.playAnimation(this.IMAGES_WALKING);
-
+                    this.resetIdleCounter();
                 } else {
-                    // this.checkIdleAnimation();
+                    this.checkIdleAnimation();
                 }
             }
         }, 150);
@@ -164,7 +164,7 @@ class Character extends MoveableObject {
             }
         });
 
-        // this.resetIdleCounter();
+        this.resetIdleCounter();
         this.speedY = 15; // Kleiner Sprung nach oben
     }
 
