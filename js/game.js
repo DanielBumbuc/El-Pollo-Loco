@@ -44,6 +44,9 @@ function init() {
     updateMobileVolumeIcon();
     world.loadSavedSettings();
 
+    // Orientation beim Start prüfen
+    checkOrientation();
+
     // ENTFERNT: Background Music bei init() - Mobile Browser blockieren das
     // Music wird erst bei startGame() nach User-Interaction gestartet
     console.log('Init complete - Background music will start after user interaction');
@@ -158,7 +161,8 @@ function debouncedResize() {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
         handleWindowResize();
-    }, 150); // 150ms Verzögerung
+        checkOrientation();
+    }, 150); 
 }
 
 function handleWindowResize() {
@@ -170,6 +174,21 @@ function handleWindowResize() {
     } else {
         document.getElementById('upperBtnContainer').classList.remove('d-none');
         document.getElementById('playBtnContainer').classList.remove('d-none');
+    }
+}
+
+function checkOrientation() {
+    const orientationWarning = document.getElementById('orientationWarning');
+    
+    // Prüfe ob mobile Gerät und Portrait-Modus
+    if (window.innerWidth <= 935 && window.innerHeight > window.innerWidth) {
+        // Portrait-Modus auf mobilen Gerät - Warnung anzeigen
+        orientationWarning.classList.remove('d-none');
+        console.log('Portrait mode detected - showing rotation warning');
+    } else {
+        // Landscape-Modus oder Desktop - Warnung verstecken
+        orientationWarning.classList.add('d-none');
+        console.log('Landscape mode or desktop - hiding rotation warning');
     }
 }
 
@@ -191,3 +210,9 @@ document.addEventListener('touchend', (e) => {
 });
 
 window.addEventListener('resize', debouncedResize);
+
+// Event Listener für Orientation Changes (zusätzlich zum resize)
+window.addEventListener('orientationchange', () => {
+    // Kurze Verzögerung da orientationchange vor dem tatsächlichen resize feuert
+    setTimeout(checkOrientation, 200);
+});

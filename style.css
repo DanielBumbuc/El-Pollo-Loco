@@ -546,3 +546,74 @@ only screen and (max-height: 480px) {
         opacity: 1;
     }
 }
+
+/* ===== ORIENTATION WARNING ===== */
+.orientation-warning {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    backdrop-filter: blur(10px);
+}
+
+.orientation-content {
+    text-align: center;
+    color: #FFDC00;
+    padding: 2rem;
+    max-width: 300px;
+}
+
+.orientation-content .orientation-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: deviceRotate 2s ease-in-out infinite;
+}
+
+.orientation-content h2 {
+    font-family: 'rustler', serif;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #FFDC00;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.orientation-content p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    color: #F4A460;
+    line-height: 1.4;
+}
+
+.orientation-content .rotation-hint {
+    font-size: 2rem;
+    animation: rotateHint 1.5s ease-in-out infinite;
+}
+
+@keyframes deviceRotate {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(90deg); }
+}
+
+@keyframes rotateHint {
+    0%, 100% { 
+        transform: rotate(0deg);
+        opacity: 0.7;
+    }
+    50% { 
+        transform: rotate(180deg);
+        opacity: 1;
+    }
+}
+
+/* Orientation Warning nur in Portrait-Modus auf mobilen Geräten */
+@media screen and (max-width: 935px) and (orientation: landscape) {
+    .orientation-warning {
+        display: none !important;
+    }
+}

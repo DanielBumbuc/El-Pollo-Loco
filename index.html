@@ -102,6 +102,16 @@
     <div class="game-container">
         <canvas id="canvas" width="720" height="480"></canvas>
 
+        <!-- Portrait Orientation Warning -->
+        <div id="orientationWarning" class="orientation-warning d-none">
+            <div class="orientation-content">
+                <div class="orientation-icon">📱</div>
+                <h2>Please rotate your device</h2>
+                <p>For the best gaming experience, please rotate your device to landscape mode.</p>
+                <div class="rotation-hint">🔄</div>
+            </div>
+        </div>
+
         <!-- Impressum Overlay -->
         <div id="impressumOverlay" class="impressum-overlay d-none" onclick="closeImpressum()">
             <div class="impressum-container" onclick="event.stopPropagation()">
