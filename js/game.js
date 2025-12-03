@@ -2,6 +2,7 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 let activeButton = false;
+let resizeTimeout;
 
 function startGame() {
     if (world) {
@@ -139,7 +140,38 @@ function setSavedVolumeIcon() {
     }
 }
 
+// Mobile Volume Icon Update
+function updateMobileVolumeIcon() {
+    const mobileVolumeOnIcon = document.getElementById('mobileVolumeOnIcon');
+    const mobileVolumeOffIcon = document.getElementById('mobileVolumeOffIcon');
 
+    if (window.soundManager && window.soundManager.isMuted) {
+        mobileVolumeOnIcon.classList.add('d-none');
+        mobileVolumeOffIcon.classList.remove('d-none');
+    } else {
+        mobileVolumeOnIcon.classList.remove('d-none');
+        mobileVolumeOffIcon.classList.add('d-none');
+    }
+}
+
+function debouncedResize() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        handleWindowResize();
+    }, 150); // 150ms Verzögerung
+}
+
+function handleWindowResize() {
+    console.log(window.innerWidth);
+    
+    if (window.innerWidth > 935) {
+        document.getElementById('upperBtnContainer').classList.add('d-none');
+        document.getElementById('playBtnContainer').classList.add('d-none');
+    } else {
+        document.getElementById('upperBtnContainer').classList.remove('d-none');
+        document.getElementById('playBtnContainer').classList.remove('d-none');
+    }
+}
 
 document.addEventListener('keydown', (e) => {
     keyboard.handleKeydown(e.code);
@@ -158,16 +190,4 @@ document.addEventListener('touchend', (e) => {
     keyboard.handleTouchEnd(e);
 });
 
-// Mobile Volume Icon Update
-function updateMobileVolumeIcon() {
-    const mobileVolumeOnIcon = document.getElementById('mobileVolumeOnIcon');
-    const mobileVolumeOffIcon = document.getElementById('mobileVolumeOffIcon');
-    
-    if (window.soundManager && window.soundManager.isMuted) {
-        mobileVolumeOnIcon.classList.add('d-none');
-        mobileVolumeOffIcon.classList.remove('d-none');
-    } else {
-        mobileVolumeOnIcon.classList.remove('d-none');
-        mobileVolumeOffIcon.classList.add('d-none');
-    }
-}
+window.addEventListener('resize', debouncedResize);
