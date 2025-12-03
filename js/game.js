@@ -46,6 +46,10 @@ function init() {
 
     // Orientation beim Start prüfen
     checkOrientation();
+    
+    // Mobile Buttons beim Start verstecken (da kein Spiel läuft)
+    document.getElementById('upperBtnContainer').classList.add('d-none');
+    document.getElementById('playBtnContainer').classList.add('d-none');
 
     // ENTFERNT: Background Music bei init() - Mobile Browser blockieren das
     // Music wird erst bei startGame() nach User-Interaction gestartet
@@ -166,15 +170,21 @@ function debouncedResize() {
 }
 
 function handleWindowResize() {
-    console.log(window.innerWidth);
+    console.log('Window resized:', window.innerWidth);
     
-    if (window.innerWidth > 935) {
-        document.getElementById('upperBtnContainer').classList.add('d-none');
-        document.getElementById('playBtnContainer').classList.add('d-none');
-    } else {
-        document.getElementById('upperBtnContainer').classList.remove('d-none');
-        document.getElementById('playBtnContainer').classList.remove('d-none');
+    // Nur bei laufendem Spiel die mobile Buttons anzeigen/verstecken
+    if (world && world.gameState) { 
+        if (window.innerWidth > 935) {
+            // Desktop - verstecke mobile Buttons
+            document.getElementById('upperBtnContainer').classList.add('d-none');
+            document.getElementById('playBtnContainer').classList.add('d-none');
+        } else {
+            // Mobile - zeige mobile Buttons nur bei laufendem Spiel
+            document.getElementById('upperBtnContainer').classList.remove('d-none');
+            document.getElementById('playBtnContainer').classList.remove('d-none');
+        }
     }
+    // Bei gestopptem Spiel: Mobile Buttons bleiben versteckt (d-none bleibt)
 }
 
 function checkOrientation() {
