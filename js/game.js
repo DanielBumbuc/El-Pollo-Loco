@@ -40,7 +40,12 @@ function init() {
     initStartScreen();
     console.log(window.soundManager.isMuted);
     setSavedVolumeIcon();
+    updateMobileVolumeIcon();
+    world.loadSavedSettings();
 
+    // ENTFERNT: Background Music bei init() - Mobile Browser blockieren das
+    // Music wird erst bei startGame() nach User-Interaction gestartet
+    console.log('Init complete - Background music will start after user interaction');
 }
 
 function initStartScreen() {
@@ -157,7 +162,7 @@ document.addEventListener('touchend', (e) => {
 function updateMobileVolumeIcon() {
     const mobileVolumeOnIcon = document.getElementById('mobileVolumeOnIcon');
     const mobileVolumeOffIcon = document.getElementById('mobileVolumeOffIcon');
-
+    
     if (window.soundManager && window.soundManager.isMuted) {
         mobileVolumeOnIcon.classList.add('d-none');
         mobileVolumeOffIcon.classList.remove('d-none');

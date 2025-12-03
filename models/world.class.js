@@ -94,6 +94,13 @@ class World {
         // Hintergrundmusik über SoundManager starten
         this.loadSavedSettings();
         if (window.soundManager) {
+            // Audio-Context für mobile Browser aktivieren
+            if (window.innerWidth <= 935) {
+                window.soundManager.activateAudioContext();
+                console.log('Mobile audio context activation attempted');
+            }
+            
+            // Background Music starten
             window.soundManager.playBackgroundMusic();
         }
     }

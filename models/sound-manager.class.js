@@ -25,9 +25,23 @@ class SoundManager {
     playSound(name) {
         if (this.sounds[name]) {
             this.sounds[name].currentTime = 0;
-            this.sounds[name].play().catch(e => {
-                console.log('Sound konnte nicht abgespielt werden:', e);
-            });
+            
+            // Promise-basierte Wiedergabe für mobile Kompatibilität
+            const playPromise = this.sounds[name].play();
+            
+            if (playPromise !== undefined) {
+                playPromise.catch(e => {
+                    console.log(`Sound "${name}" konnte nicht abgespielt werden:`, e.message);
+                    // Für Background Music versuchen wir es nochmal
+                    if (name === 'backgroundMusic') {
+                        setTimeout(() => {
+                            this.sounds[name].play().catch(() => {
+                                console.log('Background music requires user interaction');
+                            });
+                        }, 100);
+                    }
+                });
+            }
         }
     }
 
@@ -140,8 +154,33 @@ class SoundManager {
      */
     playBackgroundMusic() {
         this.stopBackgroundMusic(); // Erst stoppen falls bereits läuft
-        this.playSound('backgroundMusic');
-        console.log('Background music started via SoundManager');
+        
+        // Mobile Browser benötigen explizite Aktivierung des Audio-Context
+        if (this.sounds['backgroundMusic']) {
+            // Versuche Audio-Context zu aktivieren (mobile Lösung)
+            const bgMusic = this.sounds['backgroundMusic'];
+            
+            // Promise-Chain für mobile Kompatibilität
+            const playPromise = bgMusic.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    console.log('Background music started successfully via SoundManager');
+                }).catch((error) => {
+                    console.warn('Background music could not start:', error);
+                    console.log('This is common on mobile browsers without user interaction');
+                    
+                    // Fallback: Versuche erneut nach kurzer Verzögerung
+                    setTimeout(() => {
+                        bgMusic.play().then(() => {
+                            console.log('Background music started on second attempt');
+                        }).catch(e => {
+                            console.log('Background music requires user interaction on this device');
+                        });
+                    }, 100);
+                });
+            }
+        }
     }
 
     /**
@@ -160,6 +199,32 @@ class SoundManager {
     isBackgroundMusicPlaying() {
         const bgMusic = this.sounds['backgroundMusic'];
         return bgMusic && !bgMusic.paused && bgMusic.currentTime > 0;
+    }
+
+    /**
+     * Aktiviert den Audio-Context für mobile Browser
+     * Diese Methode sollte nach einer User-Interaction aufgerufen werden
+     */
+    activateAudioContext() {
+        // Versuche ein sehr leises, kurzes Audio abzuspielen
+        Object.values(this.sounds).forEach(audio => {
+            if (audio.paused) {
+                const originalVolume = audio.volume;
+                audio.volume = 0.001; // Fast stumm
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        audio.pause();
+                        audio.currentTime = 0;
+                        audio.volume = originalVolume;
+                        console.log('Audio context activated for mobile');
+                    }).catch(() => {
+                        audio.volume = originalVolume;
+                    });
+                }
+                return; // Nur einmal versuchen
+            }
+        });
     }
 }
 
