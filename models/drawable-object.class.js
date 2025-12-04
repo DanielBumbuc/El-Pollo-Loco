@@ -13,23 +13,23 @@ class DrawableObject {
     }
 
     drawFrame(ctx) {
-        if (this instanceof Character) {
-            ctx.beginPath();
-            ctx.lineWidth = '3';
-            ctx.strokeStyle = 'blue';
-            ctx.rect(this.x, this.y, this.width, this.height);
-            ctx.stroke();
-        }
+        // if (this instanceof Character) {
+        //     ctx.beginPath();
+        //     ctx.lineWidth = '3';
+        //     ctx.strokeStyle = 'blue';
+        //     ctx.rect(this.x, this.y, this.width, this.height);
+        //     ctx.stroke();
+        // }
 
         if (this instanceof Character) {
             ctx.beginPath();
             ctx.lineWidth = '2';
             ctx.strokeStyle = 'red';
             ctx.rect(
-                this.x + 20, 
-                this.y + 80, 
-                this.width - 40, 
-                this.height - 90
+                this.x + this.offset.left,
+                this.y + this.offset.top,
+                this.width - this.offset.left - this.offset.right,
+                this.height - this.offset.top - this.offset.bottom
             );
             ctx.stroke();
         }

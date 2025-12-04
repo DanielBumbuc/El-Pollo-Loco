@@ -8,10 +8,10 @@ class Character extends MoveableObject {
     isIdleAnimating = false;
     idleThreshold = 50; // 300 frames = 5000ms
     offset = {
-        top: 50,
-        bottom: 50,
-        left: 20,
-        right: 20
+        top: 130,
+        bottom: 12,
+        left: 50,
+        right: 50
     }
 
     IMAGES_IDLE = [
