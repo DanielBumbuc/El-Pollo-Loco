@@ -163,20 +163,6 @@ class World {
         }
     }
 
-    // checkMousePosition() {
-    //     this.canvas.addEventListener('mousemove', (e) => {
-    //         const rect = this.canvas.getBoundingClientRect();
-    //         const mouseX = e.clientX - rect.left;
-    //         const mouseY = e.clientY - rect.top;
-    //         let hovered = this.startScreen.checkClick(mouseX, mouseY);
-    //         if (hovered === this.startScreen.playButton) {
-    //             this.canvas.style.cursor = 'pointer';
-    //         } else {
-    //             this.canvas.style.cursor = 'default';
-    //         }
-    //     });
-    // }
-
     addObjectsToMap(objects) {
         objects.forEach(o => {
             this.addToMap(o);

@@ -22,7 +22,12 @@ class ChickenSmall extends MoveableObject {
         super().loadImg('../img/3_enemies_chicken/chicken_small/1_walk/2_w.png');
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
-        this.x = 350 + Math.random() * 500;
+        // Spawn im ersten Drittel des Levels
+        let levelWidth = 720 * 4; // 4 Background-Segmente
+        let spawnStart = levelWidth * 0.1; // 10% vom Level-Anfang  
+        let spawnRange = levelWidth * 0.8; // 30% der Level-Breite
+        this.x = spawnStart + Math.random() * spawnRange;
+        // this.x = 350 + Math.random() * 500;
         this.speed = 0.15 + Math.random() * 0.25;
     }
 
@@ -36,25 +41,25 @@ class ChickenSmall extends MoveableObject {
         }, 100);
 
         setInterval(() => {
-    try {
-        if (this.isDead()) {
-            // Nur beim ersten Tod loggen
-            if (!this.hasLoggedDeath) {
-                console.log('ChickenSmall DIED:', {
-                    lifepoints: this.lifepoints,
-                    isDead: this.isDead(),
-                    deadProperty: this.dead,
-                    timestamp: new Date().toLocaleTimeString()
-                });
-                this.hasLoggedDeath = true;
+            try {
+                if (this.isDead()) {
+                    // Nur beim ersten Tod loggen
+                    if (!this.hasLoggedDeath) {
+                        console.log('ChickenSmall DIED:', {
+                            lifepoints: this.lifepoints,
+                            isDead: this.isDead(),
+                            deadProperty: this.dead,
+                            timestamp: new Date().toLocaleTimeString()
+                        });
+                        this.hasLoggedDeath = true;
+                    }
+
+                    this.playAnimation(this.IMAGES_DEAD);
+                }
+            } catch (error) {
+                console.error('Error in ChickenSmall animation:', error);
             }
-            
-            this.playAnimation(this.IMAGES_DEAD);
-        }
-    } catch (error) {
-        console.error('Error in ChickenSmall animation:', error);
-    }
-}, 50);
+        }, 50);
 
     }
 

@@ -13,15 +13,15 @@ class DrawableObject {
     }
 
     drawFrame(ctx) {
-        // if (this instanceof Character) {
-        //     ctx.beginPath();
-        //     ctx.lineWidth = '3';
-        //     ctx.strokeStyle = 'blue';
-        //     ctx.rect(this.x, this.y, this.width, this.height);
-        //     ctx.stroke();
-        // }
+        if (this instanceof ChickenSmall) {
+            ctx.beginPath();
+            ctx.lineWidth = '3';
+            ctx.strokeStyle = 'blue';
+            ctx.rect(this.x, this.y, this.width, this.height);
+            ctx.stroke();
+        }
 
-        if (this instanceof Character) {
+        if (this instanceof Character || this instanceof ChickenSmall) {
             ctx.beginPath();
             ctx.lineWidth = '2';
             ctx.strokeStyle = 'red';
