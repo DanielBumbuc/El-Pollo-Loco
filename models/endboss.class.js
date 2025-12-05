@@ -7,7 +7,7 @@ class Endboss extends MoveableObject {
     hasAlerted = false; // Neu: Flag für einmaligen Angriff
     hasAttacked = false; // Neu: Flag, ob der Endboss bereits angegriffen hat
     lastAttackTime = 0; // Neu: Zeitstempel des letzten Angriffs
-    attackSpeed = 230;
+    attackSpeed = 100;
     offset = {
         top: 50,
         bottom: 50,
@@ -59,7 +59,7 @@ class Endboss extends MoveableObject {
         this.loadImages(this.IMAGES_ATTACK);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
-        this.x = 2500;
+        this.x = 3000;
         this.speed = 1;
         
 
@@ -90,7 +90,7 @@ class Endboss extends MoveableObject {
                 }
                 this.lastAttackTime = now;
             }
-        }, 200);
+        }, 150);
     }
 
     attackPosition() {

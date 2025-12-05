@@ -26,7 +26,7 @@ class Chicken extends MoveableObject {
         // this.x = 450 + Math.random() * 500;
         let levelWidth = 720 * 4; // 4 Background-Segmente
         let spawnStart = levelWidth * 0.1; // 10% vom Level-Anfang  
-        let spawnRange = levelWidth * 0.8; // 30% der Level-Breite
+        let spawnRange = levelWidth * 0.6; // 60% der Level-Breite
         this.x = spawnStart + Math.random() * spawnRange;
         this.speed = 0.15 + Math.random() * 0.25;
 

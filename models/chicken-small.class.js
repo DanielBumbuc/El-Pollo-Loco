@@ -25,7 +25,7 @@ class ChickenSmall extends MoveableObject {
         // Spawn im ersten Drittel des Levels
         let levelWidth = 720 * 4; // 4 Background-Segmente
         let spawnStart = levelWidth * 0.1; // 10% vom Level-Anfang  
-        let spawnRange = levelWidth * 0.8; // 30% der Level-Breite
+        let spawnRange = levelWidth * 0.6; // 30% der Level-Breite
         this.x = spawnStart + Math.random() * spawnRange;
         // this.x = 350 + Math.random() * 500;
         this.speed = 0.15 + Math.random() * 0.25;

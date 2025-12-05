@@ -213,7 +213,7 @@ class World {
             if (!this.level || !this.character) {
                 clearInterval(spawnInterval);
                 return;
-            } else if (this.character.x >= 1800) {
+            } else if (this.character.x >= 2880) {
                 if (this.level.endboss && this.level.endboss.length > 0) {
                     this.level.endboss.forEach(endboss => endboss.animate());
                     this.showEndbossStatusbar = true;
@@ -307,7 +307,7 @@ class World {
         }, 40);
 
         this.bottleCooldown();
-
+        
     }
 
     bottleCooldown() {

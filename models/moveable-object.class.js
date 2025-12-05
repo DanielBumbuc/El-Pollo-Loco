@@ -101,8 +101,26 @@ class MoveableObject extends DrawableObject {
     moveRight() {
         this.x += this.speed;
         this.otherDirection = false;
+        console.log(this.x);
+        
 
     }
+
+    setCameraX() {
+    if (!this.world) return;
+    
+    // Normale Kamera-Verfolgung
+    let normalCameraX = -this.x + 100;
+    
+    // Level-Ende berechnen
+    let levelEndX = this.world.level.level_end_x || 2880; // Fallback-Wert
+    let maxCameraX = -(levelEndX - this.world.canvas.width); // Maximale Kamera-Position
+    
+    // Kamera begrenzen
+    this.world.camera_x = Math.max(normalCameraX, maxCameraX);
+    
+    console.log(`Character X: ${this.x}, Camera X: ${this.world.camera_x}, Level End: ${levelEndX}`);
+}
 
     moveLeft() {
         if (this.canMoveLeft) {
