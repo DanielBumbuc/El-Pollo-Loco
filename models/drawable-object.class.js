@@ -21,7 +21,7 @@ class DrawableObject {
         //     ctx.stroke();
         // }
 
-        if (this instanceof Character || this instanceof ChickenSmall) {
+        if (this instanceof Chicken) {
             ctx.beginPath();
             ctx.lineWidth = '2';
             ctx.strokeStyle = 'red';

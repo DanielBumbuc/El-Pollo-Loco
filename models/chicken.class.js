@@ -4,10 +4,10 @@ class Chicken extends MoveableObject {
     height = 90;
     lifepoints = 100;
     offset = {
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0
+        top: 10,
+        bottom: 20,
+        left: 10,
+        right: 10
     }
     IMAGES_WALKING = [
         '../img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',

@@ -35,9 +35,7 @@ class ThrowableObject extends MoveableObject {
     throw() {
         this.speedY = 30;
         this.applayGravity();
-        if (this.bottleAmount <= 0) {
-
-        }
+        this.world.character.resetIdleCounter();
         setInterval(() => {
             this.x += this.speedX;
             this.playAnimation(this.IMAGES_BOTTLE_ROTATE);

@@ -14,10 +14,10 @@ class Endboss extends MoveableObject {
     lastAttackTime = 0; // Neu: Zeitstempel des letzten Angriffs
     attackSpeed = 100;
     offset = {
-        top: 50,
-        bottom: 50,
-        left: 50,
-        right: 50
+        top: 85,
+        bottom: 40,
+        left: 45,
+        right: 45
     }
 
     IMAGES_WALKING = [
