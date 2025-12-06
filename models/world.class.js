@@ -204,7 +204,7 @@ class World {
                 this.isYouWon = true;
                 this.initRestartButton();
             }
-        }, 100); //change from 200ms to 100ms for checking isLandingOnTop
+        }, 80);
     }
 
     spawnEndboss() {

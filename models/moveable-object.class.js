@@ -229,7 +229,7 @@ class MoveableObject extends DrawableObject {
         let isFalling = this.speedY < 0;
 
         // Prüfe ob Character über dem Gegner ist
-        let isAboveEnemy = this.y + this.height - this.offset.bottom < enemy.y + enemy.offset.top + 100;
+        let isAboveEnemy = this.y + this.height - this.offset.bottom < enemy.y + enemy.offset.top + 20;
 
         // Prüfe horizontale Überlappung
         let hasHorizontalOverlap = this.x + this.width - this.offset.right > enemy.x + enemy.offset.left &&
