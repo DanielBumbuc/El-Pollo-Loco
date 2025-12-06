@@ -5,10 +5,8 @@ function openImpressum() {
     const overlay = document.getElementById('impressumOverlay');
     const button = document.querySelector('.impressum-btn');
     const iconElements = button.querySelectorAll('circle, rect');
-    
     if (overlay) {
         overlay.classList.remove('d-none');
-        // Icon-Farbe auf aktiv setzen (gleiche Farbe wie Volume-Button aktiv)
         iconElements.forEach(element => {
             element.setAttribute('fill', '#FFDC00');
         });
@@ -22,10 +20,8 @@ function closeImpressum() {
     const overlay = document.getElementById('impressumOverlay');
     const button = document.querySelector('.impressum-btn');
     const iconElements = button.querySelectorAll('circle, rect');
-    
     if (overlay) {
         overlay.classList.add('d-none');
-        // Icon-Farbe auf Standard zurücksetzen
         iconElements.forEach(element => {
             element.setAttribute('fill', '#654321');
         });

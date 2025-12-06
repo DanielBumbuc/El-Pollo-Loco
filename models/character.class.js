@@ -85,44 +85,15 @@ class Character extends MoveableObject {
         this.applayGravity();
         this.speed = 4;
         this.animate();
-
-
     }
 
     animate() {
         setInterval(() => {
-
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-                this.moveRight();
-            }
-
-            if (this.world.keyboard.LEFT && this.x > 0) {
-                this.moveLeft();
-                this.otherDirection = true;
-            }
-
-            if (this.world.keyboard.UP && !this.isAboveGround()) {
-                this.jump();
-            }
-            this.setCamera();
+            this.setMovementApplication();
         }, 1000 / 60)
 
         setInterval(() => {
-            if (this.isDead()) {
-                return;
-                // this.playAnimation(this.IMAGES_DEAD);
-            } else if (this.isHurt() && !this.isAboveGround()) {
-                this.playAnimation(this.IMAGES_HURT);
-            } else if (this.isAboveGround()) {
-                return;
-            } else {
-                if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                    this.playAnimation(this.IMAGES_WALKING);
-                    this.resetIdleCounter();
-                } else {
-                    this.checkIdleAnimation();
-                }
-            }
+            this.setAnimation();
         }, 150);
     }
 
@@ -134,18 +105,43 @@ class Character extends MoveableObject {
                 this.playAnimation(this.IMAGES_LONG_IDLE);
             }
         } else {
-            // Normale Idle-Pose (nur wenn nicht animiert)
             this.loadImg('../img/2_character_pepe/3_jump/J-31.png');
+        }
+    }
+
+    setMovementApplication() {
+        if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+            this.moveRight();
+        }
+        if (this.world.keyboard.LEFT && this.x > 0) {
+            this.moveLeft();
+            this.otherDirection = true;
+        }
+        if (this.world.keyboard.UP && !this.isAboveGround()) {
+            this.jump();
+        }
+        this.setCamera();
+    }
+
+    setAnimation() {
+        if (this.isDead()) {
+            return;
+        } else if (this.isHurt() && !this.isAboveGround()) {
+            this.playAnimation(this.IMAGES_HURT);
+        } else if (this.isAboveGround()) {
+            return;
+        } else {
+            if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+                this.playAnimation(this.IMAGES_WALKING);
+                this.resetIdleCounter();
+            } else {
+                this.checkIdleAnimation();
+            }
         }
     }
 
     startIdleAnimation() {
         this.isIdleAnimating = true;
-        // Hier deine Idle-Animation starten
-        console.log('Character is idle for 15+ seconds - starting idle animation');
-
-        // this.playAnimation(this.IMAGES_IDLE);
-
     }
 
     resetIdleCounter() {
@@ -154,20 +150,13 @@ class Character extends MoveableObject {
     }
 
     jumpOnEnemy() {
-        // Character springt hoch nach dem Besiegen eines Gegners
-
         this.world.level.enemies.forEach((enemies) => {
             if (this.isColliding(enemies)) {
                 enemies.hit(100);
                 this.playSound('chicken');
-                console.log(enemies.lifepoints);
             }
         });
-
         this.resetIdleCounter();
-        this.speedY = 15; // Kleiner Sprung nach oben
+        this.speedY = 15;
     }
-
-
-
 }

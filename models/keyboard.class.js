@@ -8,8 +8,6 @@ class Keyboard {
     D = false;
 
     constructor() {
-        
-
 
     }
 
@@ -25,8 +23,7 @@ class Keyboard {
         if (typeof this.onBottleThrow === 'function') {
             this.onBottleThrow();
         }
-    }
-        
+    }    
     }
 
     handleKeyup(pressedKey) {
@@ -42,10 +39,8 @@ class Keyboard {
     handleTouchStart(e) {
         const button = e.target.closest('button');
         if (!button) return;
-        
         e.preventDefault();
-        button.style.opacity = '1';
-        
+        button.style.opacity = '1'; 
         switch (button.id) {
             case 'leftArrowBtn':
                 this.LEFT = true;
@@ -63,10 +58,8 @@ class Keyboard {
                 }
                 break;
             case 'mobileRestartBtn':
-                // Restart bei touchend
                 break;
             case 'mobileVolumeBtn':
-                // Volume bei touchend
                 break;
         }
     }
@@ -74,10 +67,8 @@ class Keyboard {
     handleTouchEnd(e) {
         const button = e.target.closest('button');
         if (!button) return;
-        
         e.preventDefault();
         button.style.opacity = '0.8';
-        
         switch (button.id) {
             case 'leftArrowBtn':
                 this.LEFT = false;

@@ -3,7 +3,7 @@ class SoundManager {
         this.sounds = {};
         this.isMuted = false;
         this.globalVolume = 1;
-        this.soundVolumes = {}; // Individuelle Lautstärken für jeden Sound
+        this.soundVolumes = {};
     }
 
     /**
@@ -25,18 +25,12 @@ class SoundManager {
     playSound(name) {
         if (this.sounds[name]) {
             this.sounds[name].currentTime = 0;
-            
-            // Promise-basierte Wiedergabe für mobile Kompatibilität
             const playPromise = this.sounds[name].play();
-            
             if (playPromise !== undefined) {
                 playPromise.catch(e => {
-                    console.log(`Sound "${name}" konnte nicht abgespielt werden:`, e.message);
-                    // Für Background Music versuchen wir es nochmal
                     if (name === 'backgroundMusic') {
                         setTimeout(() => {
                             this.sounds[name].play().catch(() => {
-                                console.log('Background music requires user interaction');
                             });
                         }, 100);
                     }
@@ -136,13 +130,11 @@ class SoundManager {
         this.registerSound('bottle', '../audio/health-pickup-6860.mp3', 0.3);
         this.registerSound('hit', '../audio/hitHurt.wav', 0.3);
         this.registerSound('throw', '../audio/air-whoosh-380651.mp3', 0.3);
-        // this.registerSound('walking', '../audio/running-in-grass-6237.mp3', 0.3);
         this.registerSound('dead', '../audio/ouchmp3-14591.mp3', 0.3);
         this.registerSound('chicken', '../audio/chicken_sound.wav', 0.3);
         this.registerSound('endboss', '../audio/chiken-sound-370337.mp3', 0.3);
         this.registerSound('endbossDead', '../audio/female-character-death-vocal-9-408428.mp3', 0.6);
         this.registerSound('bossFightMusic', '../audio/cowboy-western-background-247644.mp3', 0.3);
-        // Background Music hinzufügen
         this.registerSound('backgroundMusic', '../audio/the-russian-gunfighter-western-movie-instrumental-286601.mp3', 0.3);
         if (this.sounds['backgroundMusic']) {
             this.sounds['backgroundMusic'].loop = true;
@@ -153,34 +145,26 @@ class SoundManager {
      * Spielt die Background Music ab
      */
     playBackgroundMusic() {
-        this.stopBackgroundMusic(); // Erst stoppen falls bereits läuft
-        
-        // Mobile Browser benötigen explizite Aktivierung des Audio-Context
+        this.stopBackgroundMusic();
         if (this.sounds['backgroundMusic']) {
-            // Versuche Audio-Context zu aktivieren (mobile Lösung)
-            const bgMusic = this.sounds['backgroundMusic'];
-            
-            // Promise-Chain für mobile Kompatibilität
-            const playPromise = bgMusic.play();
-            
+            const playPromise = this.sounds['backgroundMusic'].play();
             if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    console.log('Background music started successfully via SoundManager');
-                }).catch((error) => {
+                playPromise.catch((error) => {
                     console.warn('Background music could not start:', error);
-                    console.log('This is common on mobile browsers without user interaction');
-                    
-                    // Fallback: Versuche erneut nach kurzer Verzögerung
-                    setTimeout(() => {
-                        bgMusic.play().then(() => {
-                            console.log('Background music started on second attempt');
-                        }).catch(e => {
-                            console.log('Background music requires user interaction on this device');
-                        });
-                    }, 100);
+                    this.retryBackgroundMusic();
                 });
             }
         }
+    }
+
+    /**
+     * Fallback-Versuch für Background Music
+     */
+    retryBackgroundMusic() {
+        setTimeout(() => {
+            this.sounds['backgroundMusic'].play().catch(() => {
+            });
+        }, 100);
     }
 
     /**
@@ -189,7 +173,6 @@ class SoundManager {
     stopBackgroundMusic() {
         this.stopSound('backgroundMusic');
         this.stopSound('bossFightMusic');
-        console.log('Background music stopped via SoundManager');
     }
 
     /**
@@ -206,27 +189,30 @@ class SoundManager {
      * Diese Methode sollte nach einer User-Interaction aufgerufen werden
      */
     activateAudioContext() {
-        // Versuche ein sehr leises, kurzes Audio abzuspielen
         Object.values(this.sounds).forEach(audio => {
             if (audio.paused) {
-                const originalVolume = audio.volume;
-                audio.volume = 0.001; // Fast stumm
-                const playPromise = audio.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        audio.pause();
-                        audio.currentTime = 0;
-                        audio.volume = originalVolume;
-                        console.log('Audio context activated for mobile');
-                    }).catch(() => {
-                        audio.volume = originalVolume;
-                    });
-                }
-                return; // Nur einmal versuchen
+                this.activateSingleAudio(audio);
             }
         });
     }
+
+    /**
+     * Aktiviert ein einzelnes Audio-Element
+     */
+    activateSingleAudio(audio) {
+        const originalVolume = audio.volume;
+        audio.volume = 0.001;
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                audio.pause();
+                audio.currentTime = 0;
+                audio.volume = originalVolume;
+            }).catch(() => {
+                audio.volume = originalVolume;
+            });
+        }
+    }
 }
 
-// Globale Sound-Manager-Instanz
 window.soundManager = new SoundManager();

@@ -18,18 +18,15 @@ class Chicken extends MoveableObject {
         '../img/3_enemies_chicken/chicken_normal/2_dead/dead.png'
     ];
 
-
     constructor() {
         super().loadImg('../img/3_enemies_chicken/chicken_normal/1_walk/2_w.png');
         this.loadImages(this.IMAGES_WALKING);
          this.loadImages(this.IMAGES_DEAD);
-        // this.x = 450 + Math.random() * 500;
-        let levelWidth = 720 * 4; // 4 Background-Segmente
-        let spawnStart = levelWidth * 0.25; // 25% vom Level-Anfang  
-        let spawnRange = levelWidth * 0.75; // 75% der Level-Breite
+        let levelWidth = 720 * 4;
+        let spawnStart = levelWidth * 0.25;
+        let spawnRange = levelWidth * 0.75;
         this.x = spawnStart + Math.random() * spawnRange;
         this.speed = 0.8 + Math.random() * 0.25;
-
     }
 
     animateWalking() {

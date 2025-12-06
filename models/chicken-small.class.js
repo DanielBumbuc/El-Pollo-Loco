@@ -22,12 +22,10 @@ class ChickenSmall extends MoveableObject {
         super().loadImg('../img/3_enemies_chicken/chicken_small/1_walk/2_w.png');
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
-        // Spawn im ersten Drittel des Levels
-        let levelWidth = 720 * 4; // 4 Background-Segmente
-        let spawnStart = levelWidth * 0.25; // 25% vom Level-Anfang  
-        let spawnRange = levelWidth * 0.75; // 75% der Level-Breite
+        let levelWidth = 720 * 4;
+        let spawnStart = levelWidth * 0.25;
+        let spawnRange = levelWidth * 0.75;
         this.x = spawnStart + Math.random() * spawnRange;
-        // this.x = 350 + Math.random() * 500;
         this.speed = 1.5 + Math.random() * 0.25;
     }
 
@@ -35,32 +33,21 @@ class ChickenSmall extends MoveableObject {
         setInterval(() => {
             this.moveLeft();
         }, 1000 / 60);
-
         setInterval(() => {
             this.playAnimation(this.IMAGES_WALKING);
         }, 100);
-
         setInterval(() => {
-            try {
-                if (this.isDead()) {
-                    // Nur beim ersten Tod loggen
-                    if (!this.hasLoggedDeath) {
-                        console.log('ChickenSmall DIED:', {
-                            lifepoints: this.lifepoints,
-                            isDead: this.isDead(),
-                            deadProperty: this.dead,
-                            timestamp: new Date().toLocaleTimeString()
-                        });
-                        this.hasLoggedDeath = true;
-                    }
+         this.checkDeadEnemie();
+        }, 50);
+    }
 
+    checkDeadEnemie() {
+           try {
+                if (this.isDead()) {
                     this.playAnimation(this.IMAGES_DEAD);
                 }
             } catch (error) {
                 console.error('Error in ChickenSmall animation:', error);
             }
-        }, 50);
-
     }
-
 }

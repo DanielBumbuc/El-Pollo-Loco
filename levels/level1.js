@@ -48,7 +48,7 @@ function loadLevel1() {
 
         ],
         [
-            // new Endboss()
+            new Endboss()
         ],
         [
             new Bottle(),

@@ -73,10 +73,10 @@ class MoveableObject extends DrawableObject {
             i++;
             if (i >= this.IMAGES_ALERT.length) {
                 clearInterval(interval);
-                this.alertAnimationActive = false; // Animation ist fertig
+                this.alertAnimationActive = false;
                 this.hasAlerted = true;
             }
-        }, 300); // Geschwindigkeit der Alert-Animation
+        }, 300);
     }
 
 
@@ -92,10 +92,10 @@ class MoveableObject extends DrawableObject {
                 this.attackPosition();
             } else if (i >= this.IMAGES_ATTACK.length) {
                 clearInterval(interval);
-                this.attackAnimationActive = false; // Animation ist fertig
-                this.hasAttacked = false; // Reset für nächsten Angriff
+                this.attackAnimationActive = false;
+                this.hasAttacked = false;
             }
-        }, 100); // Geschwindigkeit der Attack-Animation
+        }, 100);
     }
 
     moveRight() {
@@ -103,53 +103,33 @@ class MoveableObject extends DrawableObject {
         this.otherDirection = false;
     }
 
-    // setCamera() {
-    //     if (this.world.gameState) {
-    //         this.world.camera_x = -this.x + 100;
-    //         let levelEndX = this.world.level.level_end_x;
-    //         let maxCameraX = -(levelEndX - this.world.canvas.width + 100);
-    //         this.world.camera_x = Math.max(this.world.camera_x, maxCameraX);
-    //     }
-
-    // }
-
     setCamera() {
         if (this.world.gameState) {
-            // Variablen-Definitionen am Anfang
             let endboss = this.world.level.endboss[0];
             let levelEndX = this.world.level.level_end_x;
             let maxCameraX = -(levelEndX - this.world.canvas.width + 100);
             let targetOffset;
             let offsetDifference;
-            
-            // Initialisierung
             if (this.currentCameraOffset === undefined) {
-                this.currentCameraOffset = 100; // Standard-Offset links
+                this.currentCameraOffset = 100;
             }
-            
-            // Logik: Target-Offset bestimmen
-            if (endboss && this.x > endboss.x) {
-                // Character hinter Boss: Zeige Character rechts im Bild
-                targetOffset = 520; // 720px Canvas - 200px Margin = 520px
-            } else {
-                // Character vor Boss: Zeige Character links im Bild (normal)
-                targetOffset = 100;
-            }
-            
-            // Logik: Smooth Transition berechnen
-            offsetDifference = targetOffset - this.currentCameraOffset;
-            
-            if (Math.abs(offsetDifference) > 2) {
-                // Schrittweise Anpassung für smooth Transition
-                this.currentCameraOffset += offsetDifference * 0.02; // 2% pro Frame für sanfte Bewegung
-            } else {
-                // Bei kleinen Unterschieden direkt setzen
-                this.currentCameraOffset = targetOffset;
-            }
-            
-            // Logik: Kamera-Position setzen und begrenzen
+            this.setCameraPosition(endboss, targetOffset, offsetDifference);
             this.world.camera_x = -this.x + this.currentCameraOffset;
             this.world.camera_x = Math.max(this.world.camera_x, maxCameraX);
+        }
+    }
+
+    setCameraPosition(endboss, targetOffset, offsetDifference) {
+        if (endboss && this.x > endboss.x) {
+            targetOffset = 520;
+        } else {
+            targetOffset = 100;
+        }
+        offsetDifference = targetOffset - this.currentCameraOffset;
+        if (Math.abs(offsetDifference) > 2) {
+            this.currentCameraOffset += offsetDifference * 0.02;
+        } else {
+            this.currentCameraOffset = targetOffset;
         }
     }
 
@@ -182,23 +162,26 @@ class MoveableObject extends DrawableObject {
             clearInterval(this.jumpAnimationInterval);
         }
         this.jumpAnimationInterval = setInterval(() => {
-            if (!this.isAboveGround()) {
-                clearInterval(this.jumpAnimationInterval);
-                this.jumpAnimationInterval = null;
-                return;
-            }
-            let elapsed = Date.now() - this.jumpStartTime;
-            let jumpProgress = elapsed / this.calcJumpDuration();
-            jumpProgress = Math.max(0, Math.min(jumpProgress, 1));
-            let frameIndex = Math.floor(jumpProgress * this.IMAGES_JUMPING.length);
-            frameIndex = Math.max(0, Math.min(frameIndex, this.IMAGES_JUMPING.length - 1));
-            this.img = this.imageCache[this.IMAGES_JUMPING[frameIndex]];
+            this.calcJumpFrames();
         }, 30);
+    }
+
+    calcJumpFrames() {
+        if (!this.isAboveGround()) {
+            clearInterval(this.jumpAnimationInterval);
+            this.jumpAnimationInterval = null;
+            return;
+        }
+        let elapsed = Date.now() - this.jumpStartTime;
+        let jumpProgress = elapsed / this.calcJumpDuration();
+        jumpProgress = Math.max(0, Math.min(jumpProgress, 1));
+        let frameIndex = Math.floor(jumpProgress * this.IMAGES_JUMPING.length);
+        frameIndex = Math.max(0, Math.min(frameIndex, this.IMAGES_JUMPING.length - 1));
+        this.img = this.imageCache[this.IMAGES_JUMPING[frameIndex]];
     }
 
     startDeadAnimation() {
         let frame = 0;
-
         this.deadAnimationInterval = setInterval(() => {
             if (frame < this.IMAGES_DEAD.length && this.dead === true) {
                 this.img = this.imageCache[this.IMAGES_DEAD[frame]];
@@ -214,27 +197,17 @@ class MoveableObject extends DrawableObject {
     }
 
     isColliding(mo) {
-        //check collision with offset parameter
-        // console.log(this.x + this.width - this.offset.right);
-        // console.log('left:', this.x + this.offset.left + ' right:' , this.x + this.width - this.offset.right);
-
-        return this.x + this.width - this.offset.right > mo.x + mo.offset.left && //right line from character > left line mo
-            this.y + this.height > mo.y + mo.offset.top && //bottom line from character > top line mo
-            this.x + this.offset.left < mo.x + mo.width - mo.offset.right && //left line from character < right line mo
-            this.y < mo.y + mo.height - mo.offset.bottom; //top line from character < bottom line mo
+        return this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
+            this.y + this.height > mo.y + mo.offset.top &&
+            this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
+            this.y < mo.y + mo.height - mo.offset.bottom;
     }
 
     isLandingOnTop(enemy) {
-        // Prüfe ob Character von oben kommt (fallend)
         let isFalling = this.speedY < 0;
-
-        // Prüfe ob Character über dem Gegner ist
         let isAboveEnemy = this.y + this.height - this.offset.bottom < enemy.y + enemy.offset.top + 20;
-
-        // Prüfe horizontale Überlappung
         let hasHorizontalOverlap = this.x + this.width - this.offset.right > enemy.x + enemy.offset.left &&
             this.x + this.offset.left < enemy.x + enemy.width - enemy.offset.right;
-
         return isFalling && isAboveEnemy && hasHorizontalOverlap;
     }
 
@@ -256,7 +229,7 @@ class MoveableObject extends DrawableObject {
 
     isDead() {
         if ((this instanceof Character || this instanceof Endboss) && this.lifepoints == 0 && !this.dead) {
-            this.dead = true; // Animation wurde gestartet
+            this.dead = true;
             this.startDeadAnimation();
             if (this instanceof Endboss) {
                 console.log('🔥 ENDBOSS DEFEATED! 🔥');
@@ -266,17 +239,12 @@ class MoveableObject extends DrawableObject {
                     window.soundManager.stopBackgroundMusic();
                     window.soundManager.playSound('endbossDead'); // Neuer Victory Sound
                 }
-
             } else if (this instanceof Character) {
-                console.log('💀 Character died - Game Over');
-
-                // Background Music stoppen bei Character-Tod
                 if (window.soundManager) {
                     window.soundManager.stopBackgroundMusic();
                     window.soundManager.playSound('dead'); // Game Over Sound
                 }
             }
-            // this.playSound('dead');
         }
         return this.lifepoints == 0;
     }

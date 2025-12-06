@@ -28,12 +28,12 @@ class ThrowableObject extends MoveableObject {
         this.speedX = speedX;
         this.height = 40;
         this.width = 40;
-        this.world = world; // ← Sicherstellen, dass this.world definiert ist
+        this.world = world;
         this.throw();
     }
 
     throw() {
-        this.speedY = 30;
+        this.speedY = 20;
         this.applayGravity();
         this.world.character.resetIdleCounter();
         setInterval(() => {
@@ -54,31 +54,39 @@ class ThrowableObject extends MoveableObject {
     checkBottleCollision() {
         this.world.level.endboss.forEach((endboss) => {
             if (this.isColliding(endboss)) {
-                this.world.statusbarEndboss.setPercentage(endboss.lifepoints);
-                endboss.hit(15);
-                this.playSound('endboss');
-                this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
-                this.speedY = 0;
-                this.speedX = 0;
-                setTimeout(() => {
-                    this.y = 500;
-                }, 10);
+                this.setCollisionEndboss(endboss);
             }
         });
 
         this.world.level.enemies.forEach((enemies) => {
             if (this.isColliding(enemies)) {
-                enemies.hit(100);
-                this.playSound('chicken');
-                console.log(enemies.lifepoints);
-                this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
-                this.speedY = 0;
-                this.speedX = 0;
-                setTimeout(() => {
-                    this.y = 500;
-                }, 100);
+                this.setCollisionEnemy(enemies);
             }
         });
     }
-}
 
+    setCollisionEndboss(endboss) {
+        this.world.statusbarEndboss.setPercentage(endboss.lifepoints);
+        endboss.hit(15);
+        this.playSound('endboss');
+        this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
+        this.speedY = 0;
+        this.speedX = 0;
+        setTimeout(() => {
+            this.y = 500;
+        }, 10);
+    }
+
+    setCollisionEnemy(enemies) {
+        enemies.hit(100);
+        this.playSound('chicken');
+        console.log(enemies.lifepoints);
+        this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
+        this.speedY = 0;
+        this.speedX = 0;
+        setTimeout(() => {
+            this.world.removeDeadEnemies();
+            this.y = 500;
+        }, 100);
+    }
+}
