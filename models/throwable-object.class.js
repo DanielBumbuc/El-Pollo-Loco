@@ -78,7 +78,7 @@ class ThrowableObject extends MoveableObject {
                 this.speedX = 0;
                 setTimeout(() => {
                     this.y = 500;
-                }, 10);
+                }, 100);
             }
         });
     }

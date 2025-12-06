@@ -104,7 +104,7 @@ class Character extends MoveableObject {
             if (this.world.keyboard.UP && !this.isAboveGround()) {
                 this.jump();
             }
-            this.world.camera_x = -this.x + 100;
+            this.setCamera();
         }, 1000 / 60)
 
         setInterval(() => {

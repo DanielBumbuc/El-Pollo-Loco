@@ -23,8 +23,6 @@ class MoveableObject extends DrawableObject {
         right: 0
     }
 
-    // Sounds werden jetzt zentral über den SoundManager verwaltet
-
     playSound(sound) {
         if (window.soundManager) {
             window.soundManager.playSound(sound);
@@ -101,26 +99,17 @@ class MoveableObject extends DrawableObject {
     moveRight() {
         this.x += this.speed;
         this.otherDirection = false;
-        console.log(this.x);
-        
-
     }
 
-    setCameraX() {
-    if (!this.world) return;
-    
-    // Normale Kamera-Verfolgung
-    let normalCameraX = -this.x + 100;
-    
-    // Level-Ende berechnen
-    let levelEndX = this.world.level.level_end_x || 2880; // Fallback-Wert
-    let maxCameraX = -(levelEndX - this.world.canvas.width); // Maximale Kamera-Position
-    
-    // Kamera begrenzen
-    this.world.camera_x = Math.max(normalCameraX, maxCameraX);
-    
-    console.log(`Character X: ${this.x}, Camera X: ${this.world.camera_x}, Level End: ${levelEndX}`);
-}
+    setCamera() {
+        if (this.world.gameState) {
+            this.world.camera_x = -this.x + 100;
+            let levelEndX = this.world.level.level_end_x;
+            let maxCameraX = -(levelEndX - this.world.canvas.width + 100);
+            this.world.camera_x = Math.max(this.world.camera_x, maxCameraX);
+        }
+
+    }
 
     moveLeft() {
         if (this.canMoveLeft) {
@@ -228,23 +217,23 @@ class MoveableObject extends DrawableObject {
             this.dead = true; // Animation wurde gestartet
             this.startDeadAnimation();
             if (this instanceof Endboss) {
-            console.log('🔥 ENDBOSS DEFEATED! 🔥');
-            
-            // Boss Fight Music stoppen und Victory Music starten
-            if (window.soundManager) {
-                window.soundManager.stopBackgroundMusic();
-                window.soundManager.playSound('endbossDead'); // Neuer Victory Sound
+                console.log('🔥 ENDBOSS DEFEATED! 🔥');
+
+                // Boss Fight Music stoppen und Victory Music starten
+                if (window.soundManager) {
+                    window.soundManager.stopBackgroundMusic();
+                    window.soundManager.playSound('endbossDead'); // Neuer Victory Sound
+                }
+
+            } else if (this instanceof Character) {
+                console.log('💀 Character died - Game Over');
+
+                // Background Music stoppen bei Character-Tod
+                if (window.soundManager) {
+                    window.soundManager.stopBackgroundMusic();
+                    window.soundManager.playSound('dead'); // Game Over Sound
+                }
             }
-            
-        } else if (this instanceof Character) {
-            console.log('💀 Character died - Game Over');
-            
-            // Background Music stoppen bei Character-Tod
-            if (window.soundManager) {
-                window.soundManager.stopBackgroundMusic();
-                window.soundManager.playSound('dead'); // Game Over Sound
-            }
-        }
             // this.playSound('dead');
         }
         return this.lifepoints == 0;

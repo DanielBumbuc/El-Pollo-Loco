@@ -213,7 +213,7 @@ class World {
             if (!this.level || !this.character) {
                 clearInterval(spawnInterval);
                 return;
-            } else if (this.character.x >= 2880) {
+            } else if (this.character.x >= 2200) {
                 if (this.level.endboss && this.level.endboss.length > 0) {
                     this.level.endboss.forEach(endboss => endboss.animate());
                     this.showEndbossStatusbar = true;
@@ -325,8 +325,12 @@ class World {
             return;
         }
 
-        let alertDistance = 300;
+        let alertDistance = 150;
         this.level.endboss.forEach(endboss => {
+            if (this.character.x > endboss.x) {
+                endboss.otherDirection = true;
+                
+            }
             if (this.character.x + alertDistance > endboss.x && this.character.x < endboss.x + endboss.width) {
                 // console.log(this.character.x, 'und', endboss.x);
                 endboss.canMoveLeft = false;

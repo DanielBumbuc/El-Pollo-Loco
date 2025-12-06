@@ -2,9 +2,12 @@ class Endboss extends MoveableObject {
     y = 235;
     width = 200;
     height = 200;
+    otherDirection = false;
     lifepoints = 100;
     alert = false;
     hasAlerted = false; // Neu: Flag für einmaligen Angriff
+    isAttacking = false;
+    attackInterval = null;
     hasAttacked = false; // Neu: Flag, ob der Endboss bereits angegriffen hat
     lastAttackTime = 0; // Neu: Zeitstempel des letzten Angriffs
     attackSpeed = 100;
@@ -60,14 +63,19 @@ class Endboss extends MoveableObject {
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
         this.x = 3000;
-        this.speed = 1;
-        
-
+        this.speed = 2.5;
     }
 
     animate() {
         setInterval(() => {
-            this.moveLeft();
+            // Stoppe Bewegung während Alert, Attack oder anderen Animationen
+            if (!this.alertAnimationActive && !this.attackAnimationActive && !this.isAttacking && !this.isDead() && !this.isHurt()) {
+                if (!this.otherDirection) {
+                    this.moveLeft();
+                } else {
+                    this.x += this.speed;
+                }
+            }
         }, 1000 / 60);
 
         setInterval(() => {
@@ -75,15 +83,15 @@ class Endboss extends MoveableObject {
             this.playAnimation(this.IMAGES_WALKING);
         }, 200);
 
+
         setInterval(() => {
-            console.log(this.lifepoints);
-            if (this.alertAnimationActive) return;
             const now = Date.now();
             if (this.isDead()) {
                 return
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.alert) {
+                if (this.alertAnimationActive) return;
                 this.startAlertAnimation();
                 if (this.hasAlerted && now - this.lastAttackTime > 200) {
                     this.startAttackAnimation();
@@ -91,21 +99,28 @@ class Endboss extends MoveableObject {
                 this.lastAttackTime = now;
             }
         }, 150);
+
     }
 
     attackPosition() {
-        let attackInterval = null
-        let lastPosX = this.x;
-        this.x -= this.attackSpeed;
-        if (attackInterval) { // Verhindert mehrere Intervalle
-            clearInterval(attackInterval);
+        let startPosX = this.x;
+        if (this.isAttacking) {
+            return;
         }
-        attackInterval = setInterval(() => {
-            if (this.x < lastPosX) {
+        this.isAttacking = true;
+        this.x -= this.attackSpeed;
+        if (this.attackInterval) { 
+            clearInterval(this.attackInterval);
+            this.attackInterval = null;
+        }
+        this.attackInterval = setInterval(() => {
+            if (this.x < startPosX) {
                 this.x += this.attackSpeed;
             } else {
-                clearInterval(attackInterval);
-                attackInterval = null;
+                this.x = startPosX;
+                clearInterval(this.attackInterval);
+                this.attackInterval = null;
+                this.isAttacking = false;
             }
         }, 300);
     }

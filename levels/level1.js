@@ -41,10 +41,6 @@ function loadLevel1() {
             // new ChickenSmall(),
             // new ChickenSmall(),
             // new ChickenSmall(),
-            // new ChickenSmall(),
-            // new ChickenSmall(),
-            // new ChickenSmall(),
-            // new Chicken(),
             // new Chicken(),
             // new Chicken(),
             // new Chicken(),
@@ -52,7 +48,7 @@ function loadLevel1() {
 
         ],
         [
-            // new Endboss()
+            new Endboss()
         ],
         [
             new Bottle(),
