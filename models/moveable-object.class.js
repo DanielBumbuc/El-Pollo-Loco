@@ -101,14 +101,56 @@ class MoveableObject extends DrawableObject {
         this.otherDirection = false;
     }
 
+    // setCamera() {
+    //     if (this.world.gameState) {
+    //         this.world.camera_x = -this.x + 100;
+    //         let levelEndX = this.world.level.level_end_x;
+    //         let maxCameraX = -(levelEndX - this.world.canvas.width + 100);
+    //         this.world.camera_x = Math.max(this.world.camera_x, maxCameraX);
+    //     }
+
+    // }
+
     setCamera() {
         if (this.world.gameState) {
-            this.world.camera_x = -this.x + 100;
+            let endboss = this.world.level.endboss[0];
             let levelEndX = this.world.level.level_end_x;
             let maxCameraX = -(levelEndX - this.world.canvas.width + 100);
+            let targetOffset;
+            let offsetDifference = targetOffset - this.currentCameraOffset;
+            // Initialisiere currentCameraOffset falls nicht vorhanden
+            if (this.currentCameraOffset === undefined) {
+                this.currentCameraOffset = 100; // Standard-Offset links
+            }
+            
+            
+            
+            if (endboss && this.x > endboss.x) {
+                // Character hinter Boss: Zeige Character rechts im Bild
+                targetOffset = 520; // 720px Canvas - 100px Margin = 620px
+            } else {
+                // Character vor Boss: Zeige Character links im Bild (normal)
+                targetOffset = 100;
+            }
+            
+            // Smooth Transition zum Ziel-Offset
+            
+            
+            if (Math.abs(offsetDifference) > 2) {
+                // Schrittweise Anpassung für smooth Transition
+                this.currentCameraOffset += offsetDifference * 0.02; // 2% pro Frame für sanfte Bewegung
+            } else {
+                // Bei kleinen Unterschieden direkt setzen
+                this.currentCameraOffset = targetOffset;
+            }
+            
+            // Kamera-Position mit smooth Offset setzen
+            this.world.camera_x = -this.x + this.currentCameraOffset;
+            
+            // Level-Ende Begrenzung beibehalten
+            
             this.world.camera_x = Math.max(this.world.camera_x, maxCameraX);
         }
-
     }
 
     moveLeft() {
