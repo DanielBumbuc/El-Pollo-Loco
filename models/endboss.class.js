@@ -6,6 +6,8 @@ class Endboss extends MoveableObject {
     lifepoints = 100;
     alert = false;
     hasAlerted = false; // Neu: Flag für einmaligen Angriff
+    attackLeft = false;
+    attackRight = false;
     isAttacking = false;
     attackInterval = null;
     hasAttacked = false; // Neu: Flag, ob der Endboss bereits angegriffen hat
@@ -108,7 +110,17 @@ class Endboss extends MoveableObject {
             return;
         }
         this.isAttacking = true;
-        this.x -= this.attackSpeed;
+
+        if (this.attackLeft) {
+            this.x -= this.attackSpeed;
+            this.attackLeft = false;
+        }
+
+        if (this.attackRight) {
+            this.x += this.attackSpeed;
+            this.attackRight = false;
+        }
+        
         if (this.attackInterval) { 
             clearInterval(this.attackInterval);
             this.attackInterval = null;

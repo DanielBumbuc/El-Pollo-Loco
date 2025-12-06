@@ -329,7 +329,11 @@ class World {
         this.level.endboss.forEach(endboss => {
             if (this.character.x > endboss.x) {
                 endboss.otherDirection = true;
-            } else endboss.otherDirection = false;
+                endboss.attackRight = true;
+            } else {
+                endboss.otherDirection = false;
+                endboss.attackLeft = true;
+            }
             if (this.character.x + alertDistance > endboss.x && this.character.x < endboss.x + endboss.width) {
                 // console.log(this.character.x, 'und', endboss.x);
                 endboss.canMoveLeft = false;
