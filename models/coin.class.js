@@ -1,3 +1,7 @@
+/**
+ * Collectible coin class that can be gathered by the character
+ * Extends MoveableObject to support collision detection and animations
+ */
 class Coin extends MoveableObject {
     y = 370;
     width = 50;
@@ -14,6 +18,10 @@ class Coin extends MoveableObject {
         'img/8_coin/coin_2.png'
     ];
 
+    /**
+     * Creates a new collectible coin with animation setup
+     * Loads coin images and starts animation cycle
+     */
     constructor() {
         super();
         this.loadImg('../img/8_coin/coin_1.png');
@@ -21,6 +29,10 @@ class Coin extends MoveableObject {
         this.animateCoins();
     }
 
+    /**
+     * Starts the coin animation cycle
+     * Continuously cycles through coin images to create a spinning effect
+     */
     animateCoins() {
         setInterval(() => {
             this.playAnimation(this.IMAGES_COIN);

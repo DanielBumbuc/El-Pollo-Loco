@@ -23,18 +23,32 @@ class MoveableObject extends DrawableObject {
         right: 0
     }
 
+    /**
+     * Plays a sound effect through the global sound manager
+     * @param {string} sound - The sound identifier to play
+     */
     playSound(sound) {
         if (window.soundManager) {
             window.soundManager.playSound(sound);
         }
     }
 
+    /**
+     * Sets the volume for a specific sound effect
+     * @param {string} sound - The sound identifier
+     * @param {number} volume - Volume level between 0 and 1
+     */
     setSoundVolume(sound, volume) {
         if (window.soundManager) {
             window.soundManager.setSoundVolume(sound, volume);
         }
     }
 
+    /**
+     * Checks if the object is above ground level
+     * @returns {boolean} True if object is above ground, false otherwise
+     * Special case for throwable objects which are always considered above ground
+     */
     isAboveGround() {
         if (this instanceof ThrowableObject) {
             return true;
@@ -43,6 +57,11 @@ class MoveableObject extends DrawableObject {
         }
     }
 
+    /**
+     * Applies gravity physics to the object
+     * Continuously updates vertical position and velocity for realistic falling motion
+     * Handles ground collision for character objects
+     */
     applayGravity() {
         setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {
@@ -57,6 +76,11 @@ class MoveableObject extends DrawableObject {
 
     }
 
+    /**
+     * Plays a sequence of images to create animation effect
+     * @param {string[]} images - Array of image paths for animation frames
+     * Cycles through images based on current frame counter
+     */
     playAnimation(images) {
         let i = this.currentImage % images.length;
         let path = images[i];
@@ -65,6 +89,10 @@ class MoveableObject extends DrawableObject {
 
     }
 
+    /**
+     * Starts alert animation sequence for endboss encounters
+     * Plays through alert animation frames and sets alert completion flag
+     */
     startAlertAnimation() {
         this.alertAnimationActive = true;
         let i = 0;
@@ -81,6 +109,10 @@ class MoveableObject extends DrawableObject {
 
 
 
+    /**
+     * Starts attack animation sequence with mid-animation trigger
+     * Triggers attack position at halfway point and manages attack state flags
+     */
     startAttackAnimation() {
         this.attackAnimationActive = true;
         let i = 0;
@@ -98,6 +130,10 @@ class MoveableObject extends DrawableObject {
         }, 100);
     }
 
+    /**
+     * Moves the object rightward and sets facing direction
+     * Updates position and resets direction flag for proper sprite orientation
+     */
     moveRight() {
         this.x += this.speed;
         this.otherDirection = false;

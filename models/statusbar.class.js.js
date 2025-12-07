@@ -1,3 +1,7 @@
+/**
+ * Status bar class for displaying health, coins, bottles, and endboss health
+ * Extends DrawableObject to show visual progress bars with different types
+ */
 class Statusbar extends DrawableObject {
     world;
     height = 40;
@@ -39,6 +43,13 @@ class Statusbar extends DrawableObject {
         '../img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/100.png'
     ];
 
+    /**
+     * Creates a status bar of specified type with position and initial percentage
+     * @param {string} type - Type of status bar ('lifepoints', 'coins', 'bottles', 'endboss')
+     * @param {number} x - Horizontal position of the status bar
+     * @param {number} y - Vertical position of the status bar
+     * @param {number} percentage - Initial percentage value (0-100)
+     */
     constructor(type, x, y, percentage) {
         super();
         this.x = x;
@@ -56,12 +67,22 @@ class Statusbar extends DrawableObject {
         this.setPercentage(percentage);
     }
 
+    /**
+     * Sets the status bar to display a specific percentage value
+     * @param {number} percentage - The percentage to display (0-100)
+     * Updates the displayed image based on the percentage value
+     */
     setPercentage(percentage) {
         this.percentage = percentage;
         let path = this.images[this.resolveImageIndex()];
         this.img = this.imageCache[path];
     }
 
+    /**
+     * Determines which image index to use based on current percentage
+     * @returns {number} Image index (0-5) corresponding to percentage ranges
+     * Maps percentage ranges to appropriate status bar fill levels
+     */
     resolveImageIndex() {
         if (this.percentage == 100) {
             return 5;
@@ -78,6 +99,10 @@ class Statusbar extends DrawableObject {
         }
     }
 
+    /**
+     * Animates the status bar sliding in from right to left
+     * Continuously moves the status bar until it reaches position x=540
+     */
     animateStatusbar() {
         let statusbarInterval = setInterval(() => {
             this.moveStatusbar();

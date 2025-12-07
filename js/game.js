@@ -4,6 +4,10 @@ let keyboard = new Keyboard();
 let activeButton = false;
 let resizeTimeout;
 
+/**
+ * Starts the game by initializing level, showing mobile controls, and beginning gameplay
+ * Handles UI visibility based on screen size and activates game state
+ */
 function startGame() {
     if (world) {
         document.getElementById('playButton').classList.add('d-none');
@@ -21,6 +25,10 @@ function startGame() {
     }
 }
 
+/**
+ * Initializes the game canvas, sound system, world instance, and event listeners
+ * Sets up keyboard controls, start screen, volume settings, and mobile compatibility
+ */
 function init() {
     canvas = document.getElementById('canvas');
     if (window.soundManager) {
@@ -39,6 +47,10 @@ function init() {
     document.getElementById('playBtnContainer').classList.add('d-none');
 }
 
+/**
+ * Sets up keyboard event listener for Enter key to start game from start screen
+ * Enables starting game with keyboard input when not in active gameplay
+ */
 function initStartScreen() {
     document.addEventListener('keydown', (e) => {
         if (e.code === 'Enter' && !world.gameState) {
@@ -47,6 +59,10 @@ function initStartScreen() {
     });
 }
 
+/**
+ * Resets the entire game to initial state
+ * Stops audio, clears intervals, recreates world instance, and resets UI elements
+ */
 function resetGame() {
     if (window.soundManager) {
         window.soundManager.stopBackgroundMusic();
@@ -61,18 +77,31 @@ function resetGame() {
     document.getElementById('playBtnContainer').classList.add('d-none');
 }
 
+/**
+ * Clears all active intervals to prevent memory leaks and stop game loops
+ * Iterates through interval IDs and clears each one systematically
+ */
 function clearAllIntervals() {
     for (let i = 1; i < 99999; i++) {
         window.clearInterval(i);
     }
 }
 
+/**
+ * Toggles volume icon display between muted and unmuted states
+ * Delegates to world instance if available for volume control
+ */
 function toggleVolumeImg() {
     if (world) {
         world.toggleVolumeImg();
     }
 }
 
+/**
+ * Activates a control button and deactivates all others
+ * @param {HTMLElement} element - The button element to activate
+ * Handles button styling and triggers volume toggle for volume buttons
+ */
 function activeControlButton(element) {
     document.querySelectorAll('.western-button').forEach(btn => {
         btn.classList.remove('active');
@@ -83,6 +112,10 @@ function activeControlButton(element) {
     }
 }
 
+/**
+ * Sets the volume icon state based on saved localStorage settings
+ * Restores volume button appearance and sound manager mute state from previous session
+ */
 function setSavedVolumeIcon() {
     let volumeBtn = document.getElementById('volumeButton');
     let volumeOnIcon = document.getElementById('volumeOnIcon');
@@ -101,6 +134,10 @@ function setSavedVolumeIcon() {
     }
 }
 
+/**
+ * Updates mobile volume icon display based on current mute state
+ * Synchronizes mobile volume button appearance with sound manager mute status
+ */
 function updateMobileVolumeIcon() {
     const mobileVolumeOnIcon = document.getElementById('mobileVolumeOnIcon');
     const mobileVolumeOffIcon = document.getElementById('mobileVolumeOffIcon');
@@ -113,6 +150,10 @@ function updateMobileVolumeIcon() {
     }
 }
 
+/**
+ * Debounces window resize events to prevent excessive function calls
+ * Uses timeout to delay resize handling until user stops resizing window
+ */
 function debouncedResize() {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
@@ -121,6 +162,10 @@ function debouncedResize() {
     }, 150);
 }
 
+/**
+ * Handles window resize events by showing or hiding mobile controls
+ * Adjusts UI visibility based on screen width and current game state
+ */
 function handleWindowResize() {
     if (world && world.gameState) {
         if (window.innerWidth > 935) {
@@ -133,6 +178,10 @@ function handleWindowResize() {
     }
 }
 
+/**
+ * Checks device orientation and shows rotation warning for mobile portrait mode
+ * Displays warning overlay when mobile device is in portrait orientation
+ */
 function checkOrientation() {
     const orientationWarning = document.getElementById('orientationWarning');
     if (window.innerWidth <= 935 && window.innerHeight > window.innerWidth) {

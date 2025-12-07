@@ -1,3 +1,7 @@
+/**
+ * Main character class representing the player-controlled character Pepe
+ * Extends MoveableObject with movement, animation, and interaction capabilities
+ */
 class Character extends MoveableObject {
     world;
     y = 60;
@@ -74,6 +78,10 @@ class Character extends MoveableObject {
         'img/2_character_pepe/5_dead/D-57.png'
     ];
 
+    /**
+     * Creates the main character with all animation images and starts animation loops
+     * Initializes character with gravity, movement speed, and animation cycles
+     */
     constructor() {
         super().loadImg('../img/2_character_pepe/3_jump/J-31.png');
         this.loadImages(this.IMAGES_WALKING);
@@ -87,6 +95,10 @@ class Character extends MoveableObject {
         this.animate();
     }
 
+    /**
+     * Starts character animation loops for movement and visual state updates
+     * Sets up two intervals: one for movement detection, one for animation updates
+     */
     animate() {
         setInterval(() => {
             this.setMovementApplication();
@@ -97,6 +109,10 @@ class Character extends MoveableObject {
         }, 150);
     }
 
+    /**
+     * Manages idle animation states based on inactivity duration
+     * Plays short idle animation initially, then long idle animation after threshold
+     */
     checkIdleAnimation() {
         this.idleCounter++;
         if (this.idleCounter >= 0) {
@@ -109,6 +125,10 @@ class Character extends MoveableObject {
         }
     }
 
+    /**
+     * Handles keyboard input for character movement and actions
+     * Processes right/left movement, jumping, and updates camera position
+     */
     setMovementApplication() {
         if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
             this.moveRight();
@@ -123,6 +143,10 @@ class Character extends MoveableObject {
         this.setCamera();
     }
 
+    /**
+     * Determines and plays appropriate character animation based on current state
+     * Handles dead, hurt, jumping, walking, and idle animation states
+     */
     setAnimation() {
         if (this.isDead()) {
             return;
@@ -140,15 +164,27 @@ class Character extends MoveableObject {
         }
     }
 
+    /**
+     * Activates idle animation state
+     * Sets flag to indicate idle animation is currently playing
+     */
     startIdleAnimation() {
         this.isIdleAnimating = true;
     }
 
+    /**
+     * Resets idle counter and animation state
+     * Called when character becomes active to stop idle animations
+     */
     resetIdleCounter() {
         this.idleCounter = 0;
         this.isIdleAnimating = false;
     }
 
+    /**
+     * Handles character jumping on enemies to defeat them
+     * Checks collision with enemies, deals damage, plays sound, and bounces character
+     */
     jumpOnEnemy() {
         this.world.level.enemies.forEach((enemies) => {
             if (this.isColliding(enemies)) {

@@ -20,6 +20,12 @@ class World {
     isGameOver = false;
     isYouWon = false;
 
+    /**
+     * Initializes the World instance with canvas, keyboard and volume settings
+     * @param {HTMLCanvasElement} canvas - The game canvas element
+     * @param {Keyboard} keyboard - The keyboard input handler
+     * @param {number} volume - Initial volume setting
+     */
     constructor(canvas, keyboard, volume) {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
@@ -28,6 +34,9 @@ class World {
         this.draw();
     }
 
+    /**
+     * Main drawing loop that renders different game states
+     */
     draw() {
         let self = this;
         if (this.isGameOver) {
@@ -46,6 +55,9 @@ class World {
         });
     }
 
+    /**
+     * Renders the game over screen
+     */
     drawGameOver() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.addObjectsToMap(this.level.backgrounds);
@@ -53,6 +65,9 @@ class World {
         this.gameOverScreen.draw(this.ctx);
     }
 
+    /**
+     * Renders the victory screen and removes character
+     */
     drawYouWon() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.addObjectsToMap(this.level.backgrounds);
@@ -61,11 +76,17 @@ class World {
         this.character = null;
     }
 
+    /**
+     * Renders the start screen before game begins
+     */
     drawStartScreen() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.startScreen.draw(this.ctx);
     }
 
+    /**
+     * Renders the main gameplay with camera translations and all game objects
+     */
     drawGameplay() {
         this.ctx.clearRect(0, 0, canvas.width, canvas.height);
         this.ctx.translate(this.camera_x, 0);
@@ -86,13 +107,19 @@ class World {
         this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.throwableObject);
         this.ctx.translate(-this.camera_x, 0);
-    } // anpassen?
+    }
 
+    /**
+     * Sets up world references for character and throwable objects
+     */
     setWorld() {
         this.character.world = this;
         this.throwableObject.world = this;
     }
 
+    /**
+     * Initializes and starts the game with all necessary components
+     */
     startGame() {
         this.character.resetIdleCounter();
         this.setCollectables();
@@ -108,6 +135,9 @@ class World {
         }
     }
 
+    /**
+     * Loads sound settings from localStorage and applies them
+     */
     loadSavedSettings() {
         this.savedMuted = localStorage.getItem('gameMuted');
         if (this.savedMuted === 'true') {
@@ -119,6 +149,9 @@ class World {
         }
     }
 
+    /**
+     * Toggles volume icon display between muted and unmuted states
+     */
     toggleVolumeImg() {
         let volumeBtn = document.getElementById('volumeButton');
         let volumeOnIcon = document.getElementById('volumeOnIcon');
@@ -136,8 +169,11 @@ class World {
             window.soundManager.isMuted = false;
             this.toggleVolume();
         }
-    } //anpassen??
+    }
 
+    /**
+     * Toggles volume settings and saves state to localStorage
+     */
     toggleVolume() {
         if (!window.soundManager.isMuted) {
             if (window.soundManager) {
@@ -152,12 +188,20 @@ class World {
         }
     }
 
+    /**
+     * Adds an array of objects to the rendering map
+     * @param {Array} objects - Array of objects to be rendered
+     */
     addObjectsToMap(objects) {
         objects.forEach(o => {
             this.addToMap(o);
         });
     }
 
+    /**
+     * Adds a single moveable object to the rendering map with direction handling
+     * @param {MoveableObject} mo - Moveable object to be added
+     */
     addToMap(mo) {
         if (mo.otherDirection) {
             this.flipImage(mo);
@@ -169,6 +213,10 @@ class World {
         }
     }
 
+    /**
+     * Flips image horizontally for objects facing the other direction
+     * @param {MoveableObject} mo - Moveable object to flip
+     */
     flipImage(mo) {
         this.ctx.save();
         this.ctx.scale(-1, 1);
@@ -176,6 +224,9 @@ class World {
         this.ctx.restore();
     }
 
+    /**
+     * Main game loop that handles collisions and character/enemy state checks
+     */
     run() {
         let runInterval = setInterval(() => {
             if (!this.level || !this.character) {
@@ -188,6 +239,11 @@ class World {
         }, 80);
     }
 
+    /**
+     * Checks win and lose conditions during the game loop
+     * @param {number} runInterval - The interval ID to clear when game ends
+     * Handles both character death (game over) and endboss death (victory)
+     */
     checkWinLose(runInterval) {
         if (this.character.deadAnimationDone) {
             this.removeDeadCharacter();
@@ -201,6 +257,10 @@ class World {
     }
 
 
+    /**
+     * Monitors character position and spawns the endboss when character reaches position 2200
+     * Creates interval that checks character position every 200ms until spawn trigger
+     */
     spawnEndboss() {
         let spawnInterval = setInterval(() => {
             if (!this.level || !this.character) {
@@ -213,6 +273,10 @@ class World {
         }, 200);
     }
 
+    /**
+     * Activates endboss encounter by starting animations and changing music
+     * Shows endboss health bar and switches to boss fight audio track
+     */
     setIncomingEndboss() {
         if (this.level.endboss && this.level.endboss.length > 0) {
             this.level.endboss.forEach(endboss => endboss.animate());
@@ -226,6 +290,10 @@ class World {
         }
     }
 
+    /**
+     * Checks all collision types in the game world
+     * Handles enemy, endboss, bottle, and coin collision detection
+     */
     checkCollisions() {
         if (!this.level || !this.character) {
             return;
@@ -246,6 +314,11 @@ class World {
         }
     } //anpaseen??
 
+    /**
+     * Handles collision between character and regular enemy
+     * @param {Object} enemy - The enemy object involved in collision
+     * Either makes character jump on enemy (killing it) or character takes damage
+     */
     setCollisionEnemy(enemy) {
         if (this.character.isLandingOnTop(enemy)) {
             this.character.jumpOnEnemy();
@@ -258,6 +331,10 @@ class World {
         }
     }
 
+    /**
+     * Handles collision between character and endboss
+     * Character takes damage when touching endboss
+     */
     setCollisionEndboss() {
         this.level.endboss.forEach(endboss => {
             if (this.character.isColliding(endboss)) {
@@ -267,6 +344,10 @@ class World {
         });
     }
 
+    /**
+     * Handles collision between character and collectible bottles
+     * Increases character bottle count and updates status bar
+     */
     setCollisionBottle() {
         this.level.bottles.forEach(bottle => {
             if (this.character.isColliding(bottle)) {
@@ -277,6 +358,10 @@ class World {
         });
     }
 
+    /**
+     * Handles collision between character and collectible coins
+     * Increases character coin count and updates status bar
+     */
     setCollisionCoin() {
         this.level.coins.forEach(coin => {
             if (this.character.isColliding(coin)) {
@@ -287,6 +372,10 @@ class World {
         });
     }
 
+    /**
+     * Handles throwable object mechanics including bottle throwing and collision detection
+     * Manages cooldown timer and throwing speed based on character direction
+     */
     checkThrowObjects() {
         this.speedX = this.character.otherDirection ? -10 : 10;
         if (this.bottleCooldownAktive) {
@@ -301,6 +390,11 @@ class World {
         this.bottleCooldown();
     }
 
+    /**
+     * Creates and manages a new throwable bottle object
+     * @param {ThrowableObject} bottle - The throwable bottle object to add to the game
+     * Updates bottle inventory and removes bottles that hit the ground
+     */
     setThrowableObject(bottle) {
         this.throwableObject.push(bottle);
         this.character.bottleAmount -= 10;
@@ -312,6 +406,10 @@ class World {
         }, 40);
     }
 
+    /**
+     * Implements cooldown timer for bottle throwing to prevent spam
+     * Sets 1 second cooldown between bottle throws
+     */
     bottleCooldown() {
         this.bottleCooldownAktive = true;
         setTimeout(() => {
@@ -319,6 +417,10 @@ class World {
         }, 1000);
     }
 
+    /**
+     * Monitors character position relative to endboss for AI behavior
+     * Triggers endboss alert state and direction changes based on character proximity
+     */
     checkCharacterPosition() {
         let alertDistance = 150;
         if (!this.level || !this.character || !this.level.endboss) {
@@ -329,6 +431,12 @@ class World {
         });
     }
 
+    /**
+     * Updates endboss behavior based on character position and proximity
+     * @param {Object} endboss - The endboss object to update
+     * @param {number} alertDistance - Distance threshold for alert state trigger
+     * Sets direction, attack mode, movement restrictions, and alert status
+     */
     setCharacterPosition(endboss, alertDistance) {
         if (this.character.x > endboss.x) {
             endboss.otherDirection = true;
@@ -346,11 +454,20 @@ class World {
         }
     }
 
+    /**
+     * Initializes placement of all collectible items in the level
+     * Places bottles and coins in calculated positions across the map
+     */
     setCollectables() {
         this.placeBottles();
         this.placeCoins();
     }
 
+    /**
+     * Removes a collected object from the appropriate level array
+     * @param {Object} collectable - The collected item (bottle or coin) to remove
+     * Handles cleanup for both bottles and coins from level arrays
+     */
     removeCollectedObject(collectable) {
         const bottleIndex = this.level.bottles.indexOf(collectable);
         const coinIndex = this.level.coins.indexOf(collectable);
@@ -361,6 +478,10 @@ class World {
         }
     }
 
+    /**
+     * Calculates and sets positions for all bottles in the level
+     * Ensures minimum spacing between bottles and avoids placement conflicts
+     */
     placeBottles() {
         let mapWidth = this.level.level_end_x - 200;
         let minX = 200;
@@ -371,6 +492,15 @@ class World {
         });
     }
 
+    /**
+     * Calculates valid placement position for an individual bottle
+     * @param {Object} bottle - The bottle object to position
+     * @param {Array} usedPosition - Array of already used positions to avoid conflicts
+     * @param {number} minX - Minimum x position for bottle placement
+     * @param {number} mapWidth - Maximum width of the map for placement
+     * @param {number} minDistance - Minimum distance between bottles
+     * Uses random positioning with collision avoidance algorithm
+     */
     calcBottlePosition(bottle, usedPosition, minX, mapWidth, minDistance) {
         let bottlePosition;
         let tries = 0;
@@ -385,6 +515,10 @@ class World {
         bottle.x = bottlePosition;
     }
 
+    /**
+     * Calculates and sets positions for all coins in the level
+     * Ensures minimum spacing between coins and avoids placement conflicts
+     */
     placeCoins() {
         let mapWidth = this.level.level_end_x - 200;
         let minX = 200;
@@ -395,6 +529,15 @@ class World {
         });
     }
 
+    /**
+     * Calculates valid placement position for an individual coin
+     * @param {Object} coin - The coin object to position
+     * @param {Array} usedPosition - Array of already used positions to avoid conflicts
+     * @param {number} minX - Minimum x position for coin placement
+     * @param {number} mapWidth - Maximum width of the map for placement
+     * @param {number} minDistance - Minimum distance between coins
+     * Uses random positioning with collision avoidance algorithm
+     */
     calcCoinPosition(coin, usedPosition, minX, mapWidth, minDistance) {
         let coinPosition;
         let tries = 0;
@@ -409,12 +552,20 @@ class World {
         coin.x = coinPosition;
     }
 
+    /**
+     * Removes dead enemies from the level enemies array
+     * Filters out enemies that have been killed by the character
+     */
     removeDeadEnemies() {
         if (this.level && this.level.enemies) {
             this.level.enemies = this.level.enemies.filter(enemy => !enemy.isDead());
         }
     }
 
+    /**
+     * Removes dead endboss from the level endboss array
+     * Filters out defeated endboss and logs defeat message
+     */
     removeDeadEndboss() {
         if (this.level && this.level.endboss) {
             console.log('endboss is dead');
@@ -423,6 +574,10 @@ class World {
         }
     }
 
+    /**
+     * Handles character death by removing character and triggering game over
+     * Sets game over state and initializes restart button
+     */
     removeDeadCharacter() {
         if (this.character && this.character.isDead()) {
             this.character = null;
@@ -431,6 +586,10 @@ class World {
         }
     }
 
+    /**
+     * Initializes restart button visibility after game ends
+     * Shows restart button 2 seconds after game over or victory state
+     */
     initRestartButton() {
         let restartBtn = document.getElementById('restartButton');
         setInterval(() => {

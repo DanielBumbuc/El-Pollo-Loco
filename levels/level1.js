@@ -1,5 +1,10 @@
 let level1;
 
+/**
+ * Initializes level 1 with all game objects including backgrounds, enemies, collectibles
+ * Creates a complete level instance with backgrounds, clouds, chickens, endboss, bottles, and coins
+ * Sets up the main game level with proper positioning and object distribution
+ */
 function loadLevel1() {
 
     level1 = new Level(

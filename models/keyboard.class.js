@@ -1,3 +1,7 @@
+/**
+ * Keyboard input handler class for managing game controls
+ * Handles both keyboard input and touch controls for mobile devices
+ */
 class Keyboard {
     LEFT = false;
     RIGHT = false;
@@ -7,10 +11,18 @@ class Keyboard {
     ENTER = false;
     D = false;
 
+    /**
+     * Creates a new keyboard input handler
+     */
     constructor() {
 
     }
 
+    /**
+     * Handles keyboard key press events and activates corresponding input flags
+     * @param {string} pressedKey - The key code of the pressed key
+     * Maps arrow keys, space, enter, and D key to game controls
+     */
     handleKeydown(pressedKey) {
         if (pressedKey == 'ArrowLeft') this.LEFT = true;
         if (pressedKey == 'ArrowRight') this.RIGHT = true;
@@ -26,6 +38,11 @@ class Keyboard {
     }    
     }
 
+    /**
+     * Handles keyboard key release events and deactivates corresponding input flags
+     * @param {string} pressedKey - The key code of the released key
+     * Resets input flags when keys are released
+     */
     handleKeyup(pressedKey) {
         if (pressedKey == 'ArrowLeft') this.LEFT = false;
         if (pressedKey == 'ArrowRight') this.RIGHT = false;
@@ -36,6 +53,11 @@ class Keyboard {
         if (pressedKey == 'KeyD')  this.D = false;
     }
 
+    /**
+     * Handles touch start events for mobile control buttons
+     * @param {TouchEvent} e - The touch event object
+     * Maps mobile button touches to keyboard equivalents and provides visual feedback
+     */
     handleTouchStart(e) {
         const button = e.target.closest('button');
         if (!button) return;
@@ -64,6 +86,11 @@ class Keyboard {
         }
     }
 
+    /**
+     * Handles touch end events for mobile control buttons
+     * @param {TouchEvent} e - The touch event object
+     * Deactivates input flags and handles special button actions like restart and volume
+     */
     handleTouchEnd(e) {
         const button = e.target.closest('button');
         if (!button) return;

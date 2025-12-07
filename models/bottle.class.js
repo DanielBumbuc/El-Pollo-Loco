@@ -1,3 +1,7 @@
+/**
+ * Collectible bottle class that can be gathered by the character
+ * Extends MoveableObject to support collision detection and animations
+ */
 class Bottle extends MoveableObject {
     y = 370;
     width = 50;
@@ -14,6 +18,10 @@ class Bottle extends MoveableObject {
         'img/6_salsa_bottle/2_salsa_bottle_on_ground.png'
     ];
     
+    /**
+     * Creates a new collectible bottle with animation setup
+     * Loads bottle images and starts animation cycle
+     */
     constructor() {
         super();
         this.loadImg('../img/6_salsa_bottle/1_salsa_bottle_on_ground.png');
@@ -21,6 +29,10 @@ class Bottle extends MoveableObject {
         this.animateBottles();
     }
 
+    /**
+     * Starts the bottle animation cycle
+     * Continuously cycles through bottle images to create a blinking effect
+     */
     animateBottles() {
         setInterval(() => {
             this.playAnimation(this.IMAGES_BOTTLE);

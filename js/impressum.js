@@ -1,5 +1,6 @@
 /**
- * Opens the impressum overlay
+ * Opens the impressum overlay and updates button styling
+ * Changes icon colors to highlight active state (#FFDC00)
  */
 function openImpressum() {
     const overlay = document.getElementById('impressumOverlay');
@@ -14,7 +15,8 @@ function openImpressum() {
 }
 
 /**
- * Closes the impressum overlay
+ * Closes the impressum overlay and resets button styling
+ * Changes icon colors back to default state (#654321)
  */
 function closeImpressum() {
     const overlay = document.getElementById('impressumOverlay');

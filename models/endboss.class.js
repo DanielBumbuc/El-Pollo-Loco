@@ -1,3 +1,7 @@
+/**
+ * Endboss class representing the final boss enemy with complex AI behavior
+ * Extends MoveableObject with alert, attack, and advanced animation systems
+ */
 class Endboss extends MoveableObject {
     y = 235;
     width = 200;
@@ -57,6 +61,11 @@ class Endboss extends MoveableObject {
         '../img/4_enemie_boss_chicken/5_dead/G26.png'
     ];
 
+    /**
+     * Creates the endboss with all animation states and positioning
+     * Loads walking, alert, attack, hurt, and death animations
+     * Sets initial position and movement speed
+     */
     constructor() {
         super().loadImg(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
@@ -68,6 +77,10 @@ class Endboss extends MoveableObject {
         this.speed = 2.5;
     }
 
+    /**
+     * Starts all endboss animation loops including movement, walking, and state animations
+     * Creates intervals for movement direction updates, walking animation, and state checking
+     */
     animate() {
         setInterval(() => {
             this.setMoveDirection();
@@ -84,6 +97,10 @@ class Endboss extends MoveableObject {
 
     }
 
+    /**
+     * Controls endboss movement direction based on current animation state
+     * Handles leftward and rightward movement while respecting animation locks
+     */
     setMoveDirection() {
         if (!this.alertAnimationActive && !this.attackAnimationActive && !this.isAttacking && !this.isDead() && !this.isHurt()) {
             if (!this.otherDirection) {
@@ -94,6 +111,10 @@ class Endboss extends MoveableObject {
         }
     }
 
+    /**
+     * Determines and plays appropriate endboss animation based on current state
+     * Handles dead, hurt, alert, and attack animation states with timing controls
+     */
     setAnimation() {
         const now = Date.now();
         if (this.isDead()) {
@@ -110,6 +131,15 @@ class Endboss extends MoveableObject {
         }
     }
 
+    /**
+     * Initiates endboss attack sequence with position tracking
+     * Sets up attack state and starts attack interval for position-based attacks
+     */
+    /**
+     * Initiates attack sequence and manages attack positioning
+     * @param {number} startPosX - Starting position for attack return calculation
+     * Prevents multiple simultaneous attacks and sets up attack direction
+     */
     attackPosition() {
         let startPosX = this.x;
         if (this.isAttacking) {
@@ -126,6 +156,14 @@ class Endboss extends MoveableObject {
         }, 300);
     }
 
+    /**
+     * Determines attack direction and applies movement based on attack flags
+     * Handles leftward and rightward attack movements with speed modifier
+     */
+    /**
+     * Determines attack direction based on character position and moves endboss accordingly
+     * Moves left or right based on attack flags and resets directional flags
+     */
     checkAttackDirection() {
         if (this.attackLeft) {
             this.x -= this.attackSpeed;
@@ -138,6 +176,16 @@ class Endboss extends MoveableObject {
         }
     }
 
+    /**
+     * Executes attack movement and handles return to starting position
+     * @param {number} startPosX - The original x position before attack
+     * Returns endboss to starting position after attack completion
+     */
+    /**
+     * Executes attack movement and return to starting position
+     * @param {number} startPosX - Original position to return to after attack
+     * Manages attack movement and cleanup when attack is complete
+     */
     startAttack(startPosX) {
         if (this.x < startPosX) {
             this.x += this.attackSpeed;

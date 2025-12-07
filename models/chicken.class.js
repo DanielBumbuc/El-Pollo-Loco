@@ -1,3 +1,7 @@
+/**
+ * Normal chicken enemy class with walking animation and death mechanics
+ * Extends MoveableObject to support movement, collision detection, and health
+ */
 class Chicken extends MoveableObject {
     y = 330;
     width = 90;
@@ -18,6 +22,10 @@ class Chicken extends MoveableObject {
         '../img/3_enemies_chicken/chicken_normal/2_dead/dead.png'
     ];
 
+    /**
+     * Creates a normal chicken enemy with random positioning and speed
+     * Loads walking and death animations, sets random spawn location and movement speed
+     */
     constructor() {
         super().loadImg('../img/3_enemies_chicken/chicken_normal/1_walk/2_w.png');
         this.loadImages(this.IMAGES_WALKING);
@@ -29,6 +37,10 @@ class Chicken extends MoveableObject {
         this.speed = 0.8 + Math.random() * 0.25;
     }
 
+    /**
+     * Starts chicken animation loops for movement, walking, and death animations
+     * Creates intervals for leftward movement, walking animation, and death state checking
+     */
     animateWalking() {
         setInterval(() => {
             this.moveLeft();
