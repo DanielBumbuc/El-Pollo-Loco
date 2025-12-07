@@ -118,7 +118,7 @@ class ThrowableObject extends MoveableObject {
         this.speedY = 0;
         this.speedX = 0;
         setTimeout(() => {
-            this.world.removeDeadEnemies();
+            this.world.gameManager.removeDeadEnemies();
             this.y = 500;
         }, 100);
     }

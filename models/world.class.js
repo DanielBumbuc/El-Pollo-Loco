@@ -19,6 +19,7 @@ class World {
     youWonScreen = new YouWon();
     isGameOver = false;
     isYouWon = false;
+    gameManager;
 
     /**
      * Initializes the World instance with canvas, keyboard and volume settings
@@ -30,6 +31,7 @@ class World {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
         this.keyboard = keyboard;
+        this.gameManager = new GameManager(this);
         this.setWorld();
         this.draw();
     }
@@ -122,9 +124,9 @@ class World {
      */
     startGame() {
         this.character.resetIdleCounter();
-        this.setCollectables();
+        this.gameManager.setCollectables();
         this.run();
-        this.spawnEndboss();
+        this.gameManager.spawnEndboss();
         this.level.enemies.forEach(chicken => chicken.animateWalking());
         this.loadSavedSettings();
         if (window.soundManager) {
@@ -232,10 +234,9 @@ class World {
             if (!this.level || !this.character) {
                 return;
             }
-            this.checkCollisions();
-            this.checkCharacterPosition();
+            this.gameManager.checkCollisions();
+            this.gameManager.checkCharacterPosition();
             this.checkWinLose(runInterval);
-
         }, 80);
     }
 
@@ -246,130 +247,14 @@ class World {
      */
     checkWinLose(runInterval) {
         if (this.character.deadAnimationDone) {
-            this.removeDeadCharacter();
+            this.gameManager.removeDeadCharacter();
             clearInterval(runInterval);
         } else if (this.level.endboss && this.level.endboss[0] && this.level.endboss[0].deadAnimationDone) {
-            this.removeDeadEndboss();
+            this.gameManager.removeDeadEndboss();
             clearInterval(runInterval);
             this.isYouWon = true;
             this.initRestartButton();
         }
-    }
-
-
-    /**
-     * Monitors character position and spawns the endboss when character reaches position 2200
-     * Creates interval that checks character position every 200ms until spawn trigger
-     */
-    spawnEndboss() {
-        let spawnInterval = setInterval(() => {
-            if (!this.level || !this.character) {
-                clearInterval(spawnInterval);
-                return;
-            } else if (this.character.x >= 2200) {
-                this.setIncomingEndboss();
-                clearInterval(spawnInterval);
-            }
-        }, 200);
-    }
-
-    /**
-     * Activates endboss encounter by starting animations and changing music
-     * Shows endboss health bar and switches to boss fight audio track
-     */
-    setIncomingEndboss() {
-        if (this.level.endboss && this.level.endboss.length > 0) {
-            this.level.endboss.forEach(endboss => endboss.animate());
-            this.showEndbossStatusbar = true;
-            this.statusbarEndboss.animateStatusbar();
-            if (window.soundManager) {
-                window.soundManager.stopBackgroundMusic();
-                window.soundManager.playSound('bossFightMusic');
-                console.log('Endboss fight music started!');
-            }
-        }
-    }
-
-    /**
-     * Checks all collision types in the game world
-     * Handles enemy, endboss, bottle, and coin collision detection
-     */
-    checkCollisions() {
-        if (!this.level || !this.character) {
-            return;
-        }
-        this.level.enemies.forEach((enemy, index) => {
-            if (this.character.isColliding(enemy) && !enemy.isDead()) {
-                this.setCollisionEnemy(enemy);
-            }
-        });
-        if (this.level.endboss) {
-            this.setCollisionEndboss();
-        }
-        if (this.level.bottles) {
-            this.setCollisionBottle();
-        }
-        if (this.level.coins) {
-            this.setCollisionCoin();
-        }
-    } //anpaseen??
-
-    /**
-     * Handles collision between character and regular enemy
-     * @param {Object} enemy - The enemy object involved in collision
-     * Either makes character jump on enemy (killing it) or character takes damage
-     */
-    setCollisionEnemy(enemy) {
-        if (this.character.isLandingOnTop(enemy)) {
-            this.character.jumpOnEnemy();
-            setTimeout(() => {
-                this.removeDeadEnemies();
-            }, 200);
-        } else {
-            this.character.hit(10);
-            this.statusbarLifepoints.setPercentage(this.character.lifepoints);
-        }
-    }
-
-    /**
-     * Handles collision between character and endboss
-     * Character takes damage when touching endboss
-     */
-    setCollisionEndboss() {
-        this.level.endboss.forEach(endboss => {
-            if (this.character.isColliding(endboss)) {
-                this.character.hit(10);
-                this.statusbarLifepoints.setPercentage(this.character.lifepoints);
-            }
-        });
-    }
-
-    /**
-     * Handles collision between character and collectible bottles
-     * Increases character bottle count and updates status bar
-     */
-    setCollisionBottle() {
-        this.level.bottles.forEach(bottle => {
-            if (this.character.isColliding(bottle)) {
-                this.character.collectBottle();
-                this.statusbarBottles.setPercentage(this.character.bottleAmount);
-                this.removeCollectedObject(bottle);
-            }
-        });
-    }
-
-    /**
-     * Handles collision between character and collectible coins
-     * Increases character coin count and updates status bar
-     */
-    setCollisionCoin() {
-        this.level.coins.forEach(coin => {
-            if (this.character.isColliding(coin)) {
-                this.character.collectCoin();
-                this.statusbarCoins.setPercentage(this.character.coinAmount);
-                this.removeCollectedObject(coin);
-            }
-        });
     }
 
     /**
@@ -418,175 +303,6 @@ class World {
     }
 
     /**
-     * Monitors character position relative to endboss for AI behavior
-     * Triggers endboss alert state and direction changes based on character proximity
-     */
-    checkCharacterPosition() {
-        let alertDistance = 150;
-        if (!this.level || !this.character || !this.level.endboss) {
-            return;
-        }
-        this.level.endboss.forEach(endboss => {
-            this.setCharacterPosition(endboss, alertDistance);
-        });
-    }
-
-    /**
-     * Updates endboss behavior based on character position and proximity
-     * @param {Object} endboss - The endboss object to update
-     * @param {number} alertDistance - Distance threshold for alert state trigger
-     * Sets direction, attack mode, movement restrictions, and alert status
-     */
-    setCharacterPosition(endboss, alertDistance) {
-        if (this.character.x > endboss.x) {
-            endboss.otherDirection = true;
-            endboss.attackRight = true;
-        } else {
-            endboss.otherDirection = false;
-            endboss.attackLeft = true;
-        }
-        if (this.character.x + alertDistance > endboss.x && this.character.x < endboss.x + endboss.width) {
-            endboss.canMoveLeft = false;
-            endboss.alert = true;
-        } else {
-            endboss.canMoveLeft = true;
-            endboss.alert = false;
-        }
-    }
-
-    /**
-     * Initializes placement of all collectible items in the level
-     * Places bottles and coins in calculated positions across the map
-     */
-    setCollectables() {
-        this.placeBottles();
-        this.placeCoins();
-    }
-
-    /**
-     * Removes a collected object from the appropriate level array
-     * @param {Object} collectable - The collected item (bottle or coin) to remove
-     * Handles cleanup for both bottles and coins from level arrays
-     */
-    removeCollectedObject(collectable) {
-        const bottleIndex = this.level.bottles.indexOf(collectable);
-        const coinIndex = this.level.coins.indexOf(collectable);
-        if (bottleIndex > -1) {
-            this.level.bottles.splice(bottleIndex, 1);
-        } else if (coinIndex > -1) {
-            this.level.coins.splice(coinIndex, 1);
-        }
-    }
-
-    /**
-     * Calculates and sets positions for all bottles in the level
-     * Ensures minimum spacing between bottles and avoids placement conflicts
-     */
-    placeBottles() {
-        let mapWidth = this.level.level_end_x - 200;
-        let minX = 200;
-        let minDistance = 100;
-        let usedPosition = [];
-        this.level.bottles.forEach(bottle => {
-            this.calcBottlePosition(bottle, usedPosition, minX, mapWidth, minDistance);
-        });
-    }
-
-    /**
-     * Calculates valid placement position for an individual bottle
-     * @param {Object} bottle - The bottle object to position
-     * @param {Array} usedPosition - Array of already used positions to avoid conflicts
-     * @param {number} minX - Minimum x position for bottle placement
-     * @param {number} mapWidth - Maximum width of the map for placement
-     * @param {number} minDistance - Minimum distance between bottles
-     * Uses random positioning with collision avoidance algorithm
-     */
-    calcBottlePosition(bottle, usedPosition, minX, mapWidth, minDistance) {
-        let bottlePosition;
-        let tries = 0;
-        do {
-            bottlePosition = minX + Math.floor(Math.random() * mapWidth);
-            tries++;
-        } while (
-            usedPosition.some(pos => Math.abs(pos - bottlePosition) < minDistance) &&
-            tries < 100
-        );
-        usedPosition.push(bottlePosition);
-        bottle.x = bottlePosition;
-    }
-
-    /**
-     * Calculates and sets positions for all coins in the level
-     * Ensures minimum spacing between coins and avoids placement conflicts
-     */
-    placeCoins() {
-        let mapWidth = this.level.level_end_x - 200;
-        let minX = 200;
-        let minDistance = 100;
-        let usedPosition = [];
-        this.level.coins.forEach(coin => {
-            this.calcCoinPosition(coin, usedPosition, minX, mapWidth, minDistance);
-        });
-    }
-
-    /**
-     * Calculates valid placement position for an individual coin
-     * @param {Object} coin - The coin object to position
-     * @param {Array} usedPosition - Array of already used positions to avoid conflicts
-     * @param {number} minX - Minimum x position for coin placement
-     * @param {number} mapWidth - Maximum width of the map for placement
-     * @param {number} minDistance - Minimum distance between coins
-     * Uses random positioning with collision avoidance algorithm
-     */
-    calcCoinPosition(coin, usedPosition, minX, mapWidth, minDistance) {
-        let coinPosition;
-        let tries = 0;
-        do {
-            coinPosition = minX + Math.floor(Math.random() * mapWidth);
-            tries++;
-        } while (
-            usedPosition.some(pos => Math.abs(pos - coinPosition) < minDistance) &&
-            tries < 100
-        );
-        usedPosition.push(coinPosition);
-        coin.x = coinPosition;
-    }
-
-    /**
-     * Removes dead enemies from the level enemies array
-     * Filters out enemies that have been killed by the character
-     */
-    removeDeadEnemies() {
-        if (this.level && this.level.enemies) {
-            this.level.enemies = this.level.enemies.filter(enemy => !enemy.isDead());
-        }
-    }
-
-    /**
-     * Removes dead endboss from the level endboss array
-     * Filters out defeated endboss and logs defeat message
-     */
-    removeDeadEndboss() {
-        if (this.level && this.level.endboss) {
-            console.log('endboss is dead');
-
-            this.level.endboss = this.level.endboss.filter(endboss => !endboss.isDead());
-        }
-    }
-
-    /**
-     * Handles character death by removing character and triggering game over
-     * Sets game over state and initializes restart button
-     */
-    removeDeadCharacter() {
-        if (this.character && this.character.isDead()) {
-            this.character = null;
-            this.isGameOver = true;
-            this.initRestartButton();
-        }
-    }
-
-    /**
      * Initializes restart button visibility after game ends
      * Shows restart button 2 seconds after game over or victory state
      */
@@ -595,10 +311,8 @@ class World {
         setInterval(() => {
             if (this.isGameOver || this.isYouWon) {
                 console.log('you won', this.isYouWon, 'you lose', this.isGameOver);
-
                 restartBtn.classList.remove('d-none');
             }
         }, 2000);
-
     }
 }

@@ -1,0 +1,619 @@
+class World {
+    canvas;
+    ctx;
+    gameState = false;
+    keyboard;
+    savedMuted;
+    camera_x = 0;
+    character = new Character();
+    statusbarLifepoints = new Statusbar('lifepoints', 20, 20, 100);
+    statusbarCoins = new Statusbar('coins', 20, 60, 0);
+    statusbarBottles = new Statusbar('bottles', 20, 100, 50);
+    statusbarEndboss = new Statusbar('endboss', 740, 20, 100);
+    showEndbossStatusbar = false;
+    throwableObject = [];
+    bottleCooldownAktive = false;
+    level = null;
+    startScreen = new StartGame();
+    gameOverScreen = new GameOver();
+    youWonScreen = new YouWon();
+    isGameOver = false;
+    isYouWon = false;
+    
+    // Manager instances
+    collisionManager;
+    collectiblesManager;
+    throwableManager;
+    endbossManager;
+    audioUIManager;
+
+    /**
+     * Initializes the World instance with canvas, keyboard and volume settings
+     * @param {HTMLCanvasElement} canvas - The game canvas element
+     * @param {Keyboard} keyboard - The keyboard input handler
+     * @param {number} volume - Initial volume setting
+     */
+    constructor(canvas, keyboard, volume) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext("2d");
+        this.keyboard = keyboard;
+        this.initializeManagers();
+        this.setWorld();
+        this.draw();
+    }
+
+    /**
+     * Initializes all manager instances for handling different game systems
+     */
+    initializeManagers() {
+        this.collisionManager = new CollisionManager(this);
+        this.collectiblesManager = new CollectiblesManager(this);
+        this.throwableManager = new ThrowableManager(this);
+        this.endbossManager = new EndbossManager(this);
+        this.audioUIManager = new AudioUIManager(this);
+    }
+
+    /**
+     * Main drawing loop that renders different game states
+     */
+    draw() {
+        let self = this;
+        if (this.isGameOver) {
+            this.drawGameOver();
+        } else if (this.isYouWon) {
+            this.drawYouWon();
+        } else if (!this.gameState) {
+            this.drawStartScreen();
+        } else if (!this.character || !this.level) {
+            return;
+        } else {
+            this.drawGameplay();
+        }
+        requestAnimationFrame(function () {
+            self.draw();
+        });
+    }
+
+    /**
+     * Renders the game over screen
+     */
+    drawGameOver() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.addObjectsToMap(this.level.backgrounds);
+        this.addObjectsToMap(this.level.clouds);
+        this.gameOverScreen.draw(this.ctx);
+    }
+
+    /**
+     * Renders the victory screen and removes character
+     */
+    drawYouWon() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.addObjectsToMap(this.level.backgrounds);
+        this.addObjectsToMap(this.level.clouds);
+        this.youWonScreen.draw(this.ctx);
+        this.character = null;
+    }
+
+    /**
+     * Renders the start screen before game begins
+     */
+    drawStartScreen() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.startScreen.draw(this.ctx);
+    }
+
+    /**
+     * Renders the main gameplay with camera translations and all game objects
+     */
+    drawGameplay() {
+        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.ctx.translate(this.camera_x, 0);
+        this.addObjectsToMap(this.level.backgrounds);
+        this.addObjectsToMap(this.level.clouds);
+        this.addToMap(this.character);
+        this.ctx.translate(-this.camera_x, 0);
+        this.addToMap(this.statusbarLifepoints);
+        this.addToMap(this.statusbarCoins);
+        this.addToMap(this.statusbarBottles);
+        if (this.showEndbossStatusbar) {
+            this.addToMap(this.statusbarEndboss);
+        }
+        this.ctx.translate(this.camera_x, 0);
+        this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.level.endboss);
+        this.addObjectsToMap(this.level.bottles);
+        this.addObjectsToMap(this.level.coins);
+        this.addObjectsToMap(this.throwableObject);
+        this.ctx.translate(-this.camera_x, 0);
+    }
+
+    /**
+     * Sets up world references for character and throwable objects
+     */
+    setWorld() {
+        this.character.world = this;
+        this.throwableObject.world = this;
+    }
+
+    /**
+     * Initializes and starts the game with all necessary components
+     */
+    startGame() {
+        this.character.resetIdleCounter();
+        this.collectiblesManager.setCollectables();
+        this.run();
+        this.endbossManager.spawnEndboss();
+        this.level.enemies.forEach(chicken => chicken.animateWalking());
+        this.audioUIManager.loadSavedSettings();
+        if (window.soundManager) {
+            if (window.innerWidth <= 935) {
+                window.soundManager.activateAudioContext();
+            }
+            window.soundManager.playBackgroundMusic();
+        }
+    }
+    /**
+     * Adds an array of objects to the rendering map
+     * @param {Array} objects - Array of objects to be rendered
+     */
+    addObjectsToMap(objects) {
+        objects.forEach(o => {
+            this.addToMap(o);
+        });
+    }
+
+    /**
+     * Adds a single moveable object to the rendering map with direction handling
+     * @param {MoveableObject} mo - Moveable object to be added
+     */
+    addToMap(mo) {
+        if (mo.otherDirection) {
+            this.flipImage(mo);
+            mo.drawFrame(this.ctx);
+        }
+        else {
+            mo.draw(this.ctx);
+            mo.drawFrame(this.ctx);
+        }
+    }
+
+    /**
+     * Flips image horizontally for objects facing the other direction
+     * @param {MoveableObject} mo - Moveable object to flip
+     */
+    flipImage(mo) {
+        this.ctx.save();
+        this.ctx.scale(-1, 1);
+        this.ctx.drawImage(mo.img, -mo.x - mo.width, mo.y, mo.width, mo.height);
+        this.ctx.restore();
+    }
+
+    /**
+     * Handles throwable object mechanics - delegates to ThrowableManager
+     */
+    checkThrowObjects() {
+        this.throwableManager.checkThrowObjects();
+    }
+
+    /**
+     * Handles audio UI actions - delegates to AudioUIManager
+     */
+    toggleVolumeImg() {
+        this.audioUIManager.toggleVolumeImg();
+    }
+
+    /**
+     * Adds an array of objects to the rendering map
+     * @param {Array} objects - Array of objects to be rendered
+     */
+    addObjectsToMap(objects) {
+        objects.forEach(o => {
+            this.addToMap(o);
+        });
+    }
+
+    /**
+     * Adds a single moveable object to the rendering map with direction handling
+     * @param {MoveableObject} mo - Moveable object to be added
+     */
+    addToMap(mo) {
+        if (mo.otherDirection) {
+            this.flipImage(mo);
+            mo.drawFrame(this.ctx);
+        }
+        else {
+            mo.draw(this.ctx);
+            mo.drawFrame(this.ctx);
+        }
+    }
+
+    /**
+     * Flips image horizontally for objects facing the other direction
+     * @param {MoveableObject} mo - Moveable object to flip
+     */
+    flipImage(mo) {
+        this.ctx.save();
+        this.ctx.scale(-1, 1);
+        this.ctx.drawImage(mo.img, -mo.x - mo.width, mo.y, mo.width, mo.height);
+        this.ctx.restore();
+    }
+
+    /**
+     * Main game loop that handles collisions and character/enemy state checks
+     */
+    run() {
+        let runInterval = setInterval(() => {
+            if (!this.level || !this.character) {
+                return;
+            }
+            this.collisionManager.checkCollisions();
+            this.endbossManager.checkCharacterPosition();
+            this.checkWinLose(runInterval);
+
+        }, 80);
+    }
+
+    /**
+     * Checks win and lose conditions during the game loop
+     * @param {number} runInterval - The interval ID to clear when game ends
+     * Handles both character death (game over) and endboss death (victory)
+     */
+    checkWinLose(runInterval) {
+        if (this.character.deadAnimationDone) {
+            this.collisionManager.removeDeadCharacter();
+            clearInterval(runInterval);
+        } else if (this.level.endboss && this.level.endboss[0] && this.level.endboss[0].deadAnimationDone) {
+            this.collisionManager.removeDeadEndboss();
+            clearInterval(runInterval);
+            this.isYouWon = true;
+            this.audioUIManager.initRestartButton();
+        }
+    }
+
+
+    /**
+     * Monitors character position and spawns the endboss when character reaches position 2200
+     * Creates interval that checks character position every 200ms until spawn trigger
+     */
+    spawnEndboss() {
+        let spawnInterval = setInterval(() => {
+            if (!this.level || !this.character) {
+                clearInterval(spawnInterval);
+                return;
+            } else if (this.character.x >= 2200) {
+                this.setIncomingEndboss();
+                clearInterval(spawnInterval);
+            }
+        }, 200);
+    }
+
+    /**
+     * Activates endboss encounter by starting animations and changing music
+     * Shows endboss health bar and switches to boss fight audio track
+     */
+    setIncomingEndboss() {
+        if (this.level.endboss && this.level.endboss.length > 0) {
+            this.level.endboss.forEach(endboss => endboss.animate());
+            this.showEndbossStatusbar = true;
+            this.statusbarEndboss.animateStatusbar();
+            if (window.soundManager) {
+                window.soundManager.stopBackgroundMusic();
+                window.soundManager.playSound('bossFightMusic');
+                console.log('Endboss fight music started!');
+            }
+        }
+    }
+
+    /**
+     * Checks all collision types in the game world
+     * Handles enemy, endboss, bottle, and coin collision detection
+     */
+    checkCollisions() {
+        if (!this.level || !this.character) {
+            return;
+        }
+        this.level.enemies.forEach((enemy, index) => {
+            if (this.character.isColliding(enemy) && !enemy.isDead()) {
+                this.setCollisionEnemy(enemy);
+            }
+        });
+        if (this.level.endboss) {
+            this.setCollisionEndboss();
+        }
+        if (this.level.bottles) {
+            this.setCollisionBottle();
+        }
+        if (this.level.coins) {
+            this.setCollisionCoin();
+        }
+    } //anpaseen??
+
+    /**
+     * Handles collision between character and regular enemy
+     * @param {Object} enemy - The enemy object involved in collision
+     * Either makes character jump on enemy (killing it) or character takes damage
+     */
+    setCollisionEnemy(enemy) {
+        if (this.character.isLandingOnTop(enemy)) {
+            this.character.jumpOnEnemy();
+            setTimeout(() => {
+                this.removeDeadEnemies();
+            }, 200);
+        } else {
+            this.character.hit(10);
+            this.statusbarLifepoints.setPercentage(this.character.lifepoints);
+        }
+    }
+
+    /**
+     * Handles collision between character and endboss
+     * Character takes damage when touching endboss
+     */
+    setCollisionEndboss() {
+        this.level.endboss.forEach(endboss => {
+            if (this.character.isColliding(endboss)) {
+                this.character.hit(10);
+                this.statusbarLifepoints.setPercentage(this.character.lifepoints);
+            }
+        });
+    }
+
+    /**
+     * Handles collision between character and collectible bottles
+     * Increases character bottle count and updates status bar
+     */
+    setCollisionBottle() {
+        this.level.bottles.forEach(bottle => {
+            if (this.character.isColliding(bottle)) {
+                this.character.collectBottle();
+                this.statusbarBottles.setPercentage(this.character.bottleAmount);
+                this.removeCollectedObject(bottle);
+            }
+        });
+    }
+
+    /**
+     * Handles collision between character and collectible coins
+     * Increases character coin count and updates status bar
+     */
+    setCollisionCoin() {
+        this.level.coins.forEach(coin => {
+            if (this.character.isColliding(coin)) {
+                this.character.collectCoin();
+                this.statusbarCoins.setPercentage(this.character.coinAmount);
+                this.removeCollectedObject(coin);
+            }
+        });
+    }
+
+    /**
+     * Handles throwable object mechanics including bottle throwing and collision detection
+     * Manages cooldown timer and throwing speed based on character direction
+     */
+    checkThrowObjects() {
+        this.speedX = this.character.otherDirection ? -10 : 10;
+        if (this.bottleCooldownAktive) {
+            console.log('Cooldown aktiv!');
+            return;
+        }
+        if (this.character.bottleAmount < 10) {
+            return;
+        }
+        let bottle = new ThrowableObject(this.character.x, this.character.y, this.speedX, this);
+        this.setThrowableObject(bottle);
+        this.bottleCooldown();
+    }
+
+    /**
+     * Creates and manages a new throwable bottle object
+     * @param {ThrowableObject} bottle - The throwable bottle object to add to the game
+     * Updates bottle inventory and removes bottles that hit the ground
+     */
+    setThrowableObject(bottle) {
+        this.throwableObject.push(bottle);
+        this.character.bottleAmount -= 10;
+        this.statusbarBottles.setPercentage(this.character.bottleAmount);
+        setInterval(() => {
+            if (bottle.isOnGround == true) {
+                this.throwableObject = this.throwableObject.filter(bottle => bottle.y < 420);
+            }
+        }, 40);
+    }
+
+    /**
+     * Implements cooldown timer for bottle throwing to prevent spam
+     * Sets 1 second cooldown between bottle throws
+     */
+    bottleCooldown() {
+        this.bottleCooldownAktive = true;
+        setTimeout(() => {
+            this.bottleCooldownAktive = false;
+        }, 1000);
+    }
+
+    /**
+     * Monitors character position relative to endboss for AI behavior
+     * Triggers endboss alert state and direction changes based on character proximity
+     */
+    checkCharacterPosition() {
+        let alertDistance = 150;
+        if (!this.level || !this.character || !this.level.endboss) {
+            return;
+        }
+        this.level.endboss.forEach(endboss => {
+            this.setCharacterPosition(endboss, alertDistance);
+        });
+    }
+
+    /**
+     * Updates endboss behavior based on character position and proximity
+     * @param {Object} endboss - The endboss object to update
+     * @param {number} alertDistance - Distance threshold for alert state trigger
+     * Sets direction, attack mode, movement restrictions, and alert status
+     */
+    setCharacterPosition(endboss, alertDistance) {
+        if (this.character.x > endboss.x) {
+            endboss.otherDirection = true;
+            endboss.attackRight = true;
+        } else {
+            endboss.otherDirection = false;
+            endboss.attackLeft = true;
+        }
+        if (this.character.x + alertDistance > endboss.x && this.character.x < endboss.x + endboss.width) {
+            endboss.canMoveLeft = false;
+            endboss.alert = true;
+        } else {
+            endboss.canMoveLeft = true;
+            endboss.alert = false;
+        }
+    }
+
+    /**
+     * Initializes placement of all collectible items in the level
+     * Places bottles and coins in calculated positions across the map
+     */
+    setCollectables() {
+        this.placeBottles();
+        this.placeCoins();
+    }
+
+    /**
+     * Removes a collected object from the appropriate level array
+     * @param {Object} collectable - The collected item (bottle or coin) to remove
+     * Handles cleanup for both bottles and coins from level arrays
+     */
+    removeCollectedObject(collectable) {
+        const bottleIndex = this.level.bottles.indexOf(collectable);
+        const coinIndex = this.level.coins.indexOf(collectable);
+        if (bottleIndex > -1) {
+            this.level.bottles.splice(bottleIndex, 1);
+        } else if (coinIndex > -1) {
+            this.level.coins.splice(coinIndex, 1);
+        }
+    }
+
+    /**
+     * Calculates and sets positions for all bottles in the level
+     * Ensures minimum spacing between bottles and avoids placement conflicts
+     */
+    placeBottles() {
+        let mapWidth = this.level.level_end_x - 200;
+        let minX = 200;
+        let minDistance = 100;
+        let usedPosition = [];
+        this.level.bottles.forEach(bottle => {
+            this.calcBottlePosition(bottle, usedPosition, minX, mapWidth, minDistance);
+        });
+    }
+
+    /**
+     * Calculates valid placement position for an individual bottle
+     * @param {Object} bottle - The bottle object to position
+     * @param {Array} usedPosition - Array of already used positions to avoid conflicts
+     * @param {number} minX - Minimum x position for bottle placement
+     * @param {number} mapWidth - Maximum width of the map for placement
+     * @param {number} minDistance - Minimum distance between bottles
+     * Uses random positioning with collision avoidance algorithm
+     */
+    calcBottlePosition(bottle, usedPosition, minX, mapWidth, minDistance) {
+        let bottlePosition;
+        let tries = 0;
+        do {
+            bottlePosition = minX + Math.floor(Math.random() * mapWidth);
+            tries++;
+        } while (
+            usedPosition.some(pos => Math.abs(pos - bottlePosition) < minDistance) &&
+            tries < 100
+        );
+        usedPosition.push(bottlePosition);
+        bottle.x = bottlePosition;
+    }
+
+    /**
+     * Calculates and sets positions for all coins in the level
+     * Ensures minimum spacing between coins and avoids placement conflicts
+     */
+    placeCoins() {
+        let mapWidth = this.level.level_end_x - 200;
+        let minX = 200;
+        let minDistance = 100;
+        let usedPosition = [];
+        this.level.coins.forEach(coin => {
+            this.calcCoinPosition(coin, usedPosition, minX, mapWidth, minDistance);
+        });
+    }
+
+    /**
+     * Calculates valid placement position for an individual coin
+     * @param {Object} coin - The coin object to position
+     * @param {Array} usedPosition - Array of already used positions to avoid conflicts
+     * @param {number} minX - Minimum x position for coin placement
+     * @param {number} mapWidth - Maximum width of the map for placement
+     * @param {number} minDistance - Minimum distance between coins
+     * Uses random positioning with collision avoidance algorithm
+     */
+    calcCoinPosition(coin, usedPosition, minX, mapWidth, minDistance) {
+        let coinPosition;
+        let tries = 0;
+        do {
+            coinPosition = minX + Math.floor(Math.random() * mapWidth);
+            tries++;
+        } while (
+            usedPosition.some(pos => Math.abs(pos - coinPosition) < minDistance) &&
+            tries < 100
+        );
+        usedPosition.push(coinPosition);
+        coin.x = coinPosition;
+    }
+
+    /**
+     * Removes dead enemies from the level enemies array
+     * Filters out enemies that have been killed by the character
+     */
+    removeDeadEnemies() {
+        if (this.level && this.level.enemies) {
+            this.level.enemies = this.level.enemies.filter(enemy => !enemy.isDead());
+        }
+    }
+
+    /**
+     * Removes dead endboss from the level endboss array
+     * Filters out defeated endboss and logs defeat message
+     */
+    removeDeadEndboss() {
+        if (this.level && this.level.endboss) {
+            console.log('endboss is dead');
+
+            this.level.endboss = this.level.endboss.filter(endboss => !endboss.isDead());
+        }
+    }
+
+    /**
+     * Handles character death by removing character and triggering game over
+     * Sets game over state and initializes restart button
+     */
+    removeDeadCharacter() {
+        if (this.character && this.character.isDead()) {
+            this.character = null;
+            this.isGameOver = true;
+            this.initRestartButton();
+        }
+    }
+
+    /**
+     * Initializes restart button visibility after game ends
+     * Shows restart button 2 seconds after game over or victory state
+     */
+    initRestartButton() {
+        let restartBtn = document.getElementById('restartButton');
+        setInterval(() => {
+            if (this.isGameOver || this.isYouWon) {
+                console.log('you won', this.isYouWon, 'you lose', this.isGameOver);
+
+                restartBtn.classList.remove('d-none');
+            }
+        }, 2000);
+
+    }
+}
