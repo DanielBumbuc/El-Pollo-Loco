@@ -113,7 +113,6 @@ class ThrowableObject extends MoveableObject {
     setCollisionEnemy(enemies) {
         enemies.hit(100);
         this.playSound('chicken');
-        console.log(enemies.lifepoints);
         this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
         this.speedY = 0;
         this.speedX = 0;

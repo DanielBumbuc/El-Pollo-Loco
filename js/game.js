@@ -186,10 +186,8 @@ function checkOrientation() {
     const orientationWarning = document.getElementById('orientationWarning');
     if (window.innerWidth <= 935 && window.innerHeight > window.innerWidth) {
         orientationWarning.classList.remove('d-none');
-        console.log('Portrait mode detected - showing rotation warning');
     } else {
         orientationWarning.classList.add('d-none');
-        console.log('Landscape mode or desktop - hiding rotation warning');
     }
 }
 

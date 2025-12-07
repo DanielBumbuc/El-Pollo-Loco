@@ -48,7 +48,7 @@ class GameManager {
             setTimeout(() => {
                 this.removeDeadEnemies();
             }, 200);
-        } else {
+        } else  if (!this.world.character.isHurt()) {
             this.world.character.hit(10);
             this.world.statusbarLifepoints.setPercentage(this.world.character.lifepoints);
         }
@@ -60,8 +60,8 @@ class GameManager {
      */
     setCollisionEndboss() {
         this.world.level.endboss.forEach(endboss => {
-            if (this.world.character.isColliding(endboss)) {
-                this.world.character.hit(10);
+            if (this.world.character.isColliding(endboss) && !this.world.character.isHurt()) {
+                this.world.character.hit(20);
                 this.world.statusbarLifepoints.setPercentage(this.world.character.lifepoints);
             }
         });
@@ -126,7 +126,6 @@ class GameManager {
      */
     removeDeadEndboss() {
         if (this.world.level && this.world.level.endboss) {
-            console.log('endboss is dead');
             this.world.level.endboss = this.world.level.endboss.filter(endboss => !endboss.isDead());
         }
     }
@@ -254,7 +253,6 @@ class GameManager {
             if (window.soundManager) {
                 window.soundManager.stopBackgroundMusic();
                 window.soundManager.playSound('bossFightMusic');
-                console.log('Endboss fight music started!');
             }
         }
     }

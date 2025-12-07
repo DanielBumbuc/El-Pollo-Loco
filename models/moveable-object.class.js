@@ -222,7 +222,6 @@ class MoveableObject extends DrawableObject {
             if (frame < this.IMAGES_DEAD.length && this.dead === true) {
                 this.img = this.imageCache[this.IMAGES_DEAD[frame]];
                 frame++;
-                console.log(frame);
             }
             else {
                 clearInterval(this.deadAnimationInterval);
@@ -260,7 +259,7 @@ class MoveableObject extends DrawableObject {
     isHurt() {
         let passedTime = new Date().getTime() - this.lastHit;
         passedTime = passedTime / 1000;
-        return passedTime < 0.5;
+        return passedTime < 0.8;
     }
 
     isDead() {
@@ -268,17 +267,14 @@ class MoveableObject extends DrawableObject {
             this.dead = true;
             this.startDeadAnimation();
             if (this instanceof Endboss) {
-                console.log('🔥 ENDBOSS DEFEATED! 🔥');
-
-                // Boss Fight Music stoppen und Victory Music starten
                 if (window.soundManager) {
                     window.soundManager.stopBackgroundMusic();
-                    window.soundManager.playSound('endbossDead'); // Neuer Victory Sound
+                    window.soundManager.playSound('endbossDead');
                 }
             } else if (this instanceof Character) {
                 if (window.soundManager) {
                     window.soundManager.stopBackgroundMusic();
-                    window.soundManager.playSound('dead'); // Game Over Sound
+                    window.soundManager.playSound('dead');
                 }
             }
         }

@@ -264,7 +264,6 @@ class World {
     checkThrowObjects() {
         this.speedX = this.character.otherDirection ? -10 : 10;
         if (this.bottleCooldownAktive) {
-            console.log('Cooldown aktiv!');
             return;
         }
         if (this.character.bottleAmount < 10) {
@@ -310,7 +309,6 @@ class World {
         let restartBtn = document.getElementById('restartButton');
         setInterval(() => {
             if (this.isGameOver || this.isYouWon) {
-                console.log('you won', this.isYouWon, 'you lose', this.isGameOver);
                 restartBtn.classList.remove('d-none');
             }
         }, 2000);
