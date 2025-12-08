@@ -12,7 +12,7 @@ class Cloud extends MoveableObject {
      * Loads cloud image and sets random horizontal spawn position
      */
     constructor() {
-        super().loadImg('../img/5_background/layers/4_clouds/1.png');
+        super().loadImg('./img/5_background/layers/4_clouds/1.png');
         this.x = Math.random() * 500;
         this.moveLeft();
     }  

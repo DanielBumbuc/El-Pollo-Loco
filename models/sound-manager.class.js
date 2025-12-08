@@ -142,17 +142,17 @@ class SoundManager {
      * Registers all game sounds with appropriate volume levels and sets background music to loop
      */
     initializeGameSounds() {
-        this.registerSound('jump', '../audio/swing-whoosh-110410.mp3', 0.3);
-        this.registerSound('coin', '../audio/money-pickup-2-89563.mp3', 0.3);
-        this.registerSound('bottle', '../audio/health-pickup-6860.mp3', 0.3);
-        this.registerSound('hit', '../audio/hitHurt.wav', 0.3);
-        this.registerSound('throw', '../audio/air-whoosh-380651.mp3', 0.3);
-        this.registerSound('dead', '../audio/ouchmp3-14591.mp3', 0.3);
-        this.registerSound('chicken', '../audio/chicken_sound.wav', 0.3);
-        this.registerSound('endboss', '../audio/chiken-sound-370337.mp3', 0.3);
-        this.registerSound('endbossDead', '../audio/female-character-death-vocal-9-408428.mp3', 0.6);
-        this.registerSound('bossFightMusic', '../audio/cowboy-western-background-247644.mp3', 0.3);
-        this.registerSound('backgroundMusic', '../audio/the-russian-gunfighter-western-movie-instrumental-286601.mp3', 0.3);
+        this.registerSound('jump', './audio/swing-whoosh-110410.mp3', 0.3);
+        this.registerSound('coin', './audio/money-pickup-2-89563.mp3', 0.3);
+        this.registerSound('bottle', './audio/health-pickup-6860.mp3', 0.3);
+        this.registerSound('hit', './audio/hitHurt.wav', 0.3);
+        this.registerSound('throw', './audio/air-whoosh-380651.mp3', 0.3);
+        this.registerSound('dead', './audio/ouchmp3-14591.mp3', 0.3);
+        this.registerSound('chicken', './audio/chicken_sound.wav', 0.3);
+        this.registerSound('endboss', './audio/chiken-sound-370337.mp3', 0.3);
+        this.registerSound('endbossDead', './audio/female-character-death-vocal-9-408428.mp3', 0.6);
+        this.registerSound('bossFightMusic', './audio/cowboy-western-background-247644.mp3', 0.3);
+        this.registerSound('backgroundMusic', './audio/the-russian-gunfighter-western-movie-instrumental-286601.mp3', 0.3);
         if (this.sounds['backgroundMusic']) {
             this.sounds['backgroundMusic'].loop = true;
         }

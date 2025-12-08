@@ -14,8 +14,8 @@ class Bottle extends MoveableObject {
         right: 15
     }
     IMAGES_BOTTLE = [
-        'img/6_salsa_bottle/1_salsa_bottle_on_ground.png',
-        'img/6_salsa_bottle/2_salsa_bottle_on_ground.png'
+        './img/6_salsa_bottle/1_salsa_bottle_on_ground.png',
+        './img/6_salsa_bottle/2_salsa_bottle_on_ground.png'
     ];
     
     /**
@@ -24,7 +24,7 @@ class Bottle extends MoveableObject {
      */
     constructor() {
         super();
-        this.loadImg('../img/6_salsa_bottle/1_salsa_bottle_on_ground.png');
+        this.loadImg('./img/6_salsa_bottle/1_salsa_bottle_on_ground.png');
         this.loadImages(this.IMAGES_BOTTLE);    
         this.animateBottles();
     }
