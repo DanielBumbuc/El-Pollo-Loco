@@ -177,7 +177,7 @@ class MoveableObject extends DrawableObject {
 
     jump() {
         this.jumpStartTime = Date.now();
-        this.jumpEndTime;
+        this.jumpEndTime = null;
         this.speedY = 28;
         this.startJumpAnimation();
         this.playSound('jump');
@@ -210,10 +210,21 @@ class MoveableObject extends DrawableObject {
         }
         let elapsed = Date.now() - this.jumpStartTime;
         let jumpProgress = elapsed / this.calcJumpDuration();
+        let frameIndex;
         jumpProgress = Math.max(0, Math.min(jumpProgress, 1));
-        let frameIndex = Math.floor(jumpProgress * this.IMAGES_JUMPING.length);
+        if (jumpProgress <= 0.2) {
+            frameIndex = Math.floor((jumpProgress / 0.2) * 4); // 0-3
+        } else if (jumpProgress <= 0.8) {
+            frameIndex = 4 + Math.floor(((jumpProgress - 0.2) / 0.6) * 3); // 4-6
+        } else {
+            frameIndex = 7 + Math.floor(((jumpProgress - 0.8) / 0.2) * 2); // 7-8
+        }
         frameIndex = Math.max(0, Math.min(frameIndex, this.IMAGES_JUMPING.length - 1));
         this.img = this.imageCache[this.IMAGES_JUMPING[frameIndex]];
+    }
+
+    setJumpFrames(jumpProgress, frameIndex) {
+        
     }
 
     startDeadAnimation() {

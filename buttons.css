@@ -1,0 +1,340 @@
+/* ===== WESTERN BUTTON (VOLUME CONTROL) ===== */
+.western-button {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(145deg, #D2691E 0%, #CD853F 50%, #DEB887 100%);
+    border: 3px solid #8B4513;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow:
+        inset 0 2px 4px rgba(255, 255, 255, 0.3),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2),
+        0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.western-button svg {
+    color: #654321;
+    z-index: 2;
+    transition: all 0.3s ease;
+    position: absolute;
+}
+
+/* Sicherstellen, dass beide SVGs übereinander liegen */
+.western-button #volumeOnIcon,
+.western-button #volumeOffIcon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.western-star {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    color: #FFDC00;
+    font-size: 16px;
+    text-shadow: 2px 2px 0px #8B4513;
+    opacity: 0;
+    transform: scale(0.5) rotate(0deg);
+    transition: all 0.3s ease;
+}
+
+.western-button:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        inset 0 2px 4px rgba(255, 255, 255, 0.4),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.1),
+        0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.western-button:hover .western-star {
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+}
+
+.western-button:hover svg {
+    color: #4A2C17;
+    transform: scale(1.1);
+}
+
+.western-button:active {
+    transform: translateY(0px);
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.2),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+        0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.western-button.active {
+    background: linear-gradient(145deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+    box-shadow:
+        inset 0 2px 4px rgba(255, 255, 255, 0.3),
+        0 4px 8px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+}
+
+.western-button.active .western-star {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+/* ===== BUTTON CONTAINERS ===== */
+.btns {
+    position: absolute;
+    /* ← Absolute Positionierung */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    /* ← Klicks durchlassen */
+    z-index: 10;
+}
+
+.start-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: auto;
+    /* ← Buttons bleiben klickbar */
+}
+
+.upper-btn {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 20px;
+    pointer-events: auto;
+    width: auto;
+    height: 100%;
+}
+
+.play-btn {
+    /* position: absolute; */
+    /* bottom: 20px; */
+    /* left: 20px; */
+    pointer-events: auto;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    gap: 300px;
+}
+
+.leftSide {
+    display: flex;
+    flex-direction: row;
+    margin: 12px 0;
+    gap: 8px;
+}
+
+.rightSide {
+    display: flex;
+    flex-direction: column;
+    margin: 12px 0;
+    gap: 8px;
+}
+
+/* ===== SIMPLE PLAY BUTTON ===== */
+.simple-play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+    z-index: 5;
+}
+
+.simple-play-button:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.simple-play-button:active {
+    transform: translate(-50%, -50%) scale(0.95);
+}
+
+.simple-play-button.d-none {
+    display: none;
+}
+
+/* ===== SIMPLE RESTART BUTTON ===== */
+.simple-restart-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    display: flex;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid #654321;
+    background: rgba(139, 69, 19, 0.85);
+    color: #FFDC00;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 2);
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.4),
+        inset 0 2px 0 rgba(255, 220, 0, 0.2);
+    z-index: 5;
+}
+
+.simple-restart-button:not(.d-none) {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    animation: restartButtonAppear 0.6s cubic-bezier(0.68, -0.55, 0.265, 1) forwards;
+}
+
+.simple-restart-button:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    background: rgba(139, 69, 19, 0.95);
+    opacity: 1;
+}
+
+.simple-restart-button:active {
+    transform: translate(-50%, -50%) scale(0.95);
+    background: rgba(255, 220, 0, 0.4);
+    box-shadow:
+        0 2px 10px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 220, 0, 0.3);
+}
+
+.simple-restart-button.d-none {
+    display: none;
+}
+
+/* ===== MOBILE CONTROLS ===== */
+.mobile-setting-btn {
+    /* display: none; */
+    /* ← Standardmäßig versteckt */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #8b451360;
+    background: rgba(139, 69, 19, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mobile-arrow-btn {
+    /* display: none; */
+    /* ← Standardmäßig versteckt */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(139, 69, 19, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid #8B4513;
+}
+
+.mobile-arrow-btn:hover,
+.mobile-setting-btn:hover {
+    background: rgba(139, 69, 19, 0.8);
+    transform: scale(1.05);
+}
+
+.mobile-arrow-btn svg {
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.6));
+}
+
+/* ===== BUTTON USER SELECT PREVENTION ===== */
+.mobile-arrow-btn,
+.mobile-setting-btn,
+.simple-play-button,
+.simple-restart-button {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-context-menu: none;
+}
+
+.mobile-arrow-btn img,
+.mobile-setting-btn img,
+.simple-play-button img,
+.simple-restart-button img {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none;
+}
+
+/* ===== RESPONSIVE BUTTON STYLES ===== */
+@media only screen and (max-width: 935px),
+only screen and (max-height: 480px) {
+    .btns {
+        width: 100vw;
+        height: 100vh;
+        z-index: 10;
+    }
+
+    /* Mobile Arrow Button nur in responsive Ansicht anzeigen */
+    .mobile-arrow-btn {
+        display: flex !important;
+    }
+}
+
+@media (max-width: 935px) {
+    /* Buttons für Touch-Geräte optimieren */
+    .simple-play-button,
+    .simple-restart-button {
+        z-index: 10;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    .simple-play-button svg,
+    .simple-restart-button svg {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+/* ===== BUTTON ANIMATIONS ===== */
+@keyframes restartButtonAppear {
+    0% {
+        transform: translate(-50%, -50%) scale(0) rotate(-180deg);
+        opacity: 0;
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.2) rotate(-90deg);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}

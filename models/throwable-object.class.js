@@ -34,8 +34,8 @@ class ThrowableObject extends MoveableObject {
         this.loadImg('./img/6_salsa_bottle/salsa_bottle.png');
         this.loadImages(this.IMAGES_BOTTLE_ROTATE)
         this.loadImages(this.IMAGES_BOTTLE_SPLASH);
-        this.x = x + 40;
-        this.y = y + 40;
+        this.x = x + 80;
+        this.y = y + 150;
         this.speedX = speedX;
         this.height = 40;
         this.width = 40;
@@ -48,7 +48,7 @@ class ThrowableObject extends MoveableObject {
      * Applies gravity, horizontal movement, rotation animation, and collision detection
      */
     throw() {
-        this.speedY = 20;
+        this.speedY = 27;
         this.applayGravity();
         this.world.character.resetIdleCounter();
         setInterval(() => {

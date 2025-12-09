@@ -298,7 +298,7 @@ class World {
         this.bottleCooldownAktive = true;
         setTimeout(() => {
             this.bottleCooldownAktive = false;
-        }, 1000);
+        }, 1200);
     }
 
     /**

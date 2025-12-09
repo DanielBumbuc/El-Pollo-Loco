@@ -152,7 +152,9 @@ class Character extends MoveableObject {
             return;
         } else if (this.isHurt() && !this.isAboveGround()) {
             this.playAnimation(this.IMAGES_HURT);
+            this.resetIdleCounter();
         } else if (this.isAboveGround()) {
+            this.resetIdleCounter();
             return;
         } else {
             if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
