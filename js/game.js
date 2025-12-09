@@ -73,8 +73,48 @@ function resetGame() {
     world.gameState = false;
     document.getElementById('playButton').classList.remove('d-none');
     document.getElementById('restartButton').classList.add('d-none');
+    document.getElementById('homeButton').classList.add('d-none');
     document.getElementById('upperBtnContainer').classList.add('d-none');
     document.getElementById('playBtnContainer').classList.add('d-none');
+    startGame();
+}
+
+/**
+ * Returns to home/start screen by stopping the game and resetting UI
+ * Stops audio, clears intervals, resets world state, and shows start screen
+ */
+function goHome() {
+    if (window.soundManager) {
+        window.soundManager.stopBackgroundMusic();
+    }
+    clearAllIntervals();
+    world = null;
+    world = new World(canvas, keyboard);
+    world.gameState = false;
+    document.getElementById('playButton').classList.remove('d-none');
+    document.getElementById('restartButton').classList.add('d-none');
+    document.getElementById('upperBtnContainer').classList.add('d-none');
+    document.getElementById('playBtnContainer').classList.add('d-none');
+}
+
+/**
+ * Returns to home/start screen by stopping the game and resetting UI
+ * Stops audio, clears intervals, resets world state, and shows start screen
+ */
+function goHome() {
+    if (window.soundManager) {
+        window.soundManager.stopBackgroundMusic();
+    }
+    clearAllIntervals();
+    world = null;
+    world = new World(canvas, keyboard);
+    world.gameState = false;
+    document.getElementById('playButton').classList.remove('d-none');
+    document.getElementById('restartButton').classList.add('d-none');
+    document.getElementById('homeButton').classList.add('d-none');
+    document.getElementById('upperBtnContainer').classList.add('d-none');
+    document.getElementById('playBtnContainer').classList.add('d-none');
+    initStartScreen();
 }
 
 /**

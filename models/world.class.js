@@ -302,13 +302,15 @@ class World {
     }
 
     /**
-     * Initializes restart button visibility after game ends
-     * Shows restart button 2 seconds after game over or victory state
+     * Initializes restart and home button visibility after game ends
+     * Shows both buttons 2 seconds after game over or victory state
      */
     initRestartButton() {
         let restartBtn = document.getElementById('restartButton');
+        let homeBtn = document.getElementById('homeButton');
         setInterval(() => {
             if (this.isGameOver || this.isYouWon) {
+                homeBtn.classList.remove('d-none');
                 restartBtn.classList.remove('d-none');
             }
         }, 2000);

@@ -39,8 +39,8 @@
     <h1 class="game-title">El Pollo Loco</h1>
 
     <nav class="western-navbar">
+        <h3 class="legend-title">Controls</h3>
         <div class="controls-legend">
-            <h3 class="legend-title">Controls</h3>
             <div class="legend-items">
                 <div class="legend-item">
                     <span class="key-icon">←→</span>
@@ -61,20 +61,31 @@
             </div>
         </div>
         <div class="western-controls">
+            <div class="western-button home-btn" onclick="goHome()" title="Home">
+                <img src="img/icons/home.svg" alt="Home" width="24" height="24"
+                    style="filter: brightness(0) saturate(100%) invert(29%) sepia(15%) saturate(1234%) hue-rotate(352deg) brightness(96%) contrast(88%);">
+                <span class="western-star">✦</span>
+            </div>
+
             <div class="western-button restart-btn" onclick="resetGame()" title="Restart Game">
-                <img src="img/icons/restart.svg" alt="Restart" width="24" height="24" style="filter: brightness(0) saturate(100%) invert(29%) sepia(15%) saturate(1234%) hue-rotate(352deg) brightness(96%) contrast(88%);">
+                <img src="img/icons/restart.svg" alt="Restart" width="24" height="24"
+                    style="filter: brightness(0) saturate(100%) invert(29%) sepia(15%) saturate(1234%) hue-rotate(352deg) brightness(96%) contrast(88%);">
                 <span class="western-star">✦</span>
             </div>
 
             <div class="western-button volume-btn" id="volumeButton" onclick="activeControlButton(this)" title="Volume">
-                <img id="volumeOnIcon" src="img/icons/volume-on.svg" alt="Volume On" width="24" height="24" style="filter: brightness(0) saturate(100%) invert(29%) sepia(15%) saturate(1234%) hue-rotate(352deg) brightness(96%) contrast(88%);">
-                <img id="volumeOffIcon" src="img/icons/volume-off.svg" alt="Volume Off" width="24" height="24" class="d-none" style="filter: brightness(0) saturate(100%) invert(29%) sepia(15%) saturate(1234%) hue-rotate(352deg) brightness(96%) contrast(88%);">
+                <img id="volumeOnIcon" src="img/icons/volume-on.svg" alt="Volume On" width="24" height="24"
+                    style="filter: brightness(0) saturate(100%) invert(29%) sepia(15%) saturate(1234%) hue-rotate(352deg) brightness(96%) contrast(88%);">
+                <img id="volumeOffIcon" src="img/icons/volume-off.svg" alt="Volume Off" width="24" height="24"
+                    class="d-none"
+                    style="filter: brightness(0) saturate(100%) invert(29%) sepia(15%) saturate(1234%) hue-rotate(352deg) brightness(96%) contrast(88%);">
 
                 <span class="western-star">✦</span>
             </div>
 
             <div class="western-button impressum-btn" onclick="openImpressum()" title="Impressum">
-                <img src="img/icons/info.svg" alt="Info" width="24" height="24" style="filter: brightness(0) saturate(100%) invert(29%) sepia(15%) saturate(1234%) hue-rotate(352deg) brightness(96%) contrast(88%);">
+                <img src="img/icons/info.svg" alt="Info" width="24" height="24"
+                    style="filter: brightness(0) saturate(100%) invert(29%) sepia(15%) saturate(1234%) hue-rotate(352deg) brightness(96%) contrast(88%);">
                 <span class="western-star">✦</span>
             </div>
 
@@ -93,8 +104,9 @@
         </div>
         <div id="impressumOverlay" class="impressum-overlay d-none" onclick="closeImpressum()">
             <div class="impressum-container" onclick="event.stopPropagation()">
-                <button class="impressum-close-btn" onclick="closeImpressum()">
-                    <img src="img/icons/close.svg" alt="Schließen" width="20" height="20" style="filter: invert(55%) sepia(73%) saturate(342%) hue-rotate(349deg) brightness(95%) contrast(91%);">
+                <button class="impressum-close-btn" onclick="closeImpressum()" ontouchstart="closeImpressum()">
+                    <img src="img/icons/close.svg" alt="Schließen" width="20" height="20"
+                        style="filter: invert(55%) sepia(73%) saturate(342%) hue-rotate(349deg) brightness(95%) contrast(91%);">
                 </button>
 
                 <h2>Impressum</h2>
@@ -126,12 +138,22 @@
             <div class="upper-btn d-none" id="upperBtnContainer">
                 <div class="leftSide">
                     <button class="mobile-setting-btn" id="mobileRestartBtn">
-                        <img src="img/icons/restart.svg" alt="Restart" width="20" height="20" style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
+                        <img src="img/icons/restart.svg" alt="Restart" width="20" height="20"
+                            style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
                     </button>
 
                     <button class="mobile-setting-btn" id="mobileVolumeBtn">
-                        <img id="mobileVolumeOnIcon" src="img/icons/volume-on.svg" alt="Volume On" width="20" height="20" style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
-                        <img id="mobileVolumeOffIcon" src="img/icons/volume-off.svg" alt="Volume Off" width="20" height="20" class="d-none" style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
+                        <img id="mobileVolumeOnIcon" src="img/icons/volume-on.svg" alt="Volume On" width="20"
+                            height="20"
+                            style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
+                        <img id="mobileVolumeOffIcon" src="img/icons/volume-off.svg" alt="Volume Off" width="20"
+                            height="20" class="d-none"
+                            style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
+                    </button>
+
+                    <button class="mobile-impressum-btn" id="mobileImpressumBtn" ontouchstart="openImpressum()">
+                        <img src="img/icons/info.svg" width="20" height="20"
+                            style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
                     </button>
                 </div>
             </div>
@@ -140,21 +162,25 @@
 
                 <div class="leftSide">
                     <button class="mobile-arrow-btn" id="leftArrowBtn">
-                        <img src="img/icons/arrow-left.svg" alt="Links" width="40" height="40" style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
+                        <img src="img/icons/arrow-left.svg" alt="Links" width="40" height="40"
+                            style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
                     </button>
 
                     <button class="mobile-arrow-btn" id="rightArrowBtn">
-                        <img src="img/icons/arrow-right.svg" alt="Rechts" width="40" height="40" style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
+                        <img src="img/icons/arrow-right.svg" alt="Rechts" width="40" height="40"
+                            style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
                     </button>
                 </div>
 
                 <div class="rightSide">
                     <button class="mobile-arrow-btn" id="jumpBtn">
-                        <img src="img/icons/arrow-up.svg" alt="Springen" width="40" height="40" style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
+                        <img src="img/icons/arrow-up.svg" alt="Springen" width="40" height="40"
+                            style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
                     </button>
 
                     <button class="mobile-arrow-btn" id="throwBtn">
-                        <img src="img/icons/bottle.svg" alt="Werfen" width="40" height="40" style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
+                        <img src="img/icons/bottle.svg" alt="Werfen" width="40" height="40"
+                            style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
                     </button>
                 </div>
 
@@ -165,8 +191,16 @@
                     <img src="img/icons/play-button.svg" alt="Spielen" width="60" height="60">
                 </button>
 
-                <button class="simple-restart-button d-none" id="restartButton" onclick="resetGame()" ontouchstart="resetGame()">
-                    <img src="img/icons/restart.svg" alt="Neustart" width="60" height="60" style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
+                <button class="simple-home-button d-none" id="homeButton" onclick="goHome()"
+                    ontouchstart="goHome()">
+                    <img src="img/icons/home.svg" width="40" height="40"
+                        style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
+                </button>
+
+                <button class="simple-restart-button d-none" id="restartButton" onclick="resetGame()"
+                    ontouchstart="resetGame()">
+                    <img src="img/icons/restart.svg" alt="Neustart" width="60" height="60"
+                        style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
                 </button>
             </div>
         </div>
