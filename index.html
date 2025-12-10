@@ -135,12 +135,22 @@
 
         <div class="btns">
 
-            <div class="upper-btn d-none" id="upperBtnContainer">
+            <div class="upper-btn" id="upperBtnContainer">
                 <div class="leftSide">
-                    <button class="mobile-setting-btn" id="mobileRestartBtn">
-                        <img src="img/icons/restart.svg" alt="Restart" width="20" height="20"
-                            style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
-                    </button>
+
+                    <div class="restart-container">
+                        <button class="mobile-setting-btn mobile-home-btn d-none" id="mobileHomeBtn" onclick="goHome()"
+                            ontouchstart="goHome()">
+                            <img src="img/icons/home.svg" alt="Home" width="20" height="20"
+                                style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
+                        </button>
+
+                        <button class="mobile-setting-btn d-none" id="mobileRestartBtn" onclick="resetGame()"
+                            ontouchstart="resetGame()">
+                            <img src="img/icons/restart.svg" alt="Restart" width="20" height="20"
+                                style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
+                        </button>
+                    </div>
 
                     <button class="mobile-setting-btn" id="mobileVolumeBtn">
                         <img id="mobileVolumeOnIcon" src="img/icons/volume-on.svg" alt="Volume On" width="20"
@@ -191,8 +201,7 @@
                     <img src="img/icons/play-button.svg" alt="Spielen" width="60" height="60">
                 </button>
 
-                <button class="simple-home-button d-none" id="homeButton" onclick="goHome()"
-                    ontouchstart="goHome()">
+                <button class="simple-home-button d-none" id="homeButton" onclick="goHome()" ontouchstart="goHome()">
                     <img src="img/icons/home.svg" width="40" height="40"
                         style="filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(1352%) hue-rotate(15deg) brightness(100%) contrast(101%);">
                 </button>

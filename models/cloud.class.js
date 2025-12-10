@@ -12,8 +12,24 @@ class Cloud extends MoveableObject {
      * Loads cloud image and sets random horizontal spawn position
      */
     constructor() {
-        super().loadImg('./img/5_background/layers/4_clouds/1.png');
-        this.x = Math.random() * 500;
-        this.moveLeft();
+        super();
+        let cloudType = Math.random() < 0.5 ? '1.png' : '2.png';
+        this.loadImg(`./img/5_background/layers/4_clouds/${cloudType}`);
+        let levelWidth = 720 * 7;
+        let spawnStart = 0;
+        let spawnRange = levelWidth;
+        this.x = spawnStart + Math.random() * spawnRange;
+        this.speed = 0.2 + Math.random() * 0.25;
+        this.animateWalking();
     }  
+
+    /**
+     * Starts continuous leftward movement animation for the cloud
+     * Creates interval that moves cloud left at 60 FPS for smooth background motion
+     */
+    animateWalking() {
+        setInterval(() => {
+            this.moveLeft();
+        }, 1000 / 60);
+    }
 }

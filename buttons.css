@@ -1,4 +1,3 @@
-/* ===== WESTERN BUTTON (VOLUME CONTROL) ===== */
 .western-button {
     position: relative;
     width: 48px;
@@ -24,7 +23,6 @@
     position: absolute;
 }
 
-/* Sicherstellen, dass beide SVGs übereinander liegen */
 .western-button #volumeOnIcon,
 .western-button #volumeOffIcon {
     position: absolute;
@@ -84,10 +82,8 @@
     transform: scale(1.2);
 }
 
-/* ===== BUTTON CONTAINERS ===== */
 .btns {
     position: absolute;
-    /* ← Absolute Positionierung */
     top: 0;
     left: 0;
     width: 100%;
@@ -96,7 +92,6 @@
     justify-content: center;
     align-items: center;
     pointer-events: none;
-    /* ← Klicks durchlassen */
     z-index: 10;
 }
 
@@ -106,7 +101,6 @@
     left: 50%;
     transform: translate(-50%, -50%);
     pointer-events: auto;
-    /* ← Buttons bleiben klickbar */
 }
 
 .upper-btn {
@@ -121,9 +115,6 @@
 }
 
 .play-btn {
-    /* position: absolute; */
-    /* bottom: 20px; */
-    /* left: 20px; */
     pointer-events: auto;
     width: 100%;
     height: 100%;
@@ -137,7 +128,6 @@
     display: flex;
     flex-direction: row;
     margin: 12px 0;
-    gap: 8px;
 }
 
 .rightSide {
@@ -147,7 +137,16 @@
     gap: 8px;
 }
 
-/* ===== SIMPLE PLAY BUTTON ===== */
+.restart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mobile-home-btn {
+    margin-right: 10px;
+}
+
 .simple-play-button {
     position: absolute;
     top: 50%;
@@ -174,7 +173,6 @@
     display: none;
 }
 
-/* ===== SIMPLE HOME BUTTON ===== */
 .simple-home-button {
     position: absolute;
     top: 50%;
@@ -226,7 +224,6 @@
     display: none;
 }
 
-/* ===== SIMPLE RESTART BUTTON ===== */
 .simple-restart-button {
     position: absolute;
     top: 50%;
@@ -278,26 +275,21 @@
     display: none;
 }
 
-/* ===== MOBILE CONTROLS ===== */
 .mobile-setting-btn,
 .mobile-impressum-btn {
-    /* display: none; */
-    /* ← Standardmäßig versteckt */
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     border: 2px solid #8B4513;
-    background: rgba(139, 69, 19, 0.5);
+    background: rgba(139, 69, 19, 0.8) !important;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .mobile-arrow-btn {
-    /* display: none; */
-    /* ← Standardmäßig versteckt */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -321,7 +313,6 @@
     filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.6));
 }
 
-/* ===== BUTTON USER SELECT PREVENTION ===== */
 .mobile-arrow-btn,
 .mobile-setting-btn,
 .mobile-impressum-btn,
@@ -347,7 +338,6 @@
     pointer-events: none;
 }
 
-/* ===== RESPONSIVE BUTTON STYLES ===== */
 @media only screen and (max-width: 935px),
 only screen and (max-height: 480px) {
     .btns {
@@ -356,16 +346,14 @@ only screen and (max-height: 480px) {
         z-index: 10;
     }
 
-    /* Mobile Arrow Button nur in responsive Ansicht anzeigen */
     .mobile-arrow-btn,
-    .mobile-setting-btn,
+    .mobile-setting-btn:not(#mobileHomeBtn):not(#mobileRestartBtn),
     .mobile-impressum-btn {
         display: flex !important;
     }
 }
 
 @media (max-width: 935px) {
-    /* Buttons für Touch-Geräte optimieren */
     .simple-play-button,
     .simple-restart-button {
         z-index: 10;
@@ -379,7 +367,6 @@ only screen and (max-height: 480px) {
     }
 }
 
-/* ===== BUTTON ANIMATIONS ===== */
 @keyframes homeButtonAppear {
     0% {
         transform: translate(-50%, -50%) scale(0) rotate(-180deg);

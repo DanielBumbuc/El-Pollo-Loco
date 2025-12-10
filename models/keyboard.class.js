@@ -109,11 +109,6 @@ class Keyboard {
             case 'throwBtn':
                 this.D = false;
                 break;
-            case 'mobileRestartBtn':
-                if (typeof window.resetGame === 'function') {
-                    window.resetGame();
-                }
-                break;
             case 'mobileVolumeBtn':
                 if (typeof window.toggleVolumeImg === 'function') {
                     window.toggleVolumeImg();

@@ -40,6 +40,13 @@ function loadLevel1() {
             new Background('./img/5_background/layers/1_first_layer/1.png', 720 * 4)
         ],
         [
+            new Cloud(),
+            new Cloud(),
+            new Cloud(),
+            new Cloud(),
+            new Cloud(),
+            new Cloud(),
+            new Cloud(),
             new Cloud()
         ],
         [

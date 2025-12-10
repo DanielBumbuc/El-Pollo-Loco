@@ -377,8 +377,7 @@ only screen and (max-height: 480px) {
     }
 
     /* WICHTIG: d-none Klassen überschreiben */
-    .upper-btn.d-none,
-    .play-btn.d-none {
+    .upper-btn.d-none {
         display: flex !important;
         pointer-events: auto !important;
     }
@@ -391,7 +390,7 @@ only screen and (max-height: 480px) {
     }
 
     .mobile-arrow-btn,
-    .mobile-setting-btn,
+    .mobile-setting-btn:not(#mobileHomeBtn):not(#mobileRestartBtn),
     .mobile-impressum-btn {
         display: flex !important;
         justify-content: center !important;
@@ -409,7 +408,7 @@ only screen and (max-height: 480px) {
     }
 
     .mobile-arrow-btn:hover,
-    .mobile-setting-btn:hover,
+    .mobile-setting-btn:not(#mobileHomeBtn):not(#mobileRestartBtn):hover,
     .mobile-impressum-btn:hover {
         background: rgba(139, 69, 19, 0.95) !important;
         transform: scale(1.1) !important;
@@ -423,7 +422,6 @@ only screen and (max-height: 480px) {
 
     .leftSide {
         flex-direction: row !important;
-        gap: 8px !important;
         margin: 24px 0 !important;
     }
 

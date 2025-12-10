@@ -29,7 +29,7 @@ class Chicken extends MoveableObject {
     constructor() {
         super().loadImg('./img/3_enemies_chicken/chicken_normal/1_walk/2_w.png');
         this.loadImages(this.IMAGES_WALKING);
-         this.loadImages(this.IMAGES_DEAD);
+        this.loadImages(this.IMAGES_DEAD);
         let levelWidth = 720 * 4;
         let spawnStart = levelWidth * 0.25;
         let spawnRange = levelWidth * 0.75;

@@ -12,8 +12,7 @@ function startGame() {
     if (world) {
         document.getElementById('playButton').classList.add('d-none');
         if (window.innerWidth <= 935) {
-            document.getElementById('upperBtnContainer').classList.remove('d-none');
-            document.getElementById('playBtnContainer').classList.remove('d-none');
+            removeContainerElements();
         } else {
             document.getElementById('upperBtnContainer').classList.add('d-none');
             document.getElementById('playBtnContainer').classList.add('d-none');
@@ -23,6 +22,18 @@ function startGame() {
         world.gameState = true;
         world.startGame();
     }
+}
+
+/**
+ * Removes d-none class from mobile UI containers and buttons
+ * Shows mobile controls including upper button container, play button container,
+ * mobile home button, and mobile restart button for touch devices
+ */
+function removeContainerElements() {
+    document.getElementById('upperBtnContainer').classList.remove('d-none');
+    document.getElementById('playBtnContainer').classList.remove('d-none');
+    document.getElementById('mobileHomeBtn').classList.remove('d-none');
+    document.getElementById('mobileRestartBtn').classList.remove('d-none');
 }
 
 /**
@@ -43,6 +54,7 @@ function init() {
     updateMobileVolumeIcon();
     world.loadSavedSettings();
     checkOrientation();
+    document.getElementById('upperBtnContainer').classList.add('d-none');
     document.getElementById('upperBtnContainer').classList.add('d-none');
     document.getElementById('playBtnContainer').classList.add('d-none');
 }
@@ -74,6 +86,8 @@ function resetGame() {
     document.getElementById('playButton').classList.remove('d-none');
     document.getElementById('restartButton').classList.add('d-none');
     document.getElementById('homeButton').classList.add('d-none');
+    document.getElementById('mobileHomeBtn').classList.add('d-none');
+    document.getElementById('mobileRestartBtn').classList.add('d-none');
     document.getElementById('upperBtnContainer').classList.add('d-none');
     document.getElementById('playBtnContainer').classList.add('d-none');
     startGame();
@@ -112,6 +126,8 @@ function goHome() {
     document.getElementById('playButton').classList.remove('d-none');
     document.getElementById('restartButton').classList.add('d-none');
     document.getElementById('homeButton').classList.add('d-none');
+    document.getElementById('mobileHomeBtn').classList.add('d-none');
+    document.getElementById('mobileRestartBtn').classList.add('d-none');
     document.getElementById('upperBtnContainer').classList.add('d-none');
     document.getElementById('playBtnContainer').classList.add('d-none');
     initStartScreen();
