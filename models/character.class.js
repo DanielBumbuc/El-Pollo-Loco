@@ -192,6 +192,7 @@ class Character extends MoveableObject {
             if (this.isColliding(enemies)) {
                 enemies.hit(100);
                 this.playSound('chicken');
+                this.jump();
             }
         });
         this.resetIdleCounter();

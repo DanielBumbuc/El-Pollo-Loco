@@ -11,7 +11,7 @@ let resizeTimeout;
 function startGame() {
     if (world) {
         document.getElementById('playButton').classList.add('d-none');
-        if (window.innerWidth <= 935) {
+        if (window.innerWidth <= 935 || isTablet()) {
             removeContainerElements();
         } else {
             document.getElementById('upperBtnContainer').classList.add('d-none');
@@ -247,6 +247,27 @@ function checkOrientation() {
     }
 }
 
+/**
+ * Detects if the current device is a tablet based on screen size and touch capability
+ * @returns {boolean} True if device is detected as tablet
+ */
+function isTablet() {
+    const userAgent = navigator.userAgent;
+    const screenWidth = window.innerWidth;
+    const hasTouchScreen = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    
+    // iPad specific detection (auch iPad Mini)
+    const isIPad = /iPad|Macintosh/i.test(userAgent) && hasTouchScreen;
+    
+    // Android tablet detection
+    const isAndroidTablet = /Android/i.test(userAgent) && !/Mobile/i.test(userAgent);
+    
+    // Size-based detection für iPad Mini (768px - 1024px mit Touch)
+    const isTabletSize = (screenWidth >= 768 && screenWidth <= 1024) && hasTouchScreen;
+    
+    return isIPad || isAndroidTablet || isTabletSize;
+}
+
 document.addEventListener('keydown', (e) => {
     keyboard.handleKeydown(e.code);
 })
@@ -257,11 +278,11 @@ document.addEventListener('keyup', (e) => {
 
 document.addEventListener('touchstart', (e) => {
     keyboard.handleTouchStart(e);
-});
+}, { passive: false });
 
 document.addEventListener('touchend', (e) => {
     keyboard.handleTouchEnd(e);
-});
+}, { passive: false });
 
 window.addEventListener('resize', debouncedResize);
 

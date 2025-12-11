@@ -37,12 +37,10 @@ class SoundManager {
             const playPromise = this.sounds[name].play();
             if (playPromise !== undefined) {
                 playPromise.catch(e => {
-                    if (name === 'backgroundMusic') {
-                        setTimeout(() => {
-                            this.sounds[name].play().catch(() => {
-                            });
-                        }, 100);
+                    if (e.name === 'NotAllowedError') {
+                        return;
                     }
+                    console.warn(`Sound playback failed for ${name}:`, e.message);
                 });
             }
         }
@@ -164,15 +162,20 @@ class SoundManager {
      */
     playBackgroundMusic() {
         this.stopBackgroundMusic();
-        if (this.sounds['backgroundMusic']) {
-            const playPromise = this.sounds['backgroundMusic'].play();
-            if (playPromise !== undefined) {
-                playPromise.catch((error) => {
-                    console.warn('Background music could not start:', error);
-                    this.retryBackgroundMusic();
-                });
+        setTimeout(() => {
+            if (this.sounds['backgroundMusic']) {
+                const playPromise = this.sounds['backgroundMusic'].play();
+                if (playPromise !== undefined) {
+                    playPromise.catch((error) => {
+                        if (error.name === 'NotAllowedError') {
+                            return;
+                        }
+                        console.warn('Background music could not start:', error);
+                        this.retryBackgroundMusic();
+                    });
+                }
             }
-        }
+        }, 50);
     }
 
     /**

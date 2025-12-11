@@ -49,7 +49,7 @@ class GameManager {
                 this.removeDeadEnemies();
             }, 200);
         } else  if (!this.world.character.isHurt()) {
-            this.world.character.hit(10);
+            this.world.character.hit(20);
             this.world.statusbarLifepoints.setPercentage(this.world.character.lifepoints);
         }
     }
@@ -61,7 +61,7 @@ class GameManager {
     setCollisionEndboss() {
         this.world.level.endboss.forEach(endboss => {
             if (this.world.character.isColliding(endboss) && !this.world.character.isHurt()) {
-                this.world.character.hit(20);
+                this.world.character.hit(40);
                 this.world.statusbarLifepoints.setPercentage(this.world.character.lifepoints);
             }
         });
