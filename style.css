@@ -236,7 +236,7 @@ only screen and (max-height: 480px) {
     }
 
     .btns {
-        display: flex !important;  /* ← Das war das Problem! */
+        display: flex !important;
         width: 100vw;
         height: 100vh;
         z-index: 10;
@@ -303,7 +303,6 @@ only screen and (max-height: 480px) {
     }
 }
 
-/* TABLET SPECIFIC - Zwischen 768px und 1024px mit Touch */
 @media only screen and (min-width: 768px) and (max-width: 1500px) and (pointer: coarse) {
     .btns {
         display: flex !important;

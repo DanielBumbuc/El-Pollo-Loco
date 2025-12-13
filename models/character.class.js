@@ -10,7 +10,7 @@ class Character extends MoveableObject {
     isJumping = false;
     idleCounter = 0;
     isIdleAnimating = false;
-    idleThreshold = 50; // 300 frames = 5000ms
+    idleThreshold = 50;
     offset = {
         top: 130,
         bottom: 12,

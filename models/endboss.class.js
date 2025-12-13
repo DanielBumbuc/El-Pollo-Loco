@@ -9,13 +9,13 @@ class Endboss extends MoveableObject {
     otherDirection = false;
     lifepoints = 100;
     alert = false;
-    hasAlerted = false; // Neu: Flag für einmaligen Angriff
+    hasAlerted = false;
     attackLeft = false;
     attackRight = false;
     isAttacking = false;
     attackInterval = null;
-    hasAttacked = false; // Neu: Flag, ob der Endboss bereits angegriffen hat
-    lastAttackTime = 0; // Neu: Zeitstempel des letzten Angriffs
+    hasAttacked = false;
+    lastAttackTime = 0;
     attackSpeed = 100;
     offset = {
         top: 85,

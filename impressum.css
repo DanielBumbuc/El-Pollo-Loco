@@ -1,4 +1,3 @@
-/* ===== DIALOG ELEMENT STYLING ===== */
 .impressum-dialog {
     max-width: 500px;
     width: 80%;
@@ -43,7 +42,6 @@
     pointer-events: none;
 }
 
-/* ===== IMPRESSUM CLOSE BUTTON ===== */
 .impressum-close-btn {
     position: absolute;
     top: 15px;
@@ -65,7 +63,6 @@
     stroke: #FFDC00;
 }
 
-/* ===== IMPRESSUM CONTENT STYLING ===== */
 .impressum-container h2,
 .impressum-container h3,
 .impressum-container h4 {
@@ -74,9 +71,6 @@
     margin: 0;
 }
 
-/* ===== RESPONSIVE IMPRESSUM STYLES ===== */
-
-/* Tablet und kleinere Desktops (768px - 935px) */
 @media (max-width: 935px) and (min-width: 768px) {
     .impressum-dialog {
         max-width: 450px;
@@ -97,7 +91,6 @@
     }
 }
 
-/* Mobile Landscape und kleine Tablets (481px - 767px) */
 @media (max-width: 767px) and (min-width: 481px) {
     .impressum-dialog {
         max-width: 400px;
@@ -126,7 +119,6 @@
     }
 }
 
-/* Mobile Portrait (max 480px) */
 @media (max-width: 480px) {
     .impressum-dialog {
         width: 95%;
@@ -168,7 +160,6 @@
     }
 }
 
-/* Sehr kleine Bildschirme und niedrige Höhe */
 @media (max-height: 500px) {
     .impressum-container {
         max-height: 85vh;
@@ -193,7 +184,6 @@
     }
 }
 
-/* Ultra-kleine Bildschirme (unter 320px Breite) */
 @media (max-width: 320px) {
     .impressum-dialog {
         width: 98%;

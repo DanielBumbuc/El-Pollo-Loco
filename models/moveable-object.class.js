@@ -213,11 +213,11 @@ class MoveableObject extends DrawableObject {
         let frameIndex;
         jumpProgress = Math.max(0, Math.min(jumpProgress, 1));
         if (jumpProgress <= 0.2) {
-            frameIndex = Math.floor((jumpProgress / 0.2) * 4); // 0-3
+            frameIndex = Math.floor((jumpProgress / 0.2) * 4);
         } else if (jumpProgress <= 0.8) {
-            frameIndex = 4 + Math.floor(((jumpProgress - 0.2) / 0.6) * 3); // 4-6
+            frameIndex = 4 + Math.floor(((jumpProgress - 0.2) / 0.6) * 3);
         } else {
-            frameIndex = 7 + Math.floor(((jumpProgress - 0.8) / 0.2) * 2); // 7-8
+            frameIndex = 7 + Math.floor(((jumpProgress - 0.8) / 0.2) * 2);
         }
         frameIndex = Math.max(0, Math.min(frameIndex, this.IMAGES_JUMPING.length - 1));
         this.img = this.imageCache[this.IMAGES_JUMPING[frameIndex]];
