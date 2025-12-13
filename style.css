@@ -91,14 +91,6 @@ canvas {
     pointer-events: none;
 }
 
-.controls-legend {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-left: 20px;
-    flex: 1;
-}
-
 .legend-title {
     font-size: 24px;
     color: #FFDC00;
@@ -114,6 +106,7 @@ canvas {
     gap: 8px;
     flex-wrap: wrap;
     width: 240px;
+    margin-right: 150px;
 }
 
 .legend-item {

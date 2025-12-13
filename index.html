@@ -39,8 +39,9 @@
     <h1 class="game-title">El Pollo Loco</h1>
 
     <nav class="western-navbar">
+
         <h2 class="legend-title">Controls</h2>
-        <div class="controls-legend">
+
             <div class="legend-items">
                 <div class="legend-item">
                     <span class="key-icon">←→</span>
@@ -59,7 +60,7 @@
                     <span class="action">Start</span>
                 </div>
             </div>
-        </div>
+    
         <div class="western-controls">
             <button class="western-button home-btn" onclick="goHome()" ontouchstart="goHome()" title="Home">
                 <img src="img/icons/home.svg" alt="Home" width="24" height="24"
@@ -90,6 +91,7 @@
             </button>
 
         </div>
+        
     </nav>
 
     <div class="game-container">
@@ -102,8 +104,9 @@
                 <div class="rotation-hint">🔄</div>
             </div>
         </div>
-        <div id="impressumOverlay" class="impressum-overlay d-none" onclick="closeImpressum()" ontouchstart="closeImpressum()">
-            <div class="impressum-container" onclick="event.stopPropagation()" ontouchstart="event.stopPropagation()">
+
+        <dialog id="impressumDialog" class="impressum-dialog">
+            <div class="impressum-container">
                 <button class="impressum-close-btn" onclick="closeImpressum()" ontouchstart="closeImpressum()">
                     <img src="img/icons/close.svg" alt="Schließen" width="20" height="20"
                         style="filter: invert(55%) sepia(73%) saturate(342%) hue-rotate(349deg) brightness(95%) contrast(91%);">
@@ -131,7 +134,7 @@
                     71067 Sindelfingen
                 </p>
             </div>
-        </div>
+        </dialog>
 
         <div class="btns">
 

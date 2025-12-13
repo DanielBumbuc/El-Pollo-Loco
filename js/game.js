@@ -3,6 +3,7 @@ let world;
 let keyboard = new Keyboard();
 let activeButton = false;
 let resizeTimeout;
+let gameStarted = false;
 
 /**
  * Starts the game by initializing level, showing mobile controls, and beginning gameplay
@@ -22,6 +23,7 @@ function startGame() {
         world.gameState = true;
         world.startGame();
     }
+    gameStarted = true;
 }
 
 /**
@@ -76,6 +78,7 @@ function initStartScreen() {
  * Stops audio, clears intervals, recreates world instance, and resets UI elements
  */
 function resetGame() {
+    if (!gameStarted) return;
     if (window.soundManager) {
         window.soundManager.stopBackgroundMusic();
     }
@@ -83,13 +86,7 @@ function resetGame() {
     world = null;
     world = new World(canvas, keyboard);
     world.gameState = false;
-    document.getElementById('playButton').classList.remove('d-none');
-    document.getElementById('restartButton').classList.add('d-none');
-    document.getElementById('homeButton').classList.add('d-none');
-    document.getElementById('mobileHomeBtn').classList.add('d-none');
-    document.getElementById('mobileRestartBtn').classList.add('d-none');
-    document.getElementById('upperBtnContainer').classList.add('d-none');
-    document.getElementById('playBtnContainer').classList.add('d-none');
+    setBtnElements();
     startGame();
 }
 
@@ -98,6 +95,7 @@ function resetGame() {
  * Stops audio, clears intervals, resets world state, and shows start screen
  */
 function goHome() {
+    if (!gameStarted) return;
     if (window.soundManager) {
         window.soundManager.stopBackgroundMusic();
     }
@@ -105,6 +103,17 @@ function goHome() {
     world = null;
     world = new World(canvas, keyboard);
     world.gameState = false;
+    setBtnElements();
+    initStartScreen();
+    gameStarted = false;
+}
+
+/**
+ * Resets UI elements to initial state by showing play button and hiding game controls
+ * Restores start screen layout by hiding all mobile and desktop game control buttons
+ * Used when returning to home screen or resetting the game to initial state
+ */
+function setBtnElements() {
     document.getElementById('playButton').classList.remove('d-none');
     document.getElementById('restartButton').classList.add('d-none');
     document.getElementById('homeButton').classList.add('d-none');
@@ -112,7 +121,6 @@ function goHome() {
     document.getElementById('mobileRestartBtn').classList.add('d-none');
     document.getElementById('upperBtnContainer').classList.add('d-none');
     document.getElementById('playBtnContainer').classList.add('d-none');
-    initStartScreen();
 }
 
 /**
