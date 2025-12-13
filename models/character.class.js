@@ -4,7 +4,7 @@
  */
 class Character extends MoveableObject {
     world;
-    y = 60;
+    y = 120;
     otherDirection = false;
     jumpFrame = 0;
     isJumping = false;

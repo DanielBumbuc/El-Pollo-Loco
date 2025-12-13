@@ -39,7 +39,7 @@
     <h1 class="game-title">El Pollo Loco</h1>
 
     <nav class="western-navbar">
-        <h3 class="legend-title">Controls</h3>
+        <h2 class="legend-title">Controls</h2>
         <div class="controls-legend">
             <div class="legend-items">
                 <div class="legend-item">
@@ -61,19 +61,19 @@
             </div>
         </div>
         <div class="western-controls">
-            <div class="western-button home-btn" onclick="goHome()" title="Home">
+            <button class="western-button home-btn" onclick="goHome()" ontouchstart="goHome()" title="Home">
                 <img src="img/icons/home.svg" alt="Home" width="24" height="24"
                     style="filter: brightness(0) saturate(100%) invert(29%) sepia(15%) saturate(1234%) hue-rotate(352deg) brightness(96%) contrast(88%);">
                 <span class="western-star">✦</span>
-            </div>
+            </button>
 
-            <div class="western-button restart-btn" onclick="resetGame()" title="Restart Game">
+            <button class="western-button restart-btn" onclick="resetGame()" ontouchstart="resetGame()" title="Restart Game">
                 <img src="img/icons/restart.svg" alt="Restart" width="24" height="24"
                     style="filter: brightness(0) saturate(100%) invert(29%) sepia(15%) saturate(1234%) hue-rotate(352deg) brightness(96%) contrast(88%);">
                 <span class="western-star">✦</span>
-            </div>
+            </button>
 
-            <div class="western-button volume-btn" id="volumeButton" onclick="activeControlButton(this)" title="Volume">
+            <button class="western-button volume-btn" id="volumeButton" onclick="activeControlButton(this)" ontouchstart="activeControlButton(this)" title="Volume">
                 <img id="volumeOnIcon" src="img/icons/volume-on.svg" alt="Volume On" width="24" height="24"
                     style="filter: brightness(0) saturate(100%) invert(29%) sepia(15%) saturate(1234%) hue-rotate(352deg) brightness(96%) contrast(88%);">
                 <img id="volumeOffIcon" src="img/icons/volume-off.svg" alt="Volume Off" width="24" height="24"
@@ -81,13 +81,13 @@
                     style="filter: brightness(0) saturate(100%) invert(29%) sepia(15%) saturate(1234%) hue-rotate(352deg) brightness(96%) contrast(88%);">
 
                 <span class="western-star">✦</span>
-            </div>
+            </button>
 
-            <div class="western-button impressum-btn" onclick="openImpressum()" title="Impressum">
+            <button class="western-button impressum-btn" onclick="openImpressum()" ontouchstart="openImpressum()" title="Impressum">
                 <img src="img/icons/info.svg" alt="Info" width="24" height="24"
                     style="filter: brightness(0) saturate(100%) invert(29%) sepia(15%) saturate(1234%) hue-rotate(352deg) brightness(96%) contrast(88%);">
                 <span class="western-star">✦</span>
-            </div>
+            </button>
 
         </div>
     </nav>
@@ -102,8 +102,8 @@
                 <div class="rotation-hint">🔄</div>
             </div>
         </div>
-        <div id="impressumOverlay" class="impressum-overlay d-none" onclick="closeImpressum()">
-            <div class="impressum-container" onclick="event.stopPropagation()">
+        <div id="impressumOverlay" class="impressum-overlay d-none" onclick="closeImpressum()" ontouchstart="closeImpressum()">
+            <div class="impressum-container" onclick="event.stopPropagation()" ontouchstart="event.stopPropagation()">
                 <button class="impressum-close-btn" onclick="closeImpressum()" ontouchstart="closeImpressum()">
                     <img src="img/icons/close.svg" alt="Schließen" width="20" height="20"
                         style="filter: invert(55%) sepia(73%) saturate(342%) hue-rotate(349deg) brightness(95%) contrast(91%);">
