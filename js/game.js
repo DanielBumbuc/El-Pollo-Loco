@@ -268,15 +268,9 @@ document.addEventListener('touchend', (e) => {
 
 window.addEventListener('resize', debouncedResize);
 
-// window.addEventListener('orientationchange', () => {
-//     setTimeout(checkOrientation, 200);
-// });
-
 window.addEventListener('orientationchange', () => {
     setTimeout(() => {
         checkOrientation();
-        
-        // Tablet-Button-Logic nach Orientierung
         if (world && world.gameState) {
             if (window.innerWidth <= 935 || isTablet()) {
                 removeContainerElements();
